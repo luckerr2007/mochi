@@ -3,8 +3,11 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } fro
 import { useOverlay } from '../../internal/useOverlay';
 import type { MochiCommand } from './types';
 import css from './MochiCommandPalette.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiCommandPalette' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -14,7 +17,7 @@ const props = withDefaults(
     /** 按下 Cmd/Ctrl+K 自动打开 */
     hotkey?: boolean;
   }>(),
-  { placeholder: '搜索命令…', emptyText: '没有匹配的命令', hotkey: true },
+  { hotkey: true },
 );
 
 const emit = defineEmits<{ select: [MochiCommand] }>();
@@ -121,7 +124,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onGlobalKeydown));
           :class="css.panel"
           role="dialog"
           aria-modal="true"
-          :aria-label="placeholder"
+          :aria-label="placeholder ?? m.palettePlaceholder"
           tabindex="-1"
           @keydown="onPaletteKeydown"
         >
@@ -135,7 +138,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onGlobalKeydown));
               v-model="query"
               :class="css.input"
               type="text"
-              :placeholder="placeholder"
+              :placeholder="placeholder ?? m.palettePlaceholder"
               role="combobox"
               :aria-expanded="'true'"
               aria-autocomplete="list"
@@ -147,7 +150,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onGlobalKeydown));
             />
           </div>
 
-          <ul :id="listId" :class="css.list" role="listbox" :aria-label="placeholder">
+          <ul :id="listId" :class="css.list" role="listbox" :aria-label="placeholder ?? m.palettePlaceholder">
             <template v-for="(command, index) in filtered" :key="command.key">
               <li v-if="isGroupStart(index)" :class="css.group" role="presentation">
                 {{ command.group }}
@@ -167,7 +170,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onGlobalKeydown));
                 <kbd v-if="command.hint" :class="css.kbd">{{ command.hint }}</kbd>
               </li>
             </template>
-            <li v-if="!filtered.length" :class="css.empty">{{ emptyText }}</li>
+            <li v-if="!filtered.length" :class="css.empty">{{ emptyText ?? m.paletteEmpty }}</li>
           </ul>
         </div>
       </div>

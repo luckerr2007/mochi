@@ -2,8 +2,11 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import type { MochiCarouselItem } from './types';
 import css from './MochiCarousel.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiCarousel' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -13,7 +16,7 @@ const props = withDefaults(
     height?: string;
     label?: string;
   }>(),
-  { interval: 4000, height: '220px', label: '轮播' },
+  { interval: 4000, height: '220px' },
 );
 
 const index = ref(0);
@@ -105,10 +108,10 @@ onBeforeUnmount(() => clearTimeout(timer));
       </div>
     </div>
 
-    <button v-if="count > 1" :class="[css.arrow, css.prev]" type="button" aria-label="上一张" @click="go(index - 1)">
+    <button v-if="count > 1" :class="[css.arrow, css.prev]" type="button" :aria-label="m.carouselPrev" @click="go(index - 1)">
       <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2.5 L4 6 L7.5 9.5" /></svg>
     </button>
-    <button v-if="count > 1" :class="[css.arrow, css.next]" type="button" aria-label="下一张" @click="go(index + 1)">
+    <button v-if="count > 1" :class="[css.arrow, css.next]" type="button" :aria-label="m.carouselNext" @click="go(index + 1)">
       <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 2.5 L8 6 L4.5 9.5" /></svg>
     </button>
 
@@ -120,7 +123,7 @@ onBeforeUnmount(() => clearTimeout(timer));
         type="button"
         role="tab"
         :aria-selected="i === index"
-        :aria-label="`第 ${i + 1} 张`"
+        :aria-label="m.carouselSlide(i + 1)"
         @click="go(i)"
       />
     </div>

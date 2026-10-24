@@ -2,8 +2,11 @@
 import { ref } from 'vue';
 import { useOverlay } from '../../internal/useOverlay';
 import css from './MochiModal.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiModal' });
+
+const m = useMessages();
 
 withDefaults(
   defineProps<{
@@ -12,7 +15,7 @@ withDefaults(
     maskClosable?: boolean;
     closeLabel?: string;
   }>(),
-  { maskClosable: true, closeLabel: '关闭' },
+  { maskClosable: true },
 );
 
 // v-model:open —— 开关状态用显式命名，避免和表单类组件的 v-model 混淆
@@ -39,7 +42,7 @@ const { close, onKeydown } = useOverlay(open, panel);
             <slot name="header">
               <h2 :class="css.title">{{ title }}</h2>
             </slot>
-            <button :class="css.close" type="button" :aria-label="closeLabel" @click="close">
+            <button :class="css.close" type="button" :aria-label="closeLabel ?? m.close" @click="close">
               <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">
                 <path d="M2 2 L8 8 M8 2 L2 8" />
               </svg>

@@ -1,6 +1,6 @@
 {
   "name": "mochi-island-ui",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Cartoon-soft Vue 3 component library. Design tokens are the API.",
   "type": "module",
   "keywords": [
@@ -40,7 +40,11 @@
       "types": "./dist/resolver.d.ts",
       "import": "./dist/resolver.js"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./locale": {
+      "types": "./dist/locale.d.ts",
+      "import": "./dist/locale.js"
+    }
   },
   "scripts": {
     "build": "vite build && node scripts/copy-tokens.mjs",

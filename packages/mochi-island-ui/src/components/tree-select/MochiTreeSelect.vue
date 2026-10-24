@@ -5,8 +5,11 @@ import MochiPopover from '../popover/MochiPopover.vue';
 import MochiTree from '../tree/MochiTree.vue';
 import type { MochiTreeNode } from '../tree/types';
 import css from './MochiTreeSelect.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTreeSelect' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -18,7 +21,7 @@ const props = withDefaults(
     invalid?: boolean;
     defaultExpandAll?: boolean;
   }>(),
-  { placeholder: '请选择', defaultExpandAll: true },
+  { defaultExpandAll: true },
 );
 
 const model = defineModel<string>({ default: '' });
@@ -60,7 +63,7 @@ function pick(key: string) {
           :aria-describedby="hint ? hintId : undefined"
           v-bind="attrs"
         >
-          <span :class="css.text" :data-placeholder="!text || undefined">{{ text || placeholder }}</span>
+          <span :class="css.text" :data-placeholder="!text || undefined">{{ text || (placeholder ?? m.selectPlaceholder) }}</span>
           <svg :class="css.icon" viewBox="0 0 12 12" aria-hidden="true">
             <path d="M2 4.5 L6 8.5 L10 4.5" />
           </svg>
@@ -72,7 +75,7 @@ function pick(key: string) {
           :data="data"
           :selected="model"
           :default-expand-all="defaultExpandAll"
-          :label="label || '选项树'"
+          :label="label ?? m.treeSelectList"
           @update:selected="pick"
         />
       </div>

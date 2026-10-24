@@ -3,8 +3,11 @@ import { computed } from 'vue';
 import MochiAvatar from '../avatar/MochiAvatar.vue';
 import type { MochiAvatarGroupItem, MochiAvatarGroupSize } from './types';
 import css from './MochiAvatarGroup.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiAvatarGroup' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -15,7 +18,7 @@ const props = withDefaults(
     /** 读屏朗读的群体名称 */
     label?: string;
   }>(),
-  { max: 4, size: 'md', label: '成员' },
+  { max: 4, size: 'md' },
 );
 
 const shown = computed(() => props.items.slice(0, Math.max(1, props.max)));
@@ -24,7 +27,7 @@ const rest = computed(() => props.items.length - shown.value.length);
 
 <template>
   <!-- 悬停的头像会浮到最上层并上浮 2px，像被拎起来看了一眼 -->
-  <div :class="css.root" :data-size="size" role="group" :aria-label="`${label}，共 ${items.length} 位`">
+  <div :class="css.root" :data-size="size" role="group" :aria-label="`${label ?? m.avatarGroupLabel} · ${items.length}`">
     <span v-for="(item, index) in shown" :key="item.name" :class="css.item" :style="{ '--_i': index }">
       <MochiAvatar :name="item.name" :src="item.src" :size="size" />
     </span>

@@ -3,8 +3,11 @@ import { computed, nextTick, ref, useId, watch } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import MochiPopover from '../popover/MochiPopover.vue';
 import css from './MochiMentions.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiMentions' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -42,7 +45,7 @@ const suggestions = computed(() => {
   return matched.slice(0, props.limit);
 });
 
-const placeholderText = computed(() => props.placeholder ?? `输入 ${props.prefix} 唤起提及`);
+const placeholderText = computed(() => props.placeholder ?? m.value.mentionsPlaceholder(props.prefix));
 
 function onInput(event: Event) {
   model.value = (event.target as HTMLInputElement).value;
@@ -155,7 +158,7 @@ watch(suggestions, () => {
         />
       </template>
 
-      <ul :id="listId" :class="css.list" role="listbox" :aria-label="label || '提及对象'">
+      <ul :id="listId" :class="css.list" role="listbox" :aria-label="label ?? m.mentionsList">
         <li v-for="(option, index) in suggestions" :key="option">
           <button
             :class="css.option"
@@ -170,7 +173,7 @@ watch(suggestions, () => {
             {{ option }}
           </button>
         </li>
-        <li v-if="!suggestions.length" :class="css.empty">没有可提及的对象</li>
+        <li v-if="!suggestions.length" :class="css.empty">{{ m.mentionsEmpty }}</li>
       </ul>
     </MochiPopover>
   </FieldShell>

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import ToneGlyph from '../../internal/ToneGlyph.vue';
 import css from './MochiBanner.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiBanner' });
+
+const m = useMessages();
 
 withDefaults(
   defineProps<{
@@ -13,7 +16,7 @@ withDefaults(
     closable?: boolean;
     closeLabel?: string;
   }>(),
-  { tone: 'info', sticky: false, closable: true, closeLabel: '关闭公告' },
+  { tone: 'info', sticky: false, closable: true },
 );
 
 const emit = defineEmits<{ close: [] }>();
@@ -41,7 +44,7 @@ function dismiss() {
           <slot />
         </p>
 
-        <button v-if="closable" :class="css.close" type="button" :aria-label="closeLabel" @click="dismiss">
+        <button v-if="closable" :class="css.close" type="button" :aria-label="closeLabel ?? m.bannerClose" @click="dismiss">
           <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">
             <path d="M2 2 L8 8 M8 2 L2 8" />
           </svg>

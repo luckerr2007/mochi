@@ -2,8 +2,11 @@
 import { computed, nextTick, ref, useId, watch } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import css from './MochiTagInput.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTagInput' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -17,7 +20,7 @@ const props = withDefaults(
     /** 触发添加的分隔符（回车始终可用） */
     delimiters?: string[];
   }>(),
-  { placeholder: '输入后回车添加', max: 8, delimiters: () => [',', '，', ' '] },
+  { max: 8, delimiters: () => [',', '，', ' '] },
 );
 
 const emit = defineEmits<{ add: [string]; remove: [string] }>();
@@ -104,15 +107,15 @@ watch(showInput, async (visible) => {
         v-model="draft"
         :class="css.input"
         type="text"
-        :placeholder="model.length ? '' : placeholder"
-        :aria-label="label || '添加标签'"
+        :placeholder="model.length ? '' : (placeholder ?? m.tagInputPlaceholder)"
+        :aria-label="label ?? m.tagInputLabel"
         :aria-describedby="hint ? hintId : undefined"
         :aria-invalid="invalid || undefined"
         autocomplete="off"
         @input="onInput"
         @keydown="onKeydown"
       />
-      <span v-else :class="css.fullNote" aria-hidden="true">最多 {{ max }} 个</span>
+      <span v-else :class="css.fullNote" aria-hidden="true">{{ m.tagInputFull(max) }}</span>
     </div>
   </FieldShell>
 </template>

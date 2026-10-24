@@ -26,7 +26,7 @@ describe('补充件第二弹', () => {
     const avatars = wrapper.findAll('[role="group"] > .item, [role="group"] span');
     // 3 个头像 + 1 个折叠位
     expect(wrapper.text()).toContain('+2');
-    expect(wrapper.find('[role="group"]').attributes('aria-label')).toContain('共 5 位');
+    expect(wrapper.find('[role="group"]').attributes('aria-label')).toContain('5');
     expect(avatars.length).toBeGreaterThanOrEqual(3);
   });
 

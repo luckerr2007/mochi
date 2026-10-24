@@ -3,8 +3,11 @@ import { computed, nextTick, ref, useId, watch } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import MochiPopover from '../popover/MochiPopover.vue';
 import css from './MochiTimePicker.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTimePicker' });
+
+const m = useMessages();
 
 withDefaults(
   defineProps<{
@@ -14,7 +17,7 @@ withDefaults(
     disabled?: boolean;
     invalid?: boolean;
   }>(),
-  { placeholder: '选择时间' },
+  {},
 );
 
 const model = defineModel<string>({ default: '' });
@@ -69,7 +72,7 @@ watch(open, async (isOpen) => {
       </template>
 
       <div :class="css.panel">
-        <ul ref="hourCol" :class="css.col" :aria-label="'小时'">
+        <ul ref="hourCol" :class="css.col" :aria-label="m.hourColumn">
           <li v-for="h in hours" :key="h">
             <button
               :class="css.option"
@@ -85,7 +88,7 @@ watch(open, async (isOpen) => {
 
         <span :class="css.sep" aria-hidden="true">:</span>
 
-        <ul ref="minuteCol" :class="css.col" :aria-label="'分钟'">
+        <ul ref="minuteCol" :class="css.col" :aria-label="m.minuteColumn">
           <li v-for="m in minutes" :key="m">
             <button
               :class="css.option"

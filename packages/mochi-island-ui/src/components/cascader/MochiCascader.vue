@@ -4,8 +4,11 @@ import FieldShell from '../../internal/FieldShell.vue';
 import MochiPopover from '../popover/MochiPopover.vue';
 import type { MochiTreeNode } from '../tree/types';
 import css from './MochiCascader.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiCascader' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -18,7 +21,7 @@ const props = withDefaults(
     disabled?: boolean;
     invalid?: boolean;
   }>(),
-  { placeholder: '请选择' },
+  {},
 );
 
 const emit = defineEmits<{ 'update:modelValue': [string[]] }>();
@@ -88,7 +91,7 @@ function choose(node: MochiTreeNode, level: number) {
           :aria-describedby="hint ? hintId : undefined"
           v-bind="attrs"
         >
-          <span :class="css.text" :data-placeholder="!text || undefined">{{ text || placeholder }}</span>
+          <span :class="css.text" :data-placeholder="!text || undefined">{{ text || (placeholder ?? m.selectPlaceholder) }}</span>
           <svg :class="css.icon" viewBox="0 0 12 12" aria-hidden="true">
             <path d="M2 4.5 L6 8.5 L10 4.5" />
           </svg>
@@ -101,7 +104,7 @@ function choose(node: MochiTreeNode, level: number) {
           :key="level"
           :class="css.column"
           role="listbox"
-          :aria-label="`第 ${level + 1} 级`"
+          :aria-label="m.cascaderLevel(level + 1)"
         >
           <li v-for="node in column" :key="node.key">
             <button

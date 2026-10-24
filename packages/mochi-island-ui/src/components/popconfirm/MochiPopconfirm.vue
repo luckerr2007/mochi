@@ -3,8 +3,11 @@ import { ref } from 'vue';
 import MochiPopover from '../popover/MochiPopover.vue';
 import MochiButton from '../button/MochiButton.vue';
 import css from './MochiPopconfirm.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiPopconfirm' });
+
+const m = useMessages();
 
 withDefaults(
   defineProps<{
@@ -15,7 +18,7 @@ withDefaults(
     /** 危险操作用 danger，确认按钮会换成危险色 */
     tone?: 'default' | 'danger';
   }>(),
-  { confirmText: '确定', cancelText: '取消', tone: 'default' },
+  { tone: 'default' },
 );
 
 const emit = defineEmits<{ confirm: []; cancel: [] }>();
@@ -45,9 +48,9 @@ function cancel() {
     <p v-if="description" :class="css.desc">{{ description }}</p>
 
     <div :class="css.actions">
-      <MochiButton size="sm" variant="ghost" @click="cancel">{{ cancelText }}</MochiButton>
+      <MochiButton size="sm" variant="ghost" @click="cancel">{{ cancelText ?? m.cancel }}</MochiButton>
       <MochiButton size="sm" :class="tone === 'danger' ? css.danger : ''" @click="confirm">
-        {{ confirmText }}
+        {{ confirmText ?? m.confirm }}
       </MochiButton>
     </div>
   </MochiPopover>

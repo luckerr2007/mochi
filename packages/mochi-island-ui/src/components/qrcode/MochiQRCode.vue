@@ -2,8 +2,11 @@
 import { computed } from 'vue';
 import qrcode from 'qrcode-generator';
 import css from './MochiQRCode.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiQRCode' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -71,7 +74,7 @@ const viewBox = computed(() => {
 </script>
 
 <template>
-  <div :class="css.root" role="img" :aria-label="label ?? `二维码：${value}`">
+  <div :class="css.root" role="img" :aria-label="label ?? m.qrLabel(value)">
     <svg
       v-if="matrix"
       :key="matrixKey"
@@ -84,6 +87,6 @@ const viewBox = computed(() => {
     >
       <path :d="path" />
     </svg>
-    <p v-else :class="css.error" :style="{ width: `${size}px` }">内容过长，无法生成二维码</p>
+    <p v-else :class="css.error" :style="{ width: `${size}px` }">{{ m.qrFallback }}</p>
   </div>
 </template>

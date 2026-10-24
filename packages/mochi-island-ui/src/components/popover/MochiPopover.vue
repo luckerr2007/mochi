@@ -2,8 +2,11 @@
 import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue';
 import type { MochiPopoverPlacement } from './types';
 import css from './MochiPopover.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiPopover' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -97,7 +100,7 @@ onBeforeUnmount(() => {
         :style="{ width }"
         :data-bare="bare || undefined"
         :role="panelRole"
-        :aria-label="panelRole === 'menu' ? '菜单' : undefined"
+        :aria-label="panelRole === 'menu' ? m.menu : undefined"
       >
         <slot :close="close" />
       </div>

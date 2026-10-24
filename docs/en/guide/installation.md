@@ -54,3 +54,17 @@ The resolver injects `mochi-island-ui/style.css` automatically (disable with `im
 | `mochi-island-ui/style.css` | Compiled component styles |
 | `mochi-island-ui/styles/tokens.css` | The token sheet |
 | `mochi-island-ui/resolver` | `unplugin-vue-components` resolver |
+
+## Built-in strings i18n (since 1.1)
+
+Built-in strings (placeholders, aria labels, empty states, units) default to Chinese and can be
+switched to English in one call:
+
+```ts
+import { setLocale } from 'mochi-island-ui';
+
+setLocale('en-US'); // back to Chinese: setLocale('zh-CN')
+```
+
+Mounted components update reactively; props you pass explicitly (`placeholder`, `emptyText`,
+`closeLabel`, …) always take precedence over the dictionary.

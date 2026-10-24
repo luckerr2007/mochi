@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import css from './MochiCalendar.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiCalendar' });
 
-const props = withDefaults(defineProps<{ label?: string }>(), { label: '日历' });
+const m = useMessages();
+
+const props = withDefaults(defineProps<{ label?: string }>(), {});
 
 const model = defineModel<Date | null>({ default: null });
 
-const WEEKDAYS = ['一', '二', '三', '四', '五', '六', '日'];
+const WEEKDAYS = computed(() => m.value.weekdays);
 
 const today = new Date();
 const anchor = ref(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -93,13 +96,13 @@ function onKeydown(event: KeyboardEvent, index: number) {
 </script>
 
 <template>
-  <div ref="rootEl" :class="css.root" :aria-label="label">
+  <div ref="rootEl" :class="css.root" :aria-label="label ?? m.calendarLabel">
     <header :class="css.head">
-      <button :class="css.nav" type="button" aria-label="上个月" @click="shift(-1)">
+      <button :class="css.nav" type="button" :aria-label="m.prevMonth" @click="shift(-1)">
         <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2.5 L4 6 L7.5 9.5" /></svg>
       </button>
       <strong :class="css.title">{{ year }} 年 {{ month }} 月</strong>
-      <button :class="css.nav" type="button" aria-label="下个月" @click="shift(1)">
+      <button :class="css.nav" type="button" :aria-label="m.nextMonth" @click="shift(1)">
         <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 2.5 L8 6 L4.5 9.5" /></svg>
       </button>
     </header>
@@ -119,7 +122,7 @@ function onKeydown(event: KeyboardEvent, index: number) {
         :data-today="cell.today || undefined"
         :data-selected="cell.selected || undefined"
         :tabindex="index === focusIndex ? 0 : -1"
-        :aria-label="`${cell.date.getFullYear()} 年 ${cell.date.getMonth() + 1} 月 ${cell.date.getDate()} 日`"
+        :aria-label="m.dateLabel(cell.date.getFullYear(), cell.date.getMonth() + 1, cell.date.getDate())"
         :aria-pressed="cell.selected || undefined"
         :data-cal-index="index"
         @click="pick(cell.date)"

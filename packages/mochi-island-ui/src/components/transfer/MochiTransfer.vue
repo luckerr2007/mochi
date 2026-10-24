@@ -3,8 +3,11 @@ import { computed, ref, type Ref } from 'vue';
 import MochiCheckbox from '../checkbox/MochiCheckbox.vue';
 import type { MochiTransferItem } from './types';
 import css from './MochiTransfer.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTransfer' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -16,7 +19,7 @@ const props = withDefaults(
     /** 无数据文案 */
     emptyText?: string;
   }>(),
-  { titles: () => ['未选', '已选'], searchable: false, emptyText: '无数据' },
+  { searchable: false },
 );
 
 const emit = defineEmits<{ change: [string[]] }>();
@@ -38,6 +41,8 @@ const checked: Record<Side, Ref<Set<string>>> = {
   right: ref(new Set<string>()),
 };
 const queries = ref({ left: '', right: '' });
+/** 未传 titles 时跟随语言 */
+const panelTitles = computed(() => props.titles ?? [m.value.transferUnselected, m.value.transferSelected]);
 
 const leftItems = computed(() => props.data.filter((item) => !model.value.includes(item.key)));
 const rightItems = computed(() => props.data.filter((item) => model.value.includes(item.key)));
@@ -103,7 +108,7 @@ function move(toRight: boolean) {
 
 <template>
   <div :class="css.root">
-    <section v-for="side in sides" :key="side" :class="css.panel" :aria-label="side === 'left' ? titles[0] : titles[1]">
+    <section v-for="side in sides" :key="side" :class="css.panel" :aria-label="side === 'left' ? panelTitles[0] : panelTitles[1]">
       <header :class="css.header">
         <MochiCheckbox
           :model-value="summary(side).all"
@@ -111,9 +116,9 @@ function move(toRight: boolean) {
           @update:model-value="toggleAll(side)"
         >
           <!-- accname 必须来自 label 内容（包裹层上的 aria-label 传不到 input），视觉上隐藏 -->
-          <span :class="css.srOnly">全选{{ side === 'left' ? titles[0] : titles[1] }}</span>
+          <span :class="css.srOnly">全选{{ side === 'left' ? panelTitles[0] : panelTitles[1] }}</span>
         </MochiCheckbox>
-        <span :class="css.title">{{ side === 'left' ? titles[0] : titles[1] }}</span>
+        <span :class="css.title">{{ side === 'left' ? panelTitles[0] : panelTitles[1] }}</span>
         <span :class="css.count">{{ summary(side).count }} / {{ summary(side).total }}</span>
       </header>
 
@@ -122,8 +127,8 @@ function move(toRight: boolean) {
           v-model="queries[side]"
           :class="css.searchInput"
           type="search"
-          :placeholder="`搜索${side === 'left' ? titles[0] : titles[1]}`"
-          :aria-label="`搜索${side === 'left' ? titles[0] : titles[1]}`"
+          :placeholder="m.transferSearch(side === 'left' ? panelTitles[0] : panelTitles[1])"
+          :aria-label="m.transferSearch(side === 'left' ? panelTitles[0] : panelTitles[1])"
         />
       </div>
 
@@ -146,7 +151,7 @@ function move(toRight: boolean) {
             </MochiCheckbox>
           </li>
         </TransitionGroup>
-        <p v-if="!visible(side).length" :class="css.empty">{{ emptyText }}</p>
+        <p v-if="!visible(side).length" :class="css.empty">{{ emptyText ?? m.transferEmpty }}</p>
       </div>
     </section>
 
@@ -155,7 +160,7 @@ function move(toRight: boolean) {
         :class="css.move"
         type="button"
         :disabled="!summary('left').count"
-        aria-label="移到右侧"
+        :aria-label="m.transferToRight"
         @click="move(true)"
       >
         <svg viewBox="0 0 14 12" aria-hidden="true" focusable="false">
@@ -166,7 +171,7 @@ function move(toRight: boolean) {
         :class="css.move"
         type="button"
         :disabled="!summary('right').count"
-        aria-label="移到左侧"
+        :aria-label="m.transferToLeft"
         @click="move(false)"
       >
         <svg viewBox="0 0 14 12" aria-hidden="true" focusable="false">

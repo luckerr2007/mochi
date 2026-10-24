@@ -2,8 +2,11 @@
 import { computed } from 'vue';
 import type { MochiProgressTone } from './types';
 import css from './MochiProgress.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiProgress' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -14,7 +17,7 @@ const props = withDefaults(
     tone?: MochiProgressTone;
     showValue?: boolean;
   }>(),
-  { value: 0, max: 100, label: '进度', tone: 'primary', showValue: false },
+  { value: 0, max: 100, tone: 'primary', showValue: false },
 );
 
 // 越界值夹在 0-100%，避免脏数据把条子撑出轨道
@@ -37,7 +40,7 @@ const percent = computed(() => {
       :aria-valuenow="value"
       aria-valuemin="0"
       :aria-valuemax="max"
-      :aria-label="label"
+      :aria-label="label ?? m.progressLabel"
     >
       <div :class="css.bar" :data-tone="tone" :style="{ width: `${percent}%` }" />
     </div>

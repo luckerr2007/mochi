@@ -3,8 +3,11 @@ import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import type { MochiSelectOption } from './types';
 import css from './MochiSelect.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiSelect' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -164,7 +167,7 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onPointerDown)
         @keydown="onKeydown"
       >
         <span :class="css.value" :data-placeholder="!selected || undefined">
-          {{ selected?.label ?? placeholder ?? '请选择' }}
+          {{ selected?.label ?? (placeholder ?? m.selectPlaceholder) }}
         </span>
         <svg :class="css.chevron" :data-open="open" viewBox="0 0 12 12" aria-hidden="true">
           <path d="M2 4.5 L6 8.5 L10 4.5" />

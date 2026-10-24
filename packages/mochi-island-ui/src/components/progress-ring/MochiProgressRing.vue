@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import css from './MochiProgressRing.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiProgressRing' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -18,7 +21,7 @@ const props = withDefaults(
     /** 是否在圆心显示百分比 */
     showValue?: boolean;
   }>(),
-  { value: undefined, size: 96, thickness: 10, tone: 'primary', label: '进度', showValue: true },
+  { value: undefined, size: 96, thickness: 10, tone: 'primary', showValue: true },
 );
 
 /** 0-100，超出夹在边界。支持 v-model 也支持只传 value */
@@ -48,7 +51,7 @@ const offset = computed(() => {
     :class="css.root"
     :data-tone="tone"
     role="progressbar"
-    :aria-label="label"
+    :aria-label="label ?? m.progressLabel"
     :aria-valuemin="0"
     :aria-valuemax="100"
     :aria-valuenow="clamped"

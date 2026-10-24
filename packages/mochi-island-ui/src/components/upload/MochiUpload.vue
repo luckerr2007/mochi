@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import css from './MochiUpload.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiUpload' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -13,7 +16,7 @@ const props = withDefaults(
     maxSize?: number;
     hint?: string;
   }>(),
-  { multiple: true, hint: '点击选择，或把文件拖进来' },
+  { multiple: true },
 );
 
 const emit = defineEmits<{ change: [File[]] }>();
@@ -76,7 +79,7 @@ function remove(index: number) {
         <path d="M4 16 V19 A1 1 0 0 0 5 20 H19 A1 1 0 0 0 20 19 V16" />
       </svg>
 
-      <span :class="css.hint">{{ hint }}</span>
+      <span :class="css.hint">{{ hint ?? m.uploadHint }}</span>
       <span v-if="maxSize" :class="css.limit">单个文件不超过 {{ human(maxSize) }}</span>
     </label>
 

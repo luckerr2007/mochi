@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import css from './MochiSlider.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiSlider' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -13,7 +16,7 @@ const props = withDefaults(
     showValue?: boolean;
     label?: string;
   }>(),
-  { min: 0, max: 100, step: 1, showValue: false, label: '滑块' },
+  { min: 0, max: 100, step: 1, showValue: false },
 );
 
 const model = defineModel<number>({ default: 0 });
@@ -38,7 +41,7 @@ const percent = computed(() => {
         :max="max"
         :step="step"
         :disabled="disabled"
-        :aria-label="label"
+        :aria-label="label ?? m.sliderLabel"
       />
     </div>
     <output v-if="showValue" :class="css.value">{{ model }}</output>

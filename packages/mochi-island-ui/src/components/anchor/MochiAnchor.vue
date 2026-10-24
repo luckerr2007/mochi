@@ -2,12 +2,14 @@
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import type { MochiAnchorItem } from './types';
 import css from './MochiAnchor.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiAnchor' });
 
+const m = useMessages();
+
 const props = withDefaults(defineProps<{ items: MochiAnchorItem[]; offset?: number; label?: string }>(), {
   offset: 80,
-  label: '页内导航',
 });
 
 const active = defineModel<string>('active', { default: '' });
@@ -62,7 +64,7 @@ watch(active, () => nextTick(syncIndicator));
 </script>
 
 <template>
-  <nav ref="root" :class="css.root" :aria-label="label">
+  <nav ref="root" :class="css.root" :aria-label="label ?? m.anchorLabel">
     <span
       :class="css.indicator"
       :style="{ transform: `translateY(${indicator.top}px)`, height: `${indicator.height}px` }"

@@ -2,8 +2,11 @@
 import { computed, ref, useId, watch } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import css from './MochiCodeInput.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiCodeInput' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -82,7 +85,7 @@ watch(model, (value) => {
 
 <template>
   <FieldShell :label="label" :hint="hint" :field-id="fieldId" :hint-id="hintId" :invalid="invalid">
-    <div ref="groupEl" :class="css.root" role="group" :aria-label="`${length} 位兑换码`">
+    <div ref="groupEl" :class="css.root" role="group" :aria-label="m.codeGroup(length)">
       <input
         v-for="(char, index) in boxes"
         :key="index"
@@ -94,7 +97,7 @@ watch(model, (value) => {
         :value="char"
         :maxlength="1"
         :disabled="disabled"
-        :aria-label="`第 ${index + 1} 位`"
+        :aria-label="m.codeCell(index + 1)"
         :aria-invalid="invalid || undefined"
         spellcheck="false"
         @input="onInput(index, $event)"

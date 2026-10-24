@@ -6,6 +6,8 @@
  * 组件样式随组件按需加载，不受此约定影响。
  */
 export { applyTheme } from './tokens';
+export { setLocale, getLocale, useMessages } from './locale';
+export type { MochiLocaleName, MochiMessages } from './locale';
 export type { MochiTheme, MochiTokenName } from './tokens';
 
 // 组件：具名导出，与按需引入的子路径共享同一份实现

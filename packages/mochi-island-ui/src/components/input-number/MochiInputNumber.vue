@@ -2,8 +2,11 @@
 import { computed, useId } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import css from './MochiInputNumber.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiInputNumber' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -42,7 +45,7 @@ function onInput(event: Event) {
 
 <template>
   <FieldShell :label="label" :hint="hint" :field-id="fieldId" :hint-id="hintId" :invalid="invalid">
-    <button :class="css.step" type="button" :disabled="disabled" aria-label="减少" @click="nudge(-1)">
+    <button :class="css.step" type="button" :disabled="disabled" :aria-label="m.inputNumberDec" @click="nudge(-1)">
       <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 5 H8" /></svg>
     </button>
 
@@ -60,7 +63,7 @@ function onInput(event: Event) {
       @keydown.down.prevent="nudge(-1)"
     />
 
-    <button :class="css.step" type="button" :disabled="disabled" aria-label="增加" @click="nudge(1)">
+    <button :class="css.step" type="button" :disabled="disabled" :aria-label="m.inputNumberInc" @click="nudge(1)">
       <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 5 H8 M5 2 V8" /></svg>
     </button>
   </FieldShell>

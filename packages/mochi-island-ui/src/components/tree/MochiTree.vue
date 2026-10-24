@@ -3,8 +3,11 @@ import { ref } from 'vue';
 import MochiTreeRow from './MochiTreeRow.vue';
 import type { MochiTreeNode } from './types';
 import css from './MochiTree.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTree' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -12,7 +15,7 @@ const props = withDefaults(
     defaultExpandAll?: boolean;
     label?: string;
   }>(),
-  { defaultExpandAll: false, label: '树' },
+  { defaultExpandAll: false },
 );
 
 const selected = defineModel<string>('selected', { default: '' });
@@ -40,7 +43,7 @@ function select(node: MochiTreeNode) {
 </script>
 
 <template>
-  <ul :class="css.root" role="tree" :aria-label="label">
+  <ul :class="css.root" role="tree" :aria-label="label ?? m.treeLabel">
     <MochiTreeRow
       v-for="node in data"
       :key="node.key"

@@ -2,6 +2,9 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { dismissToast, type MochiToastItem } from '../../composables/toast';
 import css from './MochiToastHost.module.css';
+import { useMessages } from '../../locale';
+
+const m = useMessages();
 
 const props = defineProps<{ item: MochiToastItem; index?: number }>();
 
@@ -49,7 +52,7 @@ onBeforeUnmount(() => clearTimeout(timer));
       <p v-if="item.description" :class="css.desc">{{ item.description }}</p>
     </div>
 
-    <button :class="css.close" type="button" aria-label="关闭通知" @click="dismissToast(item.id)">
+    <button :class="css.close" type="button" :aria-label="m.toastClose" @click="dismissToast(item.id)">
       <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2 L8 8 M8 2 L2 8" /></svg>
     </button>
 

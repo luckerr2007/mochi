@@ -3,8 +3,11 @@ import { computed, ref, useId, watch } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import MochiPopover from '../popover/MochiPopover.vue';
 import css from './MochiAutoComplete.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiAutoComplete' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -17,7 +20,7 @@ const props = withDefaults(
     /** 最多展示几条建议 */
     limit?: number;
   }>(),
-  { placeholder: '输入以筛选', limit: 8 },
+  { limit: 8 },
 );
 
 const emit = defineEmits<{ select: [string] }>();
@@ -71,7 +74,7 @@ watch([open, model], () => {
           v-model="model"
           :class="css.control"
           type="text"
-          :placeholder="placeholder"
+          :placeholder="placeholder ?? m.autoCompletePlaceholder"
           :disabled="disabled"
           :invalid="invalid || undefined"
           role="combobox"
@@ -87,7 +90,7 @@ watch([open, model], () => {
         />
       </template>
 
-      <ul :id="listId" :class="css.list" role="listbox" :aria-label="label || '建议'">
+      <ul :id="listId" :class="css.list" role="listbox" :aria-label="label ?? m.autoCompleteList">
         <li v-for="(option, index) in suggestions" :key="option">
           <button
             :class="css.option"
@@ -102,7 +105,7 @@ watch([open, model], () => {
             {{ option }}
           </button>
         </li>
-        <li v-if="!suggestions.length" :class="css.empty">没有匹配的项</li>
+        <li v-if="!suggestions.length" :class="css.empty">{{ m.autoCompleteEmpty }}</li>
       </ul>
     </MochiPopover>
   </FieldShell>

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed, ref, useId } from 'vue';
 import css from './MochiRate.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiRate' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -11,7 +14,7 @@ const props = withDefaults(
     /** radiogroup 的无障碍名称 */
     label?: string;
   }>(),
-  { max: 5, readOnly: false, label: '评分' },
+  { max: 5, readOnly: false },
 );
 
 const model = defineModel<number>({ default: 0 });
@@ -27,7 +30,7 @@ const display = computed(() => hovered.value || model.value);
     :class="css.root"
     :data-readonly="readOnly || undefined"
     role="radiogroup"
-    :aria-label="label"
+    :aria-label="label ?? m.rateLabel"
     @pointerleave="hovered = 0"
   >
     <label
@@ -44,7 +47,7 @@ const display = computed(() => hovered.value || model.value);
         :name="groupName"
         :value="star"
         :disabled="readOnly"
-        :aria-label="`${star} 星`"
+        :aria-label="m.rateStar(star)"
       />
       <svg :class="css.star" :data-filled="star <= display || undefined" viewBox="0 0 20 19" aria-hidden="true">
         <path

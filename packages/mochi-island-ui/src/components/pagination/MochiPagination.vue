@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import css from './MochiPagination.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiPagination' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -42,7 +45,7 @@ function go(page: number) {
 
 <template>
   <nav :class="css.root" :aria-label="label">
-    <button :class="css.nav" type="button" :disabled="current <= 1" aria-label="上一页" @click="go(current - 1)">
+    <button :class="css.nav" type="button" :disabled="current <= 1" :aria-label="m.paginationPrev" @click="go(current - 1)">
       <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2.5 L4 6 L7.5 9.5" /></svg>
     </button>
 
@@ -63,7 +66,7 @@ function go(page: number) {
       :class="css.nav"
       type="button"
       :disabled="current >= total"
-      aria-label="下一页"
+      :aria-label="m.paginationNext"
       @click="go(current + 1)"
     >
       <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 2.5 L8 6 L4.5 9.5" /></svg>

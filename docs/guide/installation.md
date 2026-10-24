@@ -62,3 +62,15 @@ CSS Modules 的类名映射在 JS 里，所以样式必须整包引入——这�
 ## 浏览器要求
 
 构建目标是 ES2022，样式用到 `color-mix()`（Chrome 111+ / Safari 16.2+）。
+
+## 内置文案国际化（1.1 起）
+
+组件的内置文案（占位符、aria 标签、空态、单位）默认跟随中文，可一键切换英文：
+
+```ts
+import { setLocale } from 'mochi-island-ui';
+
+setLocale('en-US'); // 切回中文：setLocale('zh-CN')
+```
+
+已挂载的组件会响应式跟随；你显式传入的 props（`placeholder`、`emptyText`、`closeLabel`…）永远优先于词典。

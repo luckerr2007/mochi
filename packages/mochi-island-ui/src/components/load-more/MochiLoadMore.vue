@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import MochiSpinner from '../spinner/MochiSpinner.vue';
 import css from './MochiLoadMore.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiLoadMore' });
+
+const m = useMessages();
 
 withDefaults(
   defineProps<{
@@ -12,7 +15,7 @@ withDefaults(
     loadingText?: string;
     doneText?: string;
   }>(),
-  { status: 'idle', idleText: '加载更多', loadingText: '加载中…', doneText: '没有更多了' },
+  { status: 'idle' },
 );
 
 const emit = defineEmits<{ more: [] }>();
@@ -29,7 +32,7 @@ const emit = defineEmits<{ more: [] }>();
   >
     <MochiSpinner v-if="status === 'loading'" :size="14" />
     <span :class="css.text">
-      {{ status === 'loading' ? loadingText : status === 'done' ? doneText : idleText }}
+      {{ status === 'loading' ? (loadingText ?? m.loadMoreLoading) : status === 'done' ? (doneText ?? m.loadMoreDone) : (idleText ?? m.loadMoreIdle) }}
     </span>
   </button>
 </template>

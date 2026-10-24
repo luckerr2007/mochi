@@ -92,7 +92,7 @@ const zhTheme = {
     { text: '令牌', link: '/guide/theming' },
   ],
   sidebar: zhSidebar,
-  outline: { label: '本页目录', level: [2, 3] },
+  outline: { label: '本页目录', level: [2, 3] as [number, number] },
   docFooter: { prev: '上一篇', next: '下一篇' },
   returnToTopLabel: '回到顶部',
   darkModeSwitchLabel: '主题',
@@ -137,7 +137,7 @@ const enTheme = {
       },
     ],
   },
-  outline: { label: 'On this page', level: [2, 3] },
+  outline: { label: 'On this page', level: [2, 3] as [number, number] },
   docFooter: { prev: 'Previous', next: 'Next' },
   returnToTopLabel: 'Back to top',
   sidebarMenuLabel: 'Menu',
@@ -173,6 +173,6 @@ export default defineConfig({
   ignoreDeadLinks: true,
 
   themeConfig: {
-    outline: { label: '本页目录', level: [2, 3] },
+    outline: { label: '本页目录', level: [2, 3] as [number, number] },
   },
 });

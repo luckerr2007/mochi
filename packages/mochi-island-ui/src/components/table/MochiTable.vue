@@ -2,8 +2,11 @@
 import { computed, ref, TransitionGroup } from 'vue';
 import type { MochiTableColumn, MochiTableSort } from './types';
 import css from './MochiTable.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTable' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -14,7 +17,7 @@ const props = withDefaults(
     striped?: boolean;
     emptyText?: string;
   }>(),
-  { rowKey: 'id', emptyText: '暂无数据' },
+  { rowKey: 'id' },
 );
 
 const emit = defineEmits<{ 'sort-change': [MochiTableSort | null] }>();
@@ -110,7 +113,7 @@ function ariaSort(column: MochiTableColumn) {
       <tbody v-if="!sortedRows.length">
         <tr>
           <td :class="css.empty" :colspan="columns.length">
-            <slot name="empty">{{ emptyText }}</slot>
+            <slot name="empty">{{ emptyText ?? m.tableEmpty }}</slot>
           </td>
         </tr>
       </tbody>

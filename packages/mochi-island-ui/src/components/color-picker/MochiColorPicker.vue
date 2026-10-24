@@ -3,8 +3,11 @@ import { reactive, ref, watch } from 'vue';
 import MochiPopover from '../popover/MochiPopover.vue';
 import { clamp, hexToHsv, hsvToHex, normalizeHex } from './color';
 import css from './MochiColorPicker.module.css';
+import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiColorPicker' });
+
+const m = useMessages();
 
 const props = withDefaults(
   defineProps<{
@@ -144,7 +147,7 @@ function pickSwatch(hex: string) {
           :class="css.sv"
           :style="{ '--_hue': `${hsv.h}deg` }"
           tabindex="0"
-          :aria-label="`取色面板，当前 ${model}`"
+          :aria-label="m.svPanel(model)"
           @pointerdown="onSvDown"
           @pointermove="onSvMove"
           @pointerup="onSvUp"
@@ -164,7 +167,7 @@ function pickSwatch(hex: string) {
           min="0"
           max="360"
           :value="hsv.h"
-          aria-label="色相"
+          :aria-label="m.hueSlider"
           @input="setHue"
         />
 
@@ -183,7 +186,7 @@ function pickSwatch(hex: string) {
           <span :class="css.preview" :style="{ background: model }" aria-hidden="true" />
         </div>
 
-        <div :class="css.swatches" role="listbox" aria-label="预设颜色">
+        <div :class="css.swatches" role="listbox" :aria-label="m.swatchesLabel">
           <button
             v-for="hex in swatches"
             :key="hex"
