@@ -1,5 +1,18 @@
 # Mochi
 
+## English
+
+**Mochi Island UI** (formerly `mochi-ui`) is a cartoon-soft Vue 3 component library where the design tokens are the API — every color, spacing, radius and motion parameter is a CSS custom property, so runtime theming needs no rebuild.
+
+- 74 components · 123 tests · full keyboard & `prefers-reduced-motion` support
+- Docs (Chinese): https://mochi.liveroom.dpdns.org/
+- Blog template example (bilingual 🇨🇳/🇬🇧): https://mochi.liveroom.dpdns.org/blog/
+
+```bash
+npm install mochi-island-ui
+```
+
+
 卡通风格的 Vue 3 组件库。设计语言工程化：所有视觉决策都落在 `--mochi-*` CSS 自定义属性上，
 使用者无需改源码即可在运行时换肤。
 

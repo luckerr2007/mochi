@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 // 模板示例：显式引入组件（也可以配 unplugin-vue-components 自动按需）
 import {
   MochiAvatar,
@@ -13,13 +13,15 @@ import {
   MochiLoadMore,
   MochiPanel,
   MochiProgressRing,
+  MochiSegmented,
   MochiStatistic,
   MochiTag,
   MochiTimeline,
 } from 'mochi-island-ui';
 import { archive, posts, type BlogPost } from './posts';
+import { locale, localeOptions, setLocale, useT, type Locale } from './i18n';
 
-/* ---------- 极简 hash 路由：#/post/<key> 是文章页，其余是列表页 ---------- */
+/* ---------- 极简 hash 路由：#/post/<key> 是文章页，#/archive 归档，其余列表页 ---------- */
 const route = ref(window.location.hash);
 window.addEventListener('hashchange', () => {
   route.value = window.location.hash;
@@ -30,19 +32,32 @@ const currentPost = computed<BlogPost | null>(() => {
   return match ? (posts.find((post) => post.key === match[1]) ?? null) : null;
 });
 
-/* ---------- 列表：LoadMore 分页 ---------- */
+const t = useT();
+
+// 文章本地化视图：语言切换时 key 不变、内容随之切换
+const localized = computed(() => posts.map((post) => ({ ...post, ...post[locale.value as Locale] })));
+const currentLocalized = computed(() =>
+  currentPost.value ? (currentPost.value[locale.value as Locale] ?? currentPost.value.zh) : null,
+);
+
+// 上下篇（按 posts 声明顺序）
+const postIndex = computed(() => (currentPost.value ? posts.findIndex((p) => p.key === currentPost.value!.key) : -1));
+const prevPost = computed(() => (postIndex.value > 0 ? posts[postIndex.value - 1] : null));
+const nextPost = computed(() => (postIndex.value >= 0 && postIndex.value < posts.length - 1 ? posts[postIndex.value + 1] : null));
+
+/* ---------- 列表：LoadMore 分页 + 标签筛选 ---------- */
 const visibleCount = ref(3);
 const loadStatus = ref<'idle' | 'loading' | 'done'>('idle');
-const visiblePosts = computed(() => posts.slice(0, visibleCount.value));
+const visiblePosts = computed(() => localized.value.slice(0, visibleCount.value));
 function loadMore() {
   loadStatus.value = 'loading';
   setTimeout(() => {
-    visibleCount.value = posts.length;
+    visibleCount.value = localized.value.length;
     loadStatus.value = 'done';
   }, 900);
 }
 
-const allTags = [...new Set(posts.flatMap((post) => post.tags))];
+const allTags = computed(() => [...new Set(localized.value.flatMap((post) => post.tags))]);
 const activeTag = ref('');
 const filteredPosts = computed(() =>
   activeTag.value ? visiblePosts.value.filter((post) => post.tags.includes(activeTag.value)) : visiblePosts.value,
@@ -53,57 +68,78 @@ function toggleTag(tag: string) {
 
 const bannerOpen = ref(true);
 function goPost(key: string) {
-  window.location.hash = `#/post/${key}`;
+  window.location.hash = key ? `#/post/${key}` : '#/';
 }
+
+// 语言或路由变化时同步标签页标题
+watch([locale, route, currentPost], () => {
+  const site = t.value.siteName;
+  document.title = currentLocalized.value
+    ? `${currentLocalized.value.title} · ${site}`
+    : `${t.value.navHome} · ${site}`;
+}, { immediate: true });
 </script>
 
 <template>
   <div :class="css.page">
     <!-- 全站公告：吸顶横幅，关闭时高度收起 -->
-    <MochiBanner v-model:open="bannerOpen" tone="success" title="岛屿公告" sticky>
-      博客模板已用 Mochi 组件搭建完成，欢迎按 <MochiKbd>⌘K</MochiKbd> 的思路定制自己的岛。
+    <MochiBanner v-model:open="bannerOpen" tone="success" :title="t.bannerTitle" sticky>
+      {{ t.bannerText }}
     </MochiBanner>
 
     <header :class="css.header">
-      <span :class="css.brand"><i :class="css.dot" />薄荷岛日报</span>
+      <span :class="css.brand"><i :class="css.dot" />{{ t.siteName }}</span>
       <nav :class="css.nav">
-        <a :class="css.navLink" href="#/">首页</a>
-        <a :class="css.navLink" href="#/archive" :data-active="route === '#/archive' || undefined">归档</a>
+        <a :class="css.navLink" href="#/" :data-active="route !== '#/archive' && !currentPost || undefined">{{ t.navHome }}</a>
+        <a :class="css.navLink" href="#/archive" :data-active="route === '#/archive' || undefined">{{ t.navArchive }}</a>
+        <MochiSegmented
+          :model-value="locale"
+          :options="localeOptions"
+          :label="t.langLabel"
+          size="sm"
+          @update:model-value="setLocale($event as Locale)"
+        />
       </nav>
     </header>
 
     <!-- 文章页 -->
-    <main v-if="currentPost" :class="css.post">
-      <MochiButton size="sm" variant="ghost" @click="goPost('')">← 回列表</MochiButton>
-      <h1 :class="css.postTitle">{{ currentPost.title }}</h1>
+    <main v-if="currentPost && currentLocalized" :class="css.post">
+      <MochiButton size="sm" variant="ghost" @click="goPost('')">{{ t.backToList }}</MochiButton>
+      <h1 :class="css.postTitle">{{ currentLocalized.title }}</h1>
       <p :class="css.meta">
-        <MochiTag v-for="tag in currentPost.tags" :key="tag" tone="accent">{{ tag }}</MochiTag>
+        <MochiTag v-for="tag in currentLocalized.tags" :key="tag" tone="accent">{{ tag }}</MochiTag>
         <span :class="css.date">{{ currentPost.date }}</span>
       </p>
       <MochiDivider />
-      <p v-for="(para, i) in currentPost.paragraphs" :key="i" :class="css.para">{{ para }}</p>
-      <MochiDivider label="继续逛" />
+      <p v-for="(para, i) in currentLocalized.paragraphs" :key="i" :class="css.para">{{ para }}</p>
+      <MochiDivider :label="t.continueReading" />
       <MochiList divided>
-        <li v-for="other in posts.filter((p) => p.key !== currentPost.key)" :key="other.key">
+        <li v-for="other in localized.filter((p) => p.key !== currentPost?.key)" :key="other.key">
           <a :class="css.readNext" :href="`#/post/${other.key}`">{{ other.title }}</a>
         </li>
       </MochiList>
+      <p :class="css.pager">
+        <MochiButton v-if="prevPost" size="sm" variant="soft" @click="goPost(prevPost.key)">
+          {{ t.prevPost }}：{{ prevPost[locale].title }}
+        </MochiButton>
+        <MochiButton v-if="nextPost" size="sm" variant="soft" @click="goPost(nextPost.key)">
+          {{ t.nextPost }}：{{ nextPost[locale].title }}
+        </MochiButton>
+      </p>
     </main>
 
     <!-- 归档页 -->
     <main v-else-if="route === '#/archive'" :class="css.home">
-      <MochiPanel title="归档">
-        <MochiTimeline
-          :items="archive.map((a) => ({ title: a.title, time: a.date }))"
-        />
+      <MochiPanel :title="t.panelArchive">
+        <MochiTimeline :items="archive.map((a) => ({ title: a.title[locale], time: a.date }))" />
       </MochiPanel>
     </main>
 
     <!-- 列表页 -->
     <main v-else :class="css.home">
-      <MochiPanel title="最新文章" class="block">
+      <MochiPanel class="block">
         <template #header>
-          <h2 :class="css.listTitle">最新文章</h2>
+          <h2 :class="css.listTitle">{{ t.latest }}</h2>
           <div :class="css.tagRow">
             <MochiTag
               v-for="tag in allTags"
@@ -126,34 +162,40 @@ function goPost(key: string) {
           </p>
         </article>
 
-        <MochiLoadMore :status="loadStatus" @more="loadMore" />
+        <MochiLoadMore
+          :status="loadStatus"
+          :idle-text="t.loadMore"
+          :loading-text="t.loading"
+          :done-text="t.noMore"
+          @more="loadMore"
+        />
       </MochiPanel>
 
       <!-- 侧栏：打招呼、统计、归档 -->
       <aside :class="css.side">
         <MochiPanel class="block">
           <div :class="css.profile">
-            <MochiAvatar name="咕噜" size="lg" />
+            <MochiAvatar name="Guru" size="lg" />
             <div>
-              <strong>咕噜</strong>
-              <p :class="css.profileText">岛龄 3 年 · 每周更新</p>
+              <strong>咕噜 / Guru</strong>
+              <p :class="css.profileText">{{ t.profileRole }}</p>
             </div>
           </div>
-          <MochiDialogBubble placement="right" text="今天的博客也很热闹，随便逛逛吧！" />
+          <MochiDialogBubble placement="right" :text="t.greeting" />
         </MochiPanel>
 
-        <MochiPanel title="岛上数据">
+        <MochiPanel :title="locale === 'zh' ? '岛上数据' : 'Isle stats'">
           <div :class="css.stats">
-            <MochiStatistic title="文章" :value="posts.length" suffix="篇" />
-            <MochiStatistic title="标签" :value="allTags.length" suffix="个" />
-            <MochiProgressRing :value="72" :size="72" label="写作进度" />
+            <MochiStatistic :title="t.statsPosts" :value="posts.length" :suffix="t.postsUnit" />
+            <MochiStatistic :title="t.statsTags" :value="allTags.length" :suffix="t.tagsUnit" />
+            <MochiProgressRing :value="72" :size="72" :label="t.writing" />
           </div>
         </MochiPanel>
 
-        <MochiPanel title="归档">
+        <MochiPanel :title="t.panelArchive">
           <MochiList divided>
             <li v-for="item in archive.slice(0, 3)" :key="item.key">
-              <a :class="css.readNext" :href="`#/post/${item.key}`">{{ item.title }}</a>
+              <a :class="css.readNext" :href="`#/post/${item.key}`">{{ item.title[locale] }}</a>
             </li>
           </MochiList>
         </MochiPanel>
@@ -161,7 +203,7 @@ function goPost(key: string) {
     </main>
 
     <footer :class="css.footer">
-      <span>用 <MochiKbd>mochi-island-ui</MochiKbd> 搭建 · 薄荷岛日报</span>
+      <span>{{ t.builtWith }} <MochiKbd>mochi-island-ui</MochiKbd> {{ t.footer }}</span>
     </footer>
 
     <MochiBackTop />
@@ -187,6 +229,7 @@ function goPost(key: string) {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 20px 0;
 }
 
@@ -208,6 +251,7 @@ function goPost(key: string) {
 
 .nav {
   display: flex;
+  align-items: center;
   gap: 16px;
 }
 
@@ -285,6 +329,7 @@ function goPost(key: string) {
   align-items: center;
   gap: 8px;
   margin: 0;
+  flex-wrap: wrap;
 }
 
 .date {
@@ -301,7 +346,6 @@ function goPost(key: string) {
 
 .postTitle {
   margin: 16px 0 8px;
-  font-size: var(--mochi-font-size-lg);
   font-size: 28px;
   line-height: 1.3;
 }
@@ -318,6 +362,13 @@ function goPost(key: string) {
 
 .readNext:hover {
   color: var(--mochi-primary-deep);
+}
+
+.pager {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0 0;
 }
 
 .profile {

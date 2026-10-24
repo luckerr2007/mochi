@@ -12,6 +12,9 @@ hero:
     - theme: alt
       text: 浏览组件
       link: /components/button
+    - theme: alt
+      text: 博客模板示例
+      link: https://mochi.liveroom.dpdns.org/blog/
 
 features:
   - title: 令牌即 API
@@ -20,6 +23,8 @@ features:
     details: 弹簧曲线、按下位移、错峰入场。参数全部暴露为令牌，可整体调慢或关掉。
   - title: 尊重系统偏好
     details: prefers-reduced-motion 下移除过渡与悬浮，保留状态反馈；焦点环双层，在按钮描边上也看得见。
+  - title: 有现成的博客模板
+    details: 用这套组件搭好的双语博客示例——Banner、归档 Timeline、LoadMore 分页、侧栏数据面板，直接换文案就能用。
 ---
 
 ## 看一眼
@@ -41,3 +46,9 @@ features:
 </div>
 
 上面每个组件都没有写 import——文档站用同一套 `unplugin-vue-components` 解析器注册的。
+
+## 博客模板
+
+这份文档站的组件在 [博客模板示例](https://mochi.liveroom.dpdns.org/blog/) 里被搭成了一个完整的双语博客——
+首页（公告横幅、标签筛选、加载更多、侧栏数据面板）、文章页与归档页（hash 路由）、中英文一键切换。
+模板源码在仓库的 `examples/blog/`，复制走换掉数据就是自己的岛。
