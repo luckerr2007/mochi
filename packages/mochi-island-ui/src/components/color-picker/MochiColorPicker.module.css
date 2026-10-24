@@ -1,0 +1,236 @@
+/*
+ * 令牌清单
+ *   色彩：--mochi-surface-sunken / --mochi-line / --mochi-ink / --mochi-ink-soft / --mochi-primary-deep
+ *   几何：--mochi-radius-sm|xs / --mochi-space-2·3 / --mochi-control-md / --mochi-border-hairline
+ *   动效：--mochi-spring / --mochi-duration-base / --mochi-duration-press
+ * 纪律：SV 面板渐变是功能本身（取色的轴），不算装饰性裸色；
+ *       色相条必须用系统 range，键盘与读屏免费。
+ */
+
+.root {
+  display: inline-block;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  box-sizing: border-box;
+  height: var(--mochi-control-md);
+  padding: 0 var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-surface-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  cursor: pointer;
+}
+
+.trigger:disabled {
+  color: var(--mochi-ink-soft);
+  cursor: not-allowed;
+}
+
+.trigger:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-shadow-inset), var(--mochi-focus-ring);
+}
+
+.swatch {
+  width: 20px;
+  height: 20px;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-xs);
+}
+
+.text {
+  font-size: var(--mochi-font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.chevron {
+  width: 12px;
+  height: 12px;
+  transition: rotate var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.chevron[data-open='true'] {
+  rotate: 180deg;
+}
+
+.chevron path {
+  fill: none;
+  stroke: var(--mochi-ink-soft);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- 弹出面板 ---------- */
+.panel {
+  box-sizing: border-box;
+  padding: var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  box-shadow:
+    inset 0 0 0 var(--mochi-space-1) var(--mochi-surface),
+    inset 0 0 0 calc(var(--mochi-space-1) + var(--mochi-border-hairline)) var(--mochi-line),
+    var(--mochi-shadow-soft);
+}
+
+.sv {
+  position: relative;
+  height: 144px;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-xs);
+  /* 底色 = 当前色相的全饱和色；黑白两轴用渐变叠出，拖动即取色 */
+  background:
+    linear-gradient(to top, #000, transparent),
+    linear-gradient(to right, #fff, transparent),
+    hsl(var(--_hue) 100% 50%);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.sv:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.thumb {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #fff;
+  border-radius: var(--mochi-radius-full);
+  box-shadow: 0 0 0 var(--mochi-border-hairline) var(--mochi-line), var(--mochi-shadow-soft);
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.hue {
+  width: 100%;
+  height: 14px;
+  margin: var(--mochi-space-3) 0 0;
+  appearance: none;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-full);
+  /* 色相轴是功能渐变：红 → 黄 → 绿 → 青 → 蓝 → 品红 → 红 */
+  background: linear-gradient(
+    to right,
+    #f00,
+    #ff0,
+    #0f0,
+    #0ff,
+    #00f,
+    #f0f,
+    #f00
+  );
+  cursor: pointer;
+}
+
+.hue:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.hue::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  appearance: none;
+  border: 2px solid var(--mochi-surface);
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  box-shadow: 0 0 0 var(--mochi-border-hairline) var(--mochi-line);
+}
+
+.hue::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--mochi-surface);
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  box-shadow: 0 0 0 var(--mochi-border-hairline) var(--mochi-line);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  margin-top: var(--mochi-space-3);
+}
+
+.hex {
+  flex: 1;
+  box-sizing: border-box;
+  height: var(--mochi-control-sm);
+  min-width: 0;
+  padding: 0 var(--mochi-space-2);
+  border: 0;
+  border-radius: var(--mochi-radius-xs);
+  background: var(--mochi-surface-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+  color: var(--mochi-ink);
+  font-family: ui-monospace, monospace;
+  font-size: var(--mochi-font-size-sm);
+}
+
+.hex:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-shadow-inset), var(--mochi-focus-ring);
+}
+
+.preview {
+  flex: none;
+  width: var(--mochi-control-sm);
+  height: var(--mochi-control-sm);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-xs);
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mochi-space-2);
+  margin-top: var(--mochi-space-3);
+}
+
+.dot {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-xs);
+  cursor: pointer;
+  transition:
+    scale var(--mochi-duration-press) var(--mochi-spring),
+    box-shadow var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.dot:hover {
+  scale: 1.12;
+}
+
+.dot:active {
+  scale: 0.92;
+}
+
+.dot:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+/* 选中的预设：深色描边 + 外圈留缝，和焦点环同构 */
+.dot[aria-selected='true'] {
+  box-shadow: 0 0 0 2px var(--mochi-surface), 0 0 0 4px var(--mochi-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron,
+  .dot {
+    transition: none;
+  }
+}

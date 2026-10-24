@@ -1,0 +1,161 @@
+/*
+ * 令牌：--mochi-surface / --mochi-line / --mochi-bg-sunken / --mochi-ink / --mochi-ink-soft
+ *        --mochi-radius-md / --mochi-space-* / --mochi-primary（排序高亮）
+ * 动效：行悬停底色用 base 时长滑入（不是 fast 的一闪）；
+ *        行入场按索引错峰上浮 4px（只动前 8 行，长表不等，延迟上限 8×stagger）
+ */
+.wrap {
+  overflow: hidden;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+}
+
+.root.root {
+  display: table;
+  margin: 0;
+  overflow: visible;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  color: var(--mochi-ink);
+}
+
+.th.th {
+  border: 0;
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border-bottom: var(--mochi-border-hairline) solid var(--mochi-line);
+  background: var(--mochi-bg-sunken);
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  font-weight: var(--mochi-font-weight-bold);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.sorter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-xs);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.sorter:hover {
+  color: var(--mochi-ink);
+}
+
+.sorter:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.arrow {
+  width: 8px;
+  height: 10px;
+  opacity: 0;
+  transition:
+    opacity var(--mochi-duration-fast) var(--mochi-ease-out),
+    rotate var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.arrow[data-order='asc'],
+.arrow[data-order='desc'] {
+  opacity: 1;
+}
+
+/* 升序只留上箭头，降序把图标整体翻过来 */
+.arrow[data-order='desc'] {
+  rotate: 180deg;
+}
+
+.arrow path:first-child {
+  fill: var(--mochi-primary);
+}
+
+.arrow path:last-child {
+  fill: var(--mochi-line-strong);
+}
+
+.arrow[data-order='desc'] path:first-child {
+  fill: var(--mochi-line-strong);
+}
+
+.arrow[data-order='desc'] path:last-child {
+  fill: var(--mochi-primary);
+}
+
+.tr.tr {
+  background: transparent;
+  border-top: 0;
+  transition: background-color var(--mochi-duration-base) var(--mochi-ease-out);
+  /* 行入场错峰：只给前 8 行阶梯延迟，长表不等（--_i 由行内 style 提供） */
+  animation: rowIn var(--mochi-duration-base) var(--mochi-spring-soft) backwards;
+  animation-delay: calc(min(var(--_i, 0), 8) * var(--mochi-stagger));
+}
+
+/* 排序时的 FLIP 位移：TransitionGroup 的 move-class，行滑到新位置。
+   只做 move 不做离场动画——tr 的绝对定位在表格布局里不可靠，删除行保持瞬移 */
+.rowMove {
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--mochi-space-1));
+  }
+}
+
+.tr.tr:hover {
+  background: color-mix(in srgb, var(--mochi-bg-sunken) 55%, transparent);
+}
+
+.root[data-striped] .tr:nth-child(even) {
+  background: color-mix(in srgb, var(--mochi-bg-sunken) 35%, transparent);
+}
+
+.root[data-striped] .tr:nth-child(even):hover {
+  background: color-mix(in srgb, var(--mochi-bg-sunken) 70%, transparent);
+}
+
+.td.td {
+  border: 0;
+  font-size: inherit;
+  padding: var(--mochi-space-3);
+  border-bottom: var(--mochi-border-hairline) solid var(--mochi-line);
+}
+
+.tr:last-child .td {
+  border-bottom: 0;
+}
+
+.empty.empty {
+  border: 0;
+  padding: var(--mochi-space-8);
+  color: var(--mochi-ink-soft);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tr,
+  .arrow,
+  .sorter {
+    transition: none;
+  }
+
+  .tr {
+    animation: none;
+  }
+
+  .rowMove {
+    transition: none;
+  }
+}

@@ -1,0 +1,93 @@
+/*!
+ * Mochi Design Tokens
+ *
+ * 唯一主题来源。组件样式只允许通过 var(--mochi-*) 取值，不得出现裸色值/裸像素。
+ * 使用者在 :root（或任意容器）覆盖同名变量即可运行时换肤，无需改源码。
+ *
+ * 视觉基因：动物森友会的暖米白画布 + 深棕文字（非纯黑）、大圆角；
+ * 星露谷的空间纪律（4px 网格、多层柔和边框）；糖果色仅作可选强调。
+ * 纪律：间距 / 边框宽度 / 阴影偏移一律整数 px，不做小数。
+ */
+:root {
+  /* ---------- 色彩：主色与前景 ---------- */
+  --mochi-primary: #f0875c;            /* 蜜桃橘：主按钮、选中态 */
+  --mochi-primary-deep: #c2603c;       /* 3D 下沿与描边，压暗主色即可换肤 */
+  --mochi-primary-soft: #fde0d2;       /* 浅底：选中行、标签底 */
+  --mochi-on-primary: #43281a;         /* 主色之上的文字：深棕，对 --mochi-primary 达 5.3:1（奶油白仅 2.4:1，不可用） */
+
+  /* ---------- 色彩：画布与表面 ---------- */
+  --mochi-bg: #fdf6e9;                 /* 暖米白页面底 */
+  --mochi-bg-sunken: #f3e7d4;          /* 凹陷区（输入槽、页脚） */
+  --mochi-surface: #fffdf7;            /* 面板/卡片表面 */
+  --mochi-surface-sunken: #f8efe0;
+
+  /* ---------- 色彩：文字与描边 ---------- */
+  --mochi-ink: #3d2f28;                /* 深棕，替代纯黑 */
+  --mochi-ink-soft: #7a6455;           /* 次要文字、占位符：对表面 5.4:1，13px 也达标 */
+  --mochi-line: #e6d7c3;               /* 外层柔和描边 */
+  --mochi-line-strong: #d3bda2;        /* 内层强调描边 */
+
+  /* ---------- 色彩：可选强调（糖果高亮，只做点缀） ---------- */
+  --mochi-accent: #7fc8c0;
+  --mochi-accent-candy: #ff9fb8;
+  --mochi-danger: #bf4a46;
+
+  /* ---------- 圆角：大圆角是卡通感的第一来源 ---------- */
+  --mochi-radius-xs: 8px;              /* 小方块：勾选框、色块 */
+  --mochi-radius-sm: 12px;
+  --mochi-radius-md: 16px;
+  --mochi-radius-lg: 20px;
+  --mochi-radius-full: 999px;          /* 胶囊按钮 */
+
+  /* ---------- 控件高度：一排控件必须共用同一条基线 ---------- */
+  --mochi-control-sm: 32px;
+  --mochi-control-md: 40px;
+  --mochi-control-lg: 48px;
+
+  /* ---------- 间距：4px 基础网格，组件只允许取它的整数倍 ---------- */
+  --mochi-space-unit: 4px;
+  --mochi-space-1: calc(var(--mochi-space-unit) * 1);   /* 4  */
+  --mochi-space-2: calc(var(--mochi-space-unit) * 2);   /* 8  */
+  --mochi-space-3: calc(var(--mochi-space-unit) * 3);   /* 12 */
+  --mochi-space-4: calc(var(--mochi-space-unit) * 4);   /* 16 */
+  --mochi-space-6: calc(var(--mochi-space-unit) * 6);   /* 24 */
+  --mochi-space-8: calc(var(--mochi-space-unit) * 8);   /* 32 */
+
+  /* ---------- 边框层次：外柔内实，星露谷式三层描边底座 ---------- */
+  --mochi-border-hairline: 1px;
+  --mochi-border-width: 2px;
+  --mochi-border-width-strong: 3px;
+
+  /* ---------- 阴影：大气氛柔和 + 小面积硬边（按下位移用） ---------- */
+  --mochi-shadow-offset: 4px;          /* 按下位移距离 = 阴影偏移 */
+  --mochi-shadow-color: rgba(61, 47, 40, 0.14);
+  --mochi-shadow-press-color: #dcc0a0; /* 3D 台阶的实色底：需明显深于 --mochi-bg，台阶才读得出 */
+  --mochi-shadow-soft: 0 10px 28px -10px var(--mochi-shadow-color);
+  --mochi-shadow-press: 0 var(--mochi-shadow-offset) 0 0 var(--mochi-shadow-press-color);
+  --mochi-shadow-inset: inset 0 2px 0 0 rgba(61, 47, 40, 0.08); /* 凹陷槽：输入框、开关轨道 */
+
+  /* ---------- 动效签名 ---------- */
+  --mochi-spring: cubic-bezier(0.34, 1.56, 0.64, 1);   /* 回弹，用过冲制造弹性 */
+  --mochi-spring-soft: cubic-bezier(0.22, 1.12, 0.36, 1); /* 大面积回弹：面板/弹层，过冲更小 */
+  --mochi-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --mochi-ease-in: cubic-bezier(0.4, 0, 1, 1);         /* 离场：快走，不拖泥带水 */
+  --mochi-duration-press: 90ms;        /* 按下比松手快，这是"手感"的一半 */
+  --mochi-duration-fast: 120ms;
+  --mochi-duration-base: 220ms;
+  --mochi-duration-slow: 420ms;
+  --mochi-stagger: 60ms;               /* 列表/通知错峰入场的单步延迟 */
+
+  /* ---------- 字体 ---------- */
+  --mochi-font-family: 'Nunito', 'PingFang SC', 'Hiragino Sans GB', system-ui, sans-serif;
+  --mochi-font-size-sm: 13px;
+  --mochi-font-size-base: 15px;
+  --mochi-font-size-lg: 18px;
+  --mochi-line-height: 1.55;
+  --mochi-font-weight-normal: 500;
+  --mochi-font-weight-bold: 800;
+
+  /* ---------- 焦点环：两层结构（先留底色缝隙，再画深色环），
+       保证在按钮自身描边上也能看清，且不依赖 outline 默认样式 ---------- */
+  --mochi-focus-ring-color: #b4552f;
+  --mochi-focus-ring: 0 0 0 3px var(--mochi-surface), 0 0 0 5px var(--mochi-focus-ring-color);
+}

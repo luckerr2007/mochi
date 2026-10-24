@@ -1,0 +1,154 @@
+/*
+ * 公告便签：语气底色 + 虚线内框（票券感）+ 台阶投影（与按钮同一套物理）。
+ * 徽章符号用墨色画在软色底上，四种语气都稳过对比度；色相只由底色与虚线承担。
+ * 令牌：--mochi-radius-md / --mochi-space-1·3·4 / --mochi-shadow-press-color
+ *       --mochi-duration-base / --mochi-spring-soft
+ */
+.root {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mochi-space-3);
+  padding: var(--mochi-space-3) var(--mochi-space-4);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color);
+  font-family: var(--mochi-font-family);
+  color: var(--mochi-ink);
+  /* 出现时从徽章一侧滑入，像刚被钉上公告板 */
+  animation: slideIn var(--mochi-duration-base) var(--mochi-spring-soft);
+}
+
+/* 虚线内框：票券的裁切线，颜色跟随语气 */
+.root::before {
+  content: '';
+  position: absolute;
+  inset: var(--mochi-space-1);
+  border: var(--mochi-border-hairline) dashed var(--_tone-line);
+  border-radius: calc(var(--mochi-radius-md) - var(--mochi-space-1));
+  pointer-events: none;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--mochi-space-3) * -1));
+  }
+}
+
+/* ---------- 语气：底色 / 徽章 / 虚线，全部从令牌色 color-mix 派生 ---------- */
+.root[data-tone='info'] {
+  --_tone: var(--mochi-accent);
+}
+
+.root[data-tone='success'] {
+  --_tone: var(--mochi-primary);
+}
+
+.root[data-tone='warning'] {
+  --_tone: var(--mochi-accent-candy);
+}
+
+.root[data-tone='danger'] {
+  --_tone: var(--mochi-danger);
+}
+
+.root[data-tone] {
+  background: color-mix(in srgb, var(--_tone) 10%, var(--mochi-surface));
+  --_tone-line: color-mix(in srgb, var(--_tone) 45%, transparent);
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: var(--mochi-border-hairline) solid color-mix(in srgb, var(--_tone) 55%, transparent);
+  border-radius: var(--mochi-radius-full);
+  background: color-mix(in srgb, var(--_tone) 26%, var(--mochi-surface));
+  color: var(--mochi-ink);
+}
+
+.badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+.badge path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  padding-top: var(--mochi-space-1);
+}
+
+.title.title {
+  margin: 0 0 var(--mochi-space-1);
+  font-size: var(--mochi-font-size-base);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.text.text {
+  margin: 0;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  line-height: var(--mochi-line-height);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: var(--mochi-space-1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.close:hover {
+  background: color-mix(in srgb, var(--mochi-ink) 8%, transparent);
+  rotate: 90deg;
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.close svg {
+  width: 10px;
+  height: 10px;
+}
+
+.close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    animation: none;
+  }
+
+  .close {
+    transition: none;
+  }
+}

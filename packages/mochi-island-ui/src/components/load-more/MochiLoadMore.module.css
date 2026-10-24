@@ -1,0 +1,83 @@
+/*
+ * 加载更多：idle 是软按钮（台阶物理），loading 挂旋转的线团，done 退成虚线灰字。
+ * 令牌：--mochi-surface / --mochi-line / --mochi-line-strong / --mochi-ink-soft
+ *        --mochi-radius-full / --mochi-control-sm / --mochi-shadow-press-color
+ *        --mochi-duration-fast|base / --mochi-spring / --mochi-ease-out|ease-in
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  min-width: 160px;
+  height: var(--mochi-control-sm);
+  padding: 0 var(--mochi-space-4);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  cursor: pointer;
+  box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color);
+  transition:
+    translate var(--mochi-duration-fast) var(--mochi-spring),
+    box-shadow var(--mochi-duration-fast) var(--mochi-spring),
+    border-color var(--mochi-duration-base) var(--mochi-ease-out),
+    opacity var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.root:hover:not(:disabled) {
+  translate: 0 -1px;
+  box-shadow: 0 3px 0 0 var(--mochi-shadow-press-color);
+}
+
+.root:active:not(:disabled) {
+  translate: 0 2px;
+  box-shadow: 0 0 0 0 transparent;
+}
+
+.root:focus-visible {
+  outline: none;
+  box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color), var(--mochi-focus-ring);
+}
+
+.root:disabled {
+  cursor: default;
+}
+
+/* 加载中：描边褪成浅色，注意力交给线团 */
+.root[data-status='loading'] {
+  border-color: transparent;
+  opacity: 0.75;
+}
+
+/* 没有 more 了：退成一条虚线灰签，视觉上"到此为止" */
+.root[data-status='done'] {
+  border-style: dashed;
+  border-color: var(--mochi-line-strong);
+  box-shadow: none;
+  color: var(--mochi-ink-soft);
+  opacity: 0.8;
+  animation: settle var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    translate: 0 var(--mochi-space-1);
+  }
+}
+
+.text {
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+
+  .root[data-status='done'] {
+    animation: none;
+  }
+}

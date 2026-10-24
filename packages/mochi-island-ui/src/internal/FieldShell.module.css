@@ -1,0 +1,66 @@
+/*
+ * 令牌清单
+ *   几何：--mochi-radius-md / --mochi-space-1 · 2 · 3 / --mochi-border-hairline
+ *   色彩：--mochi-surface-sunken / --mochi-surface / --mochi-line-strong
+ *         --mochi-ink / --mochi-ink-soft / --mochi-primary-deep / --mochi-danger
+ *   立体：--mochi-shadow-inset（内凹）+ --mochi-focus-ring（槽外双层焦点环）
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-1);
+  font-family: var(--mochi-font-family);
+}
+
+.label {
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.well {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--mochi-control-md);
+  box-sizing: border-box;
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+  transition:
+    border-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    box-shadow var(--mochi-duration-fast) var(--mochi-ease-out),
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+/* 聚焦时焦点环画在槽外，槽内仍是凹陷的 */
+.well:focus-within {
+  border-color: var(--mochi-primary-deep);
+  background: var(--mochi-surface);
+  box-shadow:
+    var(--mochi-shadow-inset),
+    var(--mochi-focus-ring);
+}
+
+.root[data-invalid] .well {
+  border-color: var(--mochi-danger);
+}
+
+.root[data-invalid] .well:focus-within {
+  box-shadow:
+    var(--mochi-shadow-inset),
+    0 0 0 3px var(--mochi-surface),
+    0 0 0 5px var(--mochi-danger);
+}
+
+.hint {
+  margin: 0;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.root[data-invalid] .hint {
+  color: var(--mochi-danger);
+}

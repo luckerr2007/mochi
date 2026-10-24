@@ -1,0 +1,21 @@
+{
+  "name": "mochi",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Mochi — cartoon-soft Vue 3 component library with runtime-swappable design tokens.",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "pnpm --filter playground dev",
+    "build": "pnpm --filter mochi-island-ui build",
+    "test": "pnpm --filter mochi-island-ui test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "docs:dev": "pnpm build && pnpm --filter docs dev",
+    "docs:build": "pnpm build && pnpm --filter docs build",
+    "pack:check": "pnpm build && pnpm --filter mochi-island-ui exec npm pack --dry-run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

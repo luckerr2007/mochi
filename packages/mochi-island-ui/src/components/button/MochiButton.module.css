@@ -1,0 +1,153 @@
+/*
+ * 令牌清单
+ *   几何：--mochi-radius-full / --mochi-space-* / --mochi-border-width
+ *   色彩：--mochi-primary / --mochi-primary-deep / --mochi-on-primary
+ *         --mochi-primary-soft / --mochi-ink / --mochi-ink-soft
+ *         --mochi-line-strong / --mochi-surface-sunken
+ *   立体：--mochi-shadow-press（0 4px 0 实色台阶）、--mochi-shadow-offset（按压位移量）
+ *   动效：--mochi-spring / --mochi-duration-fast / --mochi-focus-ring
+ * 纪律：位移 = 阴影偏移（同一变量驱动），边框/文字不做 blur，阴影偏移为整数 px。
+ */
+.root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mochi-space-2);
+  box-sizing: border-box;
+  border: var(--mochi-border-width) solid transparent;
+  border-radius: var(--mochi-radius-full);
+  font-family: var(--mochi-font-family);
+  font-weight: var(--mochi-font-weight-bold);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  /* 起手位置：0，按下去才位移，因此 hover 的 -1px 不会累积 */
+  transform: translateY(0);
+  transition:
+    transform var(--mochi-duration-fast) var(--mochi-spring),
+    box-shadow var(--mochi-duration-fast) var(--mochi-spring),
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+/* ---------- 尺寸：高度取自控件标准，内边距横向生长 ---------- */
+.root[data-size='sm'] {
+  height: var(--mochi-control-sm);
+  padding-inline: var(--mochi-space-3);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.root[data-size='md'] {
+  height: var(--mochi-control-md);
+  padding-inline: var(--mochi-space-4);
+  font-size: var(--mochi-font-size-base);
+}
+
+.root[data-size='lg'] {
+  height: var(--mochi-control-lg);
+  padding-inline: var(--mochi-space-6);
+  font-size: var(--mochi-font-size-lg);
+}
+
+/* ---------- 主按钮：3D 台阶 ---------- */
+.root[data-variant='primary'] {
+  background: var(--mochi-primary);
+  color: var(--mochi-on-primary);
+  border-color: var(--mochi-primary-deep);
+  box-shadow: var(--mochi-shadow-press);
+}
+
+.root[data-variant='primary']:hover:not(:disabled) {
+  /* 抬起 1px，台阶同步长高 1px，视觉上始终"贴着地面" */
+  transform: translateY(-1px);
+  box-shadow: 0 calc(var(--mochi-shadow-offset) + 1px) 0 0 var(--mochi-shadow-press-color);
+}
+
+.root[data-variant='primary']:active:not(:disabled) {
+  /* 位移量 = 台阶高度：按到底时台阶归零，像真的被压进纸面 */
+  transform: translateY(var(--mochi-shadow-offset));
+  box-shadow: 0 0 0 0 transparent;
+  /* 按下去要快、回弹要慢——同一个 transition 用不同时长才是手感 */
+  transition-duration: var(--mochi-duration-press);
+}
+
+/* ---------- 次级按钮：浅底 + 细描边，台阶更矮 ---------- */
+.root[data-variant='soft'] {
+  background: var(--mochi-primary-soft);
+  color: var(--mochi-ink);
+  border-color: var(--mochi-line-strong);
+  box-shadow: var(--mochi-shadow-press);
+}
+
+.root[data-variant='soft']:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 calc(var(--mochi-shadow-offset) + 1px) 0 0 var(--mochi-shadow-press-color);
+}
+
+.root[data-variant='soft']:active:not(:disabled) {
+  transform: translateY(var(--mochi-shadow-offset));
+  box-shadow: 0 0 0 0 transparent;
+  transition-duration: var(--mochi-duration-press);
+}
+
+/* ---------- 幽灵按钮：无台阶，只靠底色反馈 ---------- */
+.root[data-variant='ghost'] {
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  border-color: transparent;
+}
+
+.root[data-variant='ghost']:hover:not(:disabled) {
+  background: var(--mochi-surface-sunken);
+  color: var(--mochi-ink);
+}
+
+.root[data-variant='ghost']:active:not(:disabled) {
+  background: var(--mochi-primary-soft);
+}
+
+/* ---------- 焦点：不依赖 outline，保证在任何底色上都可见 ---------- */
+.root:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-shadow-press), var(--mochi-focus-ring);
+}
+
+.root[data-variant='ghost']:focus-visible {
+  box-shadow: var(--mochi-focus-ring);
+}
+
+/* ---------- 禁用：保留轮廓，去掉立体动效 ---------- */
+.root:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  transform: none;
+}
+
+.root[data-variant='ghost']:disabled {
+  background: transparent;
+}
+
+/* ---------- 降低动态：去掉过渡与悬浮抬升，只保留"按下"这一状态反馈 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+
+  .root[data-variant='primary']:hover:not(:disabled),
+  .root[data-variant='soft']:hover:not(:disabled) {
+    transform: none;
+    box-shadow: var(--mochi-shadow-press);
+  }
+
+  .root[data-variant='primary']:active:not(:disabled),
+  .root[data-variant='soft']:active:not(:disabled) {
+    transform: translateY(var(--mochi-shadow-offset));
+    box-shadow: 0 0 0 0 transparent;
+  }
+
+  .root[data-variant='ghost']:hover:not(:disabled) {
+    background: transparent;
+  }
+}

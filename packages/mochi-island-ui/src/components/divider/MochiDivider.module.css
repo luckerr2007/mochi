@@ -1,0 +1,36 @@
+/* 令牌：--mochi-line / --mochi-border-hairline / --mochi-ink-soft / --mochi-font-size-sm */
+.root {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  border: 0;
+}
+
+.root::before,
+.root::after {
+  content: '';
+  flex: 1;
+  height: var(--mochi-border-hairline);
+  background: var(--mochi-line);
+}
+
+.root[data-vertical]::before,
+.root[data-vertical]::after {
+  content: none;
+}
+
+.root[data-vertical] {
+  align-self: stretch;
+  width: var(--mochi-border-hairline);
+  min-height: var(--mochi-space-6);
+  background: var(--mochi-line);
+}
+
+.label {
+  padding-inline: var(--mochi-space-3);
+  color: var(--mochi-ink-soft);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  white-space: nowrap;
+}

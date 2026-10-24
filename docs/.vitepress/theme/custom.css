@@ -1,0 +1,94 @@
+/*
+ * 把 VitePress 的默认主题接到 Mochi 令牌上。
+ * 关键：这里不写死任何颜色，全部用 var(--mochi-*) 派生，
+ * 所以在页面上覆盖令牌，整个文档站会一起换肤（见「设计令牌与换肤」页的可交互示例）。
+ */
+:root {
+  --vp-c-brand-1: color-mix(in srgb, var(--mochi-primary) 72%, var(--mochi-ink));
+  --vp-c-brand-2: var(--mochi-primary-deep);
+  --vp-c-brand-3: var(--mochi-primary);
+
+  --vp-c-bg: var(--mochi-bg);
+  --vp-c-bg-alt: var(--mochi-bg-sunken);
+  --vp-c-bg-soft: var(--mochi-surface);
+  --vp-c-bg-elv: var(--mochi-surface);
+
+  --vp-c-text-1: var(--mochi-ink);
+  --vp-c-text-2: var(--mochi-ink-soft);
+  --vp-c-text-3: var(--mochi-ink-soft);
+
+  --vp-c-divider: var(--mochi-line);
+  --vp-c-border: var(--mochi-line);
+  --vp-c-gutter: var(--mochi-line);
+
+  --vp-font-family-base: var(--mochi-font-family);
+  --vp-font-family-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --vp-button-brand-bg: var(--mochi-primary);
+  --vp-button-brand-border: var(--mochi-primary-deep);
+  --vp-button-brand-text: var(--mochi-on-primary);
+  --vp-button-brand-hover-bg: var(--mochi-primary);
+  --vp-button-brand-hover-border: var(--mochi-primary-deep);
+  --vp-button-brand-active-bg: var(--mochi-primary-deep);
+
+  /* 次要按钮：默认的灰紫色和暖色画布打架，换成表面色 + 米色描边 */
+  --vp-button-alt-bg: var(--mochi-surface);
+  --vp-button-alt-border: var(--mochi-line-strong);
+  --vp-button-alt-text: var(--mochi-ink);
+  --vp-button-alt-hover-bg: var(--mochi-primary-soft);
+  --vp-button-alt-hover-border: var(--mochi-primary-deep);
+  --vp-button-alt-hover-text: var(--mochi-ink);
+  --vp-button-alt-active-bg: var(--mochi-primary-soft);
+
+  --vp-code-bg: color-mix(in srgb, var(--mochi-ink) 6%, transparent);
+  --vp-code-color: var(--mochi-primary-deep);
+  --vp-c-default-soft: var(--mochi-bg-sunken);
+
+  --vp-code-block-bg: var(--mochi-surface-sunken);
+  --vp-custom-block-tip-bg: var(--mochi-surface);
+  --vp-custom-block-tip-border: var(--mochi-accent);
+}
+
+/* 按钮圆角跟组件库一致，别让文档站看起来像另一个产品 */
+.VPButton {
+  border-radius: var(--mochi-radius-full);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+/* 代码块 / 表格用同一套描边语言 */
+.vp-doc div[class*='language-'],
+.vp-doc table {
+  border-radius: var(--mochi-radius-md);
+}
+
+.vp-doc th,
+.vp-doc td {
+  border-color: var(--mochi-line);
+}
+
+.vp-doc tr:nth-child(2n) {
+  background: var(--mochi-surface-sunken);
+}
+
+/* 首页 hero 的底色不用渐变，直接铺画布色 */
+.VPHero .image-bg {
+  background: var(--mochi-bg-sunken);
+}
+
+/* 示例容器：让内嵌的组件有透气的画布 */
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  padding: var(--mochi-space-4);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+}
+
+.demo-col {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mochi-space-4);
+}

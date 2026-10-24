@@ -1,0 +1,60 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-line / --mochi-space-2 / --mochi-font-size-sm */
+.root {
+  font-family: var(--mochi-font-family);
+}
+
+.list.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  font-size: var(--mochi-font-size-sm);
+}
+
+/* 分隔符由 CSS 生成，不占 DOM 也不会被读屏念出来 */
+.item + .item::before {
+  content: '/';
+  color: var(--mochi-line);
+}
+
+.link.link {
+  color: var(--mochi-ink-soft);
+  text-decoration: none;
+  border-radius: var(--mochi-radius-xs);
+  transition: color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.link:hover {
+  color: var(--mochi-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.text {
+  color: var(--mochi-ink);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.item:last-child .text {
+  color: var(--mochi-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link.link {
+    transition: none;
+  }
+}

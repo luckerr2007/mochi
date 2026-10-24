@@ -1,0 +1,12 @@
+/* 令牌：--mochi-radius-md。水印层不接收任何指针事件，纯视觉 */
+.root {
+  position: relative;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-repeat: repeat;
+}

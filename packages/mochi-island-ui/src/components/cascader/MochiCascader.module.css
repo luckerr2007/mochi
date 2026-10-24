@@ -1,0 +1,171 @@
+/*
+ * 令牌：--mochi-line / --mochi-primary-soft / --mochi-ink / --mochi-ink-soft / --mochi-radius-md
+ * 动效：新列从右侧 6px 滑入（列按 level 作 key，只有新增的那列会挂载，所以动画只播一次）
+ */
+.trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus {
+  outline: none;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+  color: var(--mochi-ink-soft);
+}
+
+.text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.text[data-placeholder] {
+  color: var(--mochi-ink-soft);
+}
+
+.icon {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: var(--mochi-ink-soft);
+  transition: rotate var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.icon[data-open='true'] {
+  rotate: 180deg;
+}
+
+.icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.panel {
+  display: flex;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  overflow: hidden;
+}
+
+.column.column {
+  width: 150px;
+  max-height: 240px;
+  margin: 0;
+  padding: var(--mochi-space-1);
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+.column + .column {
+  border-left: var(--mochi-border-hairline) solid var(--mochi-line);
+  animation: columnIn var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+@keyframes columnIn {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-1);
+  width: 100%;
+  padding: var(--mochi-space-2);
+  border: 0;
+  border-radius: var(--mochi-radius-sm);
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.option:hover:not(:disabled) {
+  background: var(--mochi-bg-sunken);
+}
+
+.option[data-active] {
+  background: var(--mochi-primary-soft);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.option[aria-selected] {
+  color: var(--mochi-primary-deep);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.option:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.option:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.optionLabel {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.branch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: var(--mochi-ink-soft);
+}
+
+.branch path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .column + .column {
+    animation: none;
+  }
+
+  .option,
+  .icon {
+    transition: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.column.column > * {
+  margin-top: 0;
+}

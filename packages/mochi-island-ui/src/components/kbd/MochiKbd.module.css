@@ -1,0 +1,21 @@
+/*
+ * 键位徽章：与 CommandPalette 里的 kbd 同一套语言——凹陷小签 + 台阶底。
+ * 令牌：--mochi-surface-sunken / --mochi-line / --mochi-line-strong / --mochi-ink-soft
+ *        --mochi-radius-xs / --mochi-space-1·2
+ */
+.root {
+  display: inline-block;
+  min-width: 20px;
+  padding: 1px var(--mochi-space-2);
+  box-sizing: border-box;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-xs);
+  background: var(--mochi-surface-sunken);
+  box-shadow: 0 2px 0 0 var(--mochi-line-strong);
+  color: var(--mochi-ink-soft);
+  font-family: var(--mochi-font-family);
+  font-size: 12px;
+  font-weight: var(--mochi-font-weight-bold);
+  line-height: 16px;
+  text-align: center;
+}

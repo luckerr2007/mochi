@@ -1,0 +1,32 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-space-* / --mochi-danger */
+.trigger {
+  display: inline-flex;
+}
+
+.title {
+  margin: 0;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.desc {
+  margin: var(--mochi-space-1) 0 0;
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--mochi-space-2);
+  margin-top: var(--mochi-space-3);
+}
+
+/* 危险操作：只换底色与描边，不改尺寸——避免弹层在两种语气间跳动 */
+.danger {
+  background: var(--mochi-danger);
+  border-color: color-mix(in srgb, var(--mochi-danger) 70%, var(--mochi-ink));
+  color: var(--mochi-surface);
+}

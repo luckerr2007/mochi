@@ -1,0 +1,103 @@
+/*
+ * 令牌清单
+ *   几何：22×22 方块 / --mochi-radius-xs / --mochi-border-width / --mochi-space-2
+ *   色彩：--mochi-surface / --mochi-line-strong / --mochi-primary / --mochi-primary-deep
+ *         --mochi-on-primary（勾选标记）
+ *   立体：0 2px 0 --mochi-shadow-press-color（小台阶）
+ *   动效：勾用 stroke-dashoffset 画出来（不是淡入），--mochi-duration-base / --mochi-spring
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  position: relative;
+  cursor: pointer;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  color: var(--mochi-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.control {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border: var(--mochi-border-width) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-xs);
+  background: var(--mochi-surface);
+  box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color);
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    border-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    box-shadow var(--mochi-duration-press) var(--mochi-ease-out);
+}
+
+.mark {
+  width: 11px;
+  height: 9px;
+}
+
+/* 路径长度约 15，初始整段藏起来；勾选时"画"出来 */
+.mark path {
+  fill: none;
+  stroke: var(--mochi-on-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 15;
+  stroke-dashoffset: 15;
+  transition: stroke-dashoffset var(--mochi-duration-base) var(--mochi-spring) 40ms;
+}
+
+.control:checked + .box {
+  background: var(--mochi-primary);
+  border-color: var(--mochi-primary-deep);
+}
+
+.control:checked + .box .mark path {
+  stroke-dashoffset: 0;
+}
+
+/* 按下时台阶塌陷，和按钮同一套物理 */
+.root:active .box {
+  box-shadow: 0 0 0 0 transparent;
+  transform: translateY(2px);
+}
+
+.control:focus-visible + .box {
+  box-shadow:
+    0 2px 0 0 var(--mochi-shadow-press-color),
+    var(--mochi-focus-ring);
+}
+
+.root[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.text {
+  line-height: 1.2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .mark path {
+    transition: none;
+  }
+
+  .root:active .box {
+    transform: none;
+  }
+}

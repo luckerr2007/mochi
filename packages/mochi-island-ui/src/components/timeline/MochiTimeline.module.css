@@ -1,0 +1,100 @@
+/*
+ * 令牌：--mochi-line（轴线）/ --mochi-primary · accent · candy（色点）/ --mochi-ink · ink-soft
+ * 动效：圆点按索引错峰弹入（--_i × 60ms），轴线本身不动
+ */
+.root.root {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--mochi-font-family);
+}
+
+.item {
+  position: relative;
+  display: flex;
+  gap: var(--mochi-space-3);
+  padding: 0 0 var(--mochi-space-4) var(--mochi-space-6);
+}
+
+.item:last-child {
+  padding-bottom: 0;
+}
+
+/* 轴线连到下一项，最后一项不画 */
+.item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  bottom: 0;
+  left: 5px;
+  width: var(--mochi-border-hairline);
+  background: var(--mochi-line);
+}
+
+.dot {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border: var(--mochi-border-width) solid var(--mochi-surface);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-primary);
+  box-shadow: 0 0 0 var(--mochi-border-hairline) var(--mochi-line-strong);
+  animation: dotIn var(--mochi-duration-base) var(--mochi-spring) both;
+  animation-delay: calc(var(--_i) * var(--mochi-stagger));
+}
+
+.dot[data-tone='accent'] {
+  background: var(--mochi-accent);
+}
+
+.dot[data-tone='candy'] {
+  background: var(--mochi-accent-candy);
+}
+
+@keyframes dotIn {
+  from {
+    opacity: 0;
+    scale: 0.4;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.time {
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.title {
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.desc {
+  margin: 0;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  line-height: var(--mochi-line-height);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.root.root > * {
+  margin-top: 0;
+}

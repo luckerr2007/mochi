@@ -1,0 +1,77 @@
+/*
+ * 令牌：--mochi-ink（气泡底）/ --mochi-surface（字色）/ --mochi-radius-sm / --mochi-shadow-soft
+ * 动效：出现 4px 位移 + 淡入，走 --mochi-spring；消失用 --mochi-ease-in 更快，不拖住鼠标
+ */
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+.bubble {
+  position: absolute;
+  z-index: 50;
+  width: max-content;
+  max-width: 220px;
+  padding: var(--mochi-space-1) var(--mochi-space-2);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-ink);
+  color: var(--mochi-surface);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  line-height: 1.4;
+  pointer-events: none;
+  box-shadow: var(--mochi-shadow-soft);
+}
+
+.bubble[data-placement='top'] {
+  bottom: calc(100% + 6px);
+  left: 50%;
+  translate: -50% 0;
+}
+
+.bubble[data-placement='bottom'] {
+  top: calc(100% + 6px);
+  left: 50%;
+  translate: -50% 0;
+}
+
+.bubble[data-placement='left'] {
+  right: calc(100% + 6px);
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.bubble[data-placement='right'] {
+  left: calc(100% + 6px);
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.enter {
+  animation: tipIn var(--mochi-duration-fast) var(--mochi-spring);
+}
+
+.leave {
+  animation: tipOut var(--mochi-duration-fast) var(--mochi-ease-in);
+}
+
+@keyframes tipIn {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+
+@keyframes tipOut {
+  to {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .leave {
+    animation: none;
+  }
+}

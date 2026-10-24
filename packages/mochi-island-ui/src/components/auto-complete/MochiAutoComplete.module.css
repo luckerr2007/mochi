@@ -1,0 +1,95 @@
+/*
+ * 令牌：--mochi-ink / --mochi-ink-soft / --mochi-primary-soft / --mochi-primary / --mochi-radius-sm
+ * 动效：建议项按索引错峰上浮（同 Dropdown）；高亮块用背景色过渡跟随鼠标与键盘
+ */
+.control {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+}
+
+.control:focus {
+  outline: none;
+}
+
+.control::placeholder {
+  color: var(--mochi-ink-soft);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  color: var(--mochi-ink-soft);
+}
+
+/* .list.list 是刻意的双类叠加：特异性 (0,2,0) 压过文档站的 .vp-doc ul (0,1,1) */
+.list.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: var(--mochi-space-1);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  list-style: none;
+}
+
+/* disc 标记由 li 生成（list-style 可继承，直接在 li 上关掉最稳） */
+.list > li {
+  list-style: none;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border: 0;
+  border-radius: var(--mochi-radius-sm);
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+  animation: optionIn var(--mochi-duration-fast) var(--mochi-ease-out) both;
+  animation-delay: calc(var(--_i) * 24ms);
+}
+
+@keyframes optionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.option:hover,
+.option[data-active] {
+  background: var(--mochi-primary-soft);
+}
+
+.option:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.empty {
+  padding: var(--mochi-space-3);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option {
+    animation: none;
+    transition: none;
+  }
+}

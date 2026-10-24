@@ -1,0 +1,191 @@
+/*
+ * 令牌：--mochi-surface / --mochi-line / --mochi-ink / --mochi-ink-soft / --mochi-shadow-soft
+ *        --mochi-primary · accent-candy · danger（语气色）
+ * 动效：入场 spring、离场 ease-in 且绝对定位（不挤动别人）、move 由 TransitionGroup 负责
+ */
+.stack {
+  position: fixed;
+  top: var(--mochi-space-6);
+  left: 50%;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  width: min(360px, calc(100vw - var(--mochi-space-8) * 2));
+  translate: -50% 0;
+  pointer-events: none;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mochi-space-3);
+  width: 100%;
+  padding: var(--mochi-space-3) var(--mochi-space-4);
+  box-sizing: border-box;
+  overflow: hidden;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  box-shadow: var(--mochi-shadow-soft);
+  pointer-events: auto;
+}
+
+/* 左侧色条用绝对定位，不占内容宽度，文字基线永远对齐 */
+.spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--mochi-space-1);
+  background: var(--mochi-accent);
+}
+
+.card[data-tone='success'] .spine {
+  background: var(--mochi-primary);
+}
+
+.card[data-tone='warning'] .spine {
+  background: var(--mochi-accent-candy);
+}
+
+.card[data-tone='danger'] .spine {
+  background: var(--mochi-danger);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding-left: var(--mochi-space-1);
+}
+
+.title.title {
+  display: block;
+  margin: 0;
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.desc.desc {
+  margin: 2px 0 0;
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.close:hover {
+  background: var(--mochi-bg-sunken);
+  rotate: 90deg;
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.close svg {
+  width: 9px;
+  height: 9px;
+}
+
+.close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background: var(--mochi-primary-soft);
+  transform-origin: left center;
+  animation-name: shrink;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.card[data-tone='danger'] .progress {
+  background: color-mix(in srgb, var(--mochi-danger) 35%, transparent);
+}
+
+@keyframes shrink {
+  from {
+    transform: scaleX(1);
+  }
+
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- 进出场 ---------- */
+.cardEnter {
+  /* 多条同时入列时按堆叠序号错峰；backwards 让延迟期保持隐藏 */
+  animation: cardIn var(--mochi-duration-base) var(--mochi-spring) backwards;
+  animation-delay: calc(min(var(--_i, 0), 3) * var(--mochi-stagger));
+}
+
+.cardLeave {
+  animation: cardOut var(--mochi-duration-fast) var(--mochi-ease-in) forwards;
+  /* 离场时脱离文档流，剩下的通知才能靠 move 平滑补位 */
+  position: absolute;
+}
+
+.cardMove {
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--mochi-space-3) * -1)) scale(0.96);
+  }
+}
+
+@keyframes cardOut {
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--mochi-space-2) * -1)) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardEnter,
+  .cardLeave {
+    animation-duration: 1ms;
+  }
+
+  .cardMove {
+    transition: none;
+  }
+
+  .progress {
+    animation: none;
+    transform: scaleX(0);
+  }
+}

@@ -1,0 +1,74 @@
+/* 令牌：--mochi-surface / --mochi-line / --mochi-line-strong / --mochi-ink / --mochi-ink-soft / --mochi-radius-md */
+.root {
+  /* 让 block-size: auto 也能参与过渡（Chrome 129+；不支持的浏览器直接展开） */
+  interpolate-size: allow-keywords;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  font-family: var(--mochi-font-family);
+  color: var(--mochi-ink);
+}
+
+/* 原生 details 的内容容器也能过渡了，展开/收起不再"啪"地跳一下 */
+.root::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size var(--mochi-duration-slow) var(--mochi-spring),
+    content-visibility var(--mochi-duration-slow) allow-discrete;
+}
+
+.root[open]::details-content {
+  block-size: auto;
+}
+
+.summary.summary {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  padding: var(--mochi-space-3) var(--mochi-space-4);
+  cursor: pointer;
+  font-size: var(--mochi-font-size-base);
+  font-weight: var(--mochi-font-weight-bold);
+  list-style: none;
+  user-select: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 用旋转的箭头代替浏览器默认三角，和其余组件的描边风格一致 */
+.summary::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-right: var(--mochi-border-width) solid var(--mochi-line-strong);
+  border-bottom: var(--mochi-border-width) solid var(--mochi-line-strong);
+  transform: rotate(-45deg);
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.root[open] > .summary::before {
+  transform: rotate(45deg);
+}
+
+.summary:focus-visible {
+  outline: none;
+  border-radius: var(--mochi-radius-md);
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.content {
+  padding: 0 var(--mochi-space-4) var(--mochi-space-4);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  line-height: var(--mochi-line-height);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .summary::before {
+    transition: none;
+  }
+}

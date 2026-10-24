@@ -1,0 +1,96 @@
+/* 令牌：--mochi-surface / --mochi-line / --mochi-primary / --mochi-primary-deep / --mochi-ink / --mochi-ink-soft */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-3);
+  font-family: var(--mochi-font-family);
+}
+
+.list {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mochi-space-1);
+  padding: var(--mochi-space-1);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-bg-sunken);
+  align-self: flex-start;
+}
+
+/* 一块共享的指示块在两个标签之间滑动，而不是各标签自己换底色 */
+.indicator {
+  position: absolute;
+  top: var(--mochi-space-1);
+  bottom: var(--mochi-space-1);
+  left: 0;
+  border: var(--mochi-border-hairline) solid var(--mochi-primary-deep);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  transition:
+    transform var(--mochi-duration-base) var(--mochi-spring),
+    width var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.tab {
+  position: relative;
+  z-index: 1;
+  padding: var(--mochi-space-1) var(--mochi-space-4);
+  border: var(--mochi-border-hairline) solid transparent;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  font: inherit;
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+  cursor: pointer;
+  transition: color var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.tab:hover:not(:disabled) {
+  color: var(--mochi-ink);
+}
+
+.tab[aria-selected='true'] {
+  color: var(--mochi-ink);
+}
+
+.tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.tab:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+/* 面板只做焦点承接，不再套第二层边框 */
+.panel:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+  border-radius: var(--mochi-radius-md);
+}
+
+/* 内容切换：新面板淡入上浮一次（指示块管"去哪"，这里管"来了"） */
+.panelIn {
+  animation: panelIn var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--mochi-space-2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .indicator {
+    transition: none;
+  }
+
+  .panelIn {
+    animation: none;
+  }
+}

@@ -1,0 +1,203 @@
+/*
+ * 令牌：--mochi-surface-sunken / --mochi-line-strong / --mochi-primary / --mochi-primary-soft
+ *        --mochi-ink / --mochi-ink-soft / --mochi-radius-md / --mochi-space-*
+ * 动效：拖入时整块"吸住"（边框换色 + 轻微放大）；文件行滑入，用 TransitionGroup 的位移过渡
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-3);
+  font-family: var(--mochi-font-family);
+}
+
+.drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--mochi-space-2);
+  padding: var(--mochi-space-6);
+  border: var(--mochi-border-width) dashed var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface-sunken);
+  color: var(--mochi-ink-soft);
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color var(--mochi-duration-base) var(--mochi-ease-out),
+    background-color var(--mochi-duration-base) var(--mochi-ease-out),
+    scale var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.drop:hover {
+  border-color: var(--mochi-primary);
+}
+
+/* 拖拽悬停：整块轻微"吸"起来 */
+.drop[data-dragging] {
+  border-color: var(--mochi-primary);
+  background: var(--mochi-primary-soft);
+  scale: 1.01;
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+  color: var(--mochi-primary);
+}
+
+.icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hint {
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.limit {
+  font-size: 12px;
+}
+
+.list.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-surface);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--mochi-ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.size {
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.remove:hover {
+  background: var(--mochi-bg-sunken);
+  rotate: 90deg;
+}
+
+.remove:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.remove svg {
+  width: 9px;
+  height: 9px;
+}
+
+.remove path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* TransitionGroup 的进出场：用全局类名，不参与 CSS Modules 哈希 */
+.file-enter-active {
+  animation: fileIn var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.file-leave-active {
+  position: absolute;
+  animation: fileOut var(--mochi-duration-fast) var(--mochi-ease-in) forwards;
+}
+
+.file-move {
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes fileIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--mochi-space-2) * -1));
+  }
+}
+
+@keyframes fileOut {
+  to {
+    opacity: 0;
+    transform: translateX(var(--mochi-space-4));
+  }
+}
+
+.root[data-disabled] .drop {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop,
+  .remove {
+    transition: none;
+  }
+
+  .drop[data-dragging] {
+    scale: 1;
+  }
+
+  .file-enter-active,
+  .file-leave-active,
+  .file-move {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.list.list > * {
+  margin-top: 0;
+}

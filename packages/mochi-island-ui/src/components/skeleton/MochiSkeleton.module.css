@@ -1,0 +1,46 @@
+/* 令牌：--mochi-bg-sunken / --mochi-line / --mochi-radius-* / --mochi-duration-slow */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-2);
+  width: 100%;
+}
+
+.bar {
+  display: block;
+  border-radius: var(--mochi-radius-sm);
+  /* 高光横扫过底色，比整体明暗呼吸更"活"，也不会闪到眼睛 */
+  background: linear-gradient(
+    90deg,
+    var(--mochi-bg-sunken) 0%,
+    color-mix(in srgb, var(--mochi-bg-sunken) 55%, var(--mochi-surface)) 50%,
+    var(--mochi-bg-sunken) 100%
+  );
+  background-size: 200% 100%;
+  animation: sweep calc(var(--mochi-duration-slow) * 3) var(--mochi-ease-out) infinite;
+}
+
+.bar[data-rounded='md'] {
+  border-radius: var(--mochi-radius-md);
+}
+
+.bar[data-rounded='full'] {
+  border-radius: var(--mochi-radius-full);
+}
+
+@keyframes sweep {
+  from {
+    background-position: 120% 0;
+  }
+
+  to {
+    background-position: -120% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    animation: none;
+    background: var(--mochi-bg-sunken);
+  }
+}

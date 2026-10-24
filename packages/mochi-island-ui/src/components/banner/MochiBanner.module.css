@@ -1,0 +1,163 @@
+/*
+ * 公告横幅：与 Alert 同一套语气语言（徽章 + 语气底色），但形态是整行条幅，
+ * 关闭时高度收起（grid 0fr 补间）而不是瞬间消失。
+ * 令牌：--mochi-space-2·3 / --mochi-radius-md|sm / --mochi-duration-base / --mochi-spring-soft
+ */
+.collapse {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows var(--mochi-duration-base) var(--mochi-spring-soft);
+}
+
+/* 关闭后保持 0fr + 透明，不占布局 */
+.collapse:not([data-open]) {
+  grid-template-rows: 0fr;
+}
+
+.clip {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  box-sizing: border-box;
+  margin: 0 0 var(--mochi-space-2);
+  padding: var(--mochi-space-2) var(--mochi-space-4);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  font-family: var(--mochi-font-family);
+  color: var(--mochi-ink);
+  /* 从视口上方滑入，像公告被贴上来 */
+  animation: bannerIn var(--mochi-duration-base) var(--mochi-spring-soft);
+}
+
+/* sticky 用占位的 position:sticky：滚动时吸附在视口顶部，且不遮盖页面内容 */
+.root[data-sticky] {
+  position: sticky;
+  top: var(--mochi-space-2);
+  z-index: 60;
+  box-shadow: var(--mochi-shadow-soft);
+}
+
+@keyframes bannerIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--mochi-space-2) * -1));
+  }
+}
+
+/* ---------- 语气：底色与徽章描边（虚线框是便签的语言，条幅不用） ---------- */
+.root[data-tone='info'] {
+  --_tone: var(--mochi-accent);
+}
+
+.root[data-tone='success'] {
+  --_tone: var(--mochi-primary);
+}
+
+.root[data-tone='warning'] {
+  --_tone: var(--mochi-accent-candy);
+}
+
+.root[data-tone='danger'] {
+  --_tone: var(--mochi-danger);
+}
+
+.root[data-tone] {
+  background: color-mix(in srgb, var(--_tone) 10%, var(--mochi-surface));
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: var(--mochi-border-hairline) solid color-mix(in srgb, var(--_tone) 55%, transparent);
+  border-radius: var(--mochi-radius-full);
+  background: color-mix(in srgb, var(--_tone) 26%, var(--mochi-surface));
+  color: var(--mochi-ink);
+}
+
+.badge svg {
+  width: 11px;
+  height: 11px;
+}
+
+.badge path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--mochi-font-size-sm);
+  line-height: var(--mochi-line-height);
+}
+
+.title {
+  margin-right: var(--mochi-space-2);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.close:hover {
+  background: color-mix(in srgb, var(--mochi-ink) 8%, transparent);
+  rotate: 90deg;
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.close svg {
+  width: 10px;
+  height: 10px;
+}
+
+.close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collapse {
+    transition: none;
+  }
+
+  .root {
+    animation: none;
+  }
+
+  .close {
+    transition: none;
+  }
+}

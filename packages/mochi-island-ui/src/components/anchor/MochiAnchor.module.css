@@ -1,0 +1,63 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-primary / --mochi-line / --mochi-spring */
+.root {
+  position: relative;
+  display: block;
+  font-family: var(--mochi-font-family);
+}
+
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--mochi-border-width-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-primary);
+  transition:
+    transform var(--mochi-duration-base) var(--mochi-spring),
+    height var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.list.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-1);
+  margin: 0;
+  padding: 0 var(--mochi-space-3);
+  list-style: none;
+}
+
+.link.link {
+  display: block;
+  padding: var(--mochi-space-1) 0;
+  border-radius: var(--mochi-radius-xs);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  text-decoration: none;
+  transition: color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.link:hover {
+  color: var(--mochi-ink);
+}
+
+.link[aria-current='true'] {
+  color: var(--mochi-primary-deep);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.link:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator,
+  .link.link {
+    transition: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.list.list > * {
+  margin-top: 0;
+}

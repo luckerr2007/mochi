@@ -1,0 +1,131 @@
+/*
+ * 令牌清单
+ *   几何：--mochi-space-3（行距）/ --mochi-border-hairline
+ *   色彩：--mochi-ink / --mochi-line（分隔线）
+ *   动效：--mochi-stagger（错峰步长）/ --mochi-duration-slow / --mochi-spring
+ * 纪律：位移 8px（4px 格）；错峰用 nth-child 阶梯，不引入 JS 计数。
+ */
+.root.root {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+}
+
+.root > * {
+  padding-block: var(--mochi-space-3);
+}
+
+.root > :first-child {
+  padding-top: 0;
+}
+
+.root > :last-child {
+  padding-bottom: 0;
+}
+
+/* 有序列表用原生的数字标记，让 padding-left 给标记腾位置 */
+.root[data-ordered] {
+  padding-left: var(--mochi-space-6);
+  list-style: decimal;
+}
+
+.root[data-ordered] > *::marker {
+  color: var(--mochi-ink-soft);
+}
+
+.root[data-divided] > :not(:last-child) {
+  border-bottom: var(--mochi-border-hairline) solid var(--mochi-line);
+}
+
+/* ---------- 错峰入场：阶梯只覆盖前 7 项，之后统一延迟最大值，避免长列表等太久 ---------- */
+.root[data-stagger] > * {
+  animation: rise var(--mochi-duration-slow) var(--mochi-spring) both;
+}
+
+.root[data-stagger] > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.root[data-stagger] > *:nth-child(2) {
+  animation-delay: var(--mochi-stagger);
+}
+
+.root[data-stagger] > *:nth-child(3) {
+  animation-delay: calc(var(--mochi-stagger) * 2);
+}
+
+.root[data-stagger] > *:nth-child(4) {
+  animation-delay: calc(var(--mochi-stagger) * 3);
+}
+
+.root[data-stagger] > *:nth-child(5) {
+  animation-delay: calc(var(--mochi-stagger) * 4);
+}
+
+.root[data-stagger] > *:nth-child(6) {
+  animation-delay: calc(var(--mochi-stagger) * 5);
+}
+
+.root[data-stagger] > *:nth-child(n + 7) {
+  animation-delay: calc(var(--mochi-stagger) * 6);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- 动态增删：move 由 TransitionGroup 补位，离场绝对定位不占位 ---------- */
+.root[data-animated] {
+  position: relative;
+}
+
+.itemEnter {
+  animation: rise var(--mochi-duration-base) var(--mochi-spring) backwards;
+}
+
+.itemLeave {
+  position: absolute;
+  width: 100%;
+  animation: fade var(--mochi-duration-fast) var(--mochi-ease-in) forwards;
+}
+
+.itemMove {
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes fade {
+  to {
+    opacity: 0;
+    transform: translateX(var(--mochi-space-2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-stagger] > *,
+  .itemEnter,
+  .itemLeave {
+    animation: none;
+  }
+
+  .itemMove {
+    transition: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.root.root > * {
+  margin-top: 0;
+}

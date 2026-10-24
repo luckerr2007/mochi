@@ -1,0 +1,89 @@
+/*
+ * 令牌：--mochi-surface / --mochi-line / --mochi-shadow-soft / --mochi-radius-md / --mochi-ink
+ * 动效：从锚点方向弹入（位移 4px + 缩放 0.96），走 --mochi-spring；离场更快
+ */
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  display: inline-flex;
+}
+
+.panel {
+  position: absolute;
+  z-index: 70;
+  box-sizing: border-box;
+  padding: var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  line-height: var(--mochi-line-height);
+  box-shadow: var(--mochi-shadow-soft);
+}
+
+.bottom {
+  top: calc(100% + var(--mochi-space-2));
+  left: 0;
+  transform-origin: top left;
+}
+
+.top {
+  bottom: calc(100% + var(--mochi-space-2));
+  left: 0;
+  transform-origin: bottom left;
+}
+
+.right {
+  top: 0;
+  left: calc(100% + var(--mochi-space-2));
+  transform-origin: top left;
+}
+
+.left {
+  top: 0;
+  right: calc(100% + var(--mochi-space-2));
+  transform-origin: top right;
+}
+
+.panel[data-bare] {
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-md);
+  background: transparent;
+  /* 无边框模式仍保留氛围阴影，否则浮层和背后的内容会糊在一起 */
+  box-shadow: var(--mochi-shadow-soft);
+}
+
+.enter {
+  animation: popIn var(--mochi-duration-fast) var(--mochi-spring);
+}
+
+.leave {
+  animation: popOut var(--mochi-duration-fast) var(--mochi-ease-in);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+@keyframes popOut {
+  to {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .leave {
+    animation: none;
+  }
+}

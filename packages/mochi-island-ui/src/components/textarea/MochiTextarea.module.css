@@ -1,0 +1,31 @@
+/*
+ * 外壳（label / 槽 / hint）来自 FieldShell；这里只处理多行输入特有的部分。
+ * 令牌：--mochi-ink / --mochi-ink-soft / --mochi-font-size-base / --mochi-line-height
+ */
+.control {
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  line-height: var(--mochi-line-height);
+  /* 纵向可拉伸，横向不拉——避免把面板撑破 */
+  resize: vertical;
+}
+
+.control:focus {
+  outline: none;
+}
+
+.control::placeholder {
+  color: var(--mochi-ink-soft);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  color: var(--mochi-ink-soft);
+}

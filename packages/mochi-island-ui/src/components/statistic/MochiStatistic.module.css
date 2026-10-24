@@ -1,0 +1,35 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-font-size-lg / --mochi-font-weight-bold */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-1);
+  font-family: var(--mochi-font-family);
+}
+
+.title {
+  margin: 0;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.value {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin: 0;
+  color: var(--mochi-ink);
+  font-size: 28px;
+  font-weight: var(--mochi-font-weight-bold);
+  line-height: 1.1;
+}
+
+.number {
+  /* 等宽数字：滚动时宽度不跳，避免整行左右抖 */
+  font-variant-numeric: tabular-nums;
+}
+
+.affix {
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-base);
+  font-weight: var(--mochi-font-weight-normal);
+}

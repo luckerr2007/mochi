@@ -1,0 +1,65 @@
+/*
+ * 令牌：--mochi-ink / --mochi-ink-soft / --mochi-primary-soft / --mochi-line
+ * 动效：菜单项按索引错峰 24ms 上浮淡入——比整块一起出现更像"拉出来"
+ */
+.trigger {
+  display: inline-flex;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.item {
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border: 0;
+  border-radius: var(--mochi-radius-sm);
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+  animation: itemIn var(--mochi-duration-fast) var(--mochi-ease-out) both;
+  animation-delay: calc(var(--_i) * 24ms);
+}
+
+@keyframes itemIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.item:hover:not(:disabled) {
+  background: var(--mochi-primary-soft);
+}
+
+.item:focus-visible {
+  outline: none;
+  background: var(--mochi-primary-soft);
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.item:disabled {
+  color: var(--mochi-ink-soft);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.divider {
+  margin: var(--mochi-space-1) 0;
+  border: 0;
+  border-top: var(--mochi-border-hairline) solid var(--mochi-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    animation: none;
+    transition: none;
+  }
+}

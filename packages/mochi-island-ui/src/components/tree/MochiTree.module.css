@@ -1,0 +1,130 @@
+/*
+ * 令牌：--mochi-primary-soft / --mochi-bg-sunken / --mochi-ink / --mochi-ink-soft
+ *        --mochi-radius-sm / --mochi-spring
+ * 动效：展开/收起用 grid-template-rows 0fr ↔ 1fr（浏览器补间，不用测高），
+ *       折线箭头旋转；选中行铺主色浅底并带一次轻微的"呼吸"
+ */
+.root.root {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: var(--mochi-space-1);
+  list-style: none;
+  font-family: var(--mochi-font-family);
+}
+
+.item {
+  min-width: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-1);
+  width: 100%;
+  padding: var(--mochi-space-1) var(--mochi-space-2);
+  border: 0;
+  border-radius: var(--mochi-radius-sm);
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.row:hover:not(:disabled) {
+  background: var(--mochi-bg-sunken);
+}
+
+.row[aria-selected] {
+  background: var(--mochi-primary-soft);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.row:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.row:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.branch {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--mochi-ink-soft);
+  transition: rotate var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.branch[data-open='true'] {
+  rotate: 90deg;
+}
+
+.branch[data-leaf] {
+  visibility: hidden;
+}
+
+.branch svg {
+  width: 12px;
+  height: 12px;
+}
+
+.branch path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 与 Menu 分组同一套 0fr ↔ 1fr 补间 */
+.group {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.group[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.children.children {
+  overflow: hidden;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.children .row {
+  font-size: 13px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group,
+  .branch,
+  .row {
+    transition: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.root.root > *,
+.children.children > * {
+  margin-top: 0;
+}

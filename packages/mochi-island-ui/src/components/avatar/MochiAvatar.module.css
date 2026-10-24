@@ -1,0 +1,64 @@
+/* 令牌：--mochi-primary-soft / --mochi-line-strong / --mochi-ink / --mochi-radius-full / --mochi-radius-md */
+.root {
+  display: inline-flex;
+  flex: none;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: var(--mochi-border-width) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-primary-soft);
+  vertical-align: middle;
+}
+
+.root[data-size='sm'] {
+  width: 28px;
+  height: 28px;
+}
+
+.root[data-size='md'] {
+  width: 40px;
+  height: 40px;
+}
+
+.root[data-size='lg'] {
+  width: 56px;
+  height: 56px;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 图片解码完成的瞬间淡入，避免半张图"跳"出来 */
+  animation: fadeIn var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    scale: 1.06;
+  }
+}
+
+.fallback {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  font-weight: var(--mochi-font-weight-bold);
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.root[data-size='lg'] .fallback {
+  font-size: var(--mochi-font-size-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img {
+    animation: none;
+  }
+}

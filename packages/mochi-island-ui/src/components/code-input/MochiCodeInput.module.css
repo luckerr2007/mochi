@@ -1,0 +1,62 @@
+/*
+ * 兑换码输入：N 个单格，填入的格子 spring 弹一下（规则重新匹配即重播）。
+ * 令牌：--mochi-surface-sunken / --mochi-primary-soft / --mochi-primary-deep
+ *        --mochi-control-lg / --mochi-radius-sm / --mochi-space-2 / --mochi-mono
+ */
+.root {
+  display: flex;
+  gap: var(--mochi-space-2);
+  font-family: var(--mochi-font-family);
+}
+
+.box {
+  box-sizing: border-box;
+  width: var(--mochi-control-lg);
+  height: var(--mochi-control-lg);
+  padding: 0;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-surface-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-lg);
+  font-weight: var(--mochi-font-weight-bold);
+  text-align: center;
+  text-transform: lowercase;
+  caret-color: var(--mochi-primary-deep);
+  transition:
+    border-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.box[data-filled] {
+  border-color: var(--mochi-primary-deep);
+  background: var(--mochi-primary-soft);
+  animation: boxPop var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.box:focus {
+  outline: none;
+  box-shadow: var(--mochi-shadow-inset), var(--mochi-focus-ring);
+}
+
+.box:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@keyframes boxPop {
+  from {
+    scale: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box {
+    transition: none;
+  }
+
+  .box[data-filled] {
+    animation: none;
+  }
+}

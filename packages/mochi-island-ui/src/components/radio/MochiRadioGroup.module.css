@@ -1,0 +1,126 @@
+/*
+ * 令牌清单
+ *   几何：22×22 圆点（--mochi-border-width 描边）/ --mochi-radius-full / --mochi-space-*
+ *   色彩：--mochi-surface / --mochi-line-strong / --mochi-primary / --mochi-primary-deep
+ *         --mochi-on-primary（内点）/ --mochi-ink
+ *   立体：0 2px 0 --mochi-shadow-press-color（小台阶）
+ *   动效：--mochi-spring + --mochi-duration-base（内点弹出）
+ */
+.root {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: var(--mochi-font-family);
+}
+
+.legend {
+  margin-bottom: var(--mochi-space-2);
+  padding: 0;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mochi-space-2) var(--mochi-space-6);
+}
+
+.option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  cursor: pointer;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-base);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.control {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.dot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border: var(--mochi-border-width) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color);
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    border-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.pip {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-on-primary);
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    opacity var(--mochi-duration-fast) var(--mochi-ease-out),
+    transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.control:checked + .dot {
+  background: var(--mochi-primary);
+  border-color: var(--mochi-primary-deep);
+}
+
+.control:checked + .dot .pip {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 按住时圆点被压扁，和勾选框、开关共用同一套按压手感 */
+.root .option:active .dot {
+  scale: 0.92;
+}
+
+.dot {
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    border-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    scale var(--mochi-duration-press) var(--mochi-ease-out);
+}
+
+.control:focus-visible + .dot {
+  box-shadow:
+    0 2px 0 0 var(--mochi-shadow-press-color),
+    var(--mochi-focus-ring);
+}
+
+/* fieldset[disabled] 会禁用所有后代表单控件，这里只管视觉 */
+.root:disabled .option {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot,
+  .pip {
+    transition: none;
+  }
+
+  .pip {
+    transform: none;
+  }
+
+  .root .option:active .dot {
+    scale: 1;
+  }
+}

@@ -1,0 +1,111 @@
+/*
+ * 令牌清单
+ *   几何：44×26 轨道 + 18×18 滑块（全整数）/ --mochi-border-width / --mochi-radius-full
+ *   色彩：--mochi-bg-sunken → --mochi-primary（开）/ --mochi-line-strong / --mochi-surface
+ *   立体：--mochi-shadow-inset（轨道内凹）/ --mochi-shadow-press-color（滑块 1px 台阶）
+ *   动效：--mochi-spring（滑块过冲）/ --mochi-duration-base / --mochi-duration-press（按住挤压）
+ * 纪律：滑块位移 = 轨道内宽 - 滑块宽，全部整数，不出现半像素。
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  position: relative;
+  cursor: pointer;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  color: var(--mochi-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.control {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.track {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 26px;
+  box-sizing: border-box;
+  border: var(--mochi-border-width) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-bg-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+  transition:
+    background-color var(--mochi-duration-base) var(--mochi-ease-out),
+    border-color var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border: var(--mochi-border-hairline) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  box-shadow: 0 1px 0 0 var(--mochi-shadow-press-color);
+  /* 用独立的 translate / scale 属性，位移与挤压可以分别过渡、互不覆盖 */
+  translate: 0;
+  scale: 1;
+  transition:
+    translate var(--mochi-duration-base) var(--mochi-spring),
+    scale var(--mochi-duration-press) var(--mochi-ease-out),
+    border-color var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.control:checked + .track {
+  background: var(--mochi-primary);
+  border-color: var(--mochi-primary-deep);
+}
+
+/* 内宽 40 - 滑块 18 - 左右各 2 = 18px 行程 */
+.control:checked + .track .thumb {
+  border-color: var(--mochi-primary-deep);
+  translate: 18px;
+}
+
+/* 按住时滑块被挤扁一点，松手回弹——这是"按得动"的关键触感 */
+.root:active .thumb {
+  scale: 1.12 0.92;
+}
+
+.root:active .track {
+  background: var(--mochi-primary-soft);
+}
+
+.control:checked:active + .track {
+  background: var(--mochi-primary-deep);
+}
+
+.control:focus-visible + .track {
+  box-shadow:
+    var(--mochi-shadow-inset),
+    var(--mochi-focus-ring);
+}
+
+.root[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.text {
+  line-height: 1.2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .thumb {
+    transition: none;
+  }
+
+  .root:active .thumb {
+    scale: 1;
+  }
+}

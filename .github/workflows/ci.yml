@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 与本地保持同版本；pnpm 12 的 allowBuilds 语义与 10 不同
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 单元测试（含令牌契约与对比度）
+        run: pnpm test
+
+      - name: 类型检查
+        run: pnpm typecheck
+
+      - name: 构建组件库
+        run: pnpm build
+
+      - name: 构建文档站
+        run: pnpm docs:build
+
+      - name: 校验发布产物
+        run: pnpm pack:check

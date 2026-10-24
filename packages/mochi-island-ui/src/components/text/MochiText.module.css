@@ -1,0 +1,35 @@
+/* 令牌：--mochi-ink · ink-soft · danger · primary-deep / --mochi-font-size-* / --mochi-line-height */
+.root.root {
+  margin: 0;
+  font-family: var(--mochi-font-family);
+  line-height: var(--mochi-line-height);
+  color: var(--mochi-ink);
+}
+
+.root[data-size='sm'] {
+  font-size: var(--mochi-font-size-sm);
+}
+
+.root[data-size='base'] {
+  font-size: var(--mochi-font-size-base);
+}
+
+.root[data-size='lg'] {
+  font-size: var(--mochi-font-size-lg);
+}
+
+.root[data-tone='soft'] {
+  color: var(--mochi-ink-soft);
+}
+
+.root[data-tone='danger'] {
+  color: var(--mochi-danger);
+}
+
+.root[data-tone='accent'] {
+  color: var(--mochi-primary-deep);
+}
+
+.root[data-bold] {
+  font-weight: var(--mochi-font-weight-bold);
+}

@@ -1,0 +1,144 @@
+/*
+ * 令牌：--mochi-line / --mochi-ink / --mochi-ink-soft / --mochi-ink-soft / --mochi-radius-md
+ * 动效：预览遮罩淡入，大图从 0.92 弹到 1（spring）——同 Modal 的手感
+ */
+.root {
+  display: block;
+  padding: 0;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-bg-sunken);
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: border-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.root:hover {
+  border-color: var(--mochi-primary);
+}
+
+.root:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  display: grid;
+  place-items: center;
+  padding: var(--mochi-space-6);
+  background: color-mix(in srgb, var(--mochi-ink) 55%, transparent);
+  cursor: zoom-out;
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-2);
+  max-width: min(86vw, 900px);
+  margin: 0;
+  cursor: default;
+}
+
+.large {
+  max-width: 100%;
+  max-height: 78vh;
+  border-radius: var(--mochi-radius-md);
+  object-fit: contain;
+  background: var(--mochi-surface);
+}
+
+.caption {
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: var(--mochi-space-4);
+  right: var(--mochi-space-4);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: color-mix(in srgb, var(--mochi-surface) 90%, transparent);
+  color: var(--mochi-ink);
+  cursor: pointer;
+  transition: rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.close:hover {
+  rotate: 90deg;
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.close svg {
+  width: 12px;
+  height: 12px;
+}
+
+.close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.enter {
+  animation: maskIn var(--mochi-duration-fast) var(--mochi-ease-out),
+    zoomIn var(--mochi-duration-base) var(--mochi-spring);
+}
+
+/* 缩放的动画要落在图上，遮罩只负责淡入 */
+.enter :deep(.frame),
+.frame {
+  animation: zoomIn var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.leave {
+  animation: maskOut var(--mochi-duration-fast) var(--mochi-ease-in);
+}
+
+@keyframes maskIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes maskOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .leave,
+  .frame {
+    animation: none;
+  }
+}

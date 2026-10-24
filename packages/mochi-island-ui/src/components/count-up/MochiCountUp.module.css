@@ -1,0 +1,16 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft */
+.root {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--mochi-font-family);
+  color: var(--mochi-ink);
+  font-weight: var(--mochi-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.affix {
+  color: var(--mochi-ink-soft);
+  font-size: 0.7em;
+  font-weight: var(--mochi-font-weight-normal);
+}

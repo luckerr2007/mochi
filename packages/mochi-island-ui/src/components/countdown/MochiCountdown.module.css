@@ -1,0 +1,55 @@
+/*
+ * 倒计时：格子像游戏的活力值，数字变化时 spring 弹一下。
+ * 令牌：--mochi-surface-sunken / --mochi-line / --mochi-ink / --mochi-ink-soft
+ *        --mochi-radius-sm / --mochi-space-1·2 / --mochi-duration-base / --mochi-spring
+ */
+.root {
+  display: inline-flex;
+  gap: var(--mochi-space-2);
+  font-family: var(--mochi-font-family);
+}
+
+.cell {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--mochi-space-1);
+}
+
+.value {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: var(--mochi-space-1) var(--mochi-space-2);
+  box-sizing: border-box;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-surface-sunken);
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-lg);
+  font-weight: var(--mochi-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  animation: digitIn var(--mochi-duration-base) var(--mochi-spring);
+}
+
+/* 归零的格子褪成次要色，表示这一位已经走完 */
+.value[data-zero] {
+  color: var(--mochi-ink-soft);
+}
+
+@keyframes digitIn {
+  from {
+    opacity: 0.4;
+    scale: 0.88;
+  }
+}
+
+.unit {
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .value {
+    animation: none;
+  }
+}

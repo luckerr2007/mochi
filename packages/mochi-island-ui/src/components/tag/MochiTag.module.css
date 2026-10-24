@@ -1,0 +1,89 @@
+/*
+ * 令牌清单
+ *   几何：--mochi-radius-full / --mochi-space-1 · 2 / --mochi-border-hairline
+ *   色彩：文字一律 --mochi-ink（保证 13px 也达 4.5:1），色相只由底色/描边承担：
+ *         neutral → --mochi-bg-sunken + --mochi-line-strong
+ *         accent  → --mochi-accent
+ *         candy   → --mochi-accent-candy
+ *         danger  → color-mix(--mochi-danger 与 surface/line)
+ * 纪律：色调用 color-mix 派生，使用者覆盖任一色令牌，标签自动跟随。
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-1);
+  box-sizing: border-box;
+  padding: 2px var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-bg-sunken);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.root[data-tone='accent'] {
+  background: var(--mochi-accent);
+  border-color: color-mix(in srgb, var(--mochi-accent) 70%, var(--mochi-ink));
+}
+
+.root[data-tone='candy'] {
+  background: var(--mochi-accent-candy);
+  border-color: color-mix(in srgb, var(--mochi-accent-candy) 70%, var(--mochi-ink));
+}
+
+.root[data-tone='danger'] {
+  background: color-mix(in srgb, var(--mochi-danger) 14%, var(--mochi-surface));
+  border-color: color-mix(in srgb, var(--mochi-danger) 55%, var(--mochi-line));
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  /* 负边距抵消右内边距，让 × 贴住胶囊边缘，仍落在 4px 网格上 */
+  margin-right: calc(var(--mochi-space-1) * -1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.close:hover {
+  background: color-mix(in srgb, var(--mochi-ink) 10%, transparent);
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.close svg {
+  width: 10px;
+  height: 10px;
+  transition: rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.close:hover svg {
+  rotate: 90deg;
+}
+
+.close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .close,
+  .close svg {
+    transition: none;
+  }
+}

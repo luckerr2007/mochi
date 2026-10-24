@@ -1,0 +1,77 @@
+/*
+ * 令牌：--mochi-line-strong（空星描边）/ --mochi-primary（实心）/ --mochi-accent-candy（悬停高亮）
+ * 动效：填充按索引错峰（--_i × 30ms），从左往右"扫"过去，不是整排一起亮
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-1);
+}
+
+.item {
+  position: relative;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.root[data-readonly] .item {
+  cursor: default;
+}
+
+.control {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.star {
+  width: 20px;
+  height: 19px;
+  overflow: visible;
+}
+
+.star path {
+  fill: transparent;
+  stroke: var(--mochi-line-strong);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  transition:
+    fill var(--mochi-duration-fast) var(--mochi-ease-out),
+    stroke var(--mochi-duration-fast) var(--mochi-ease-out),
+    scale var(--mochi-duration-base) var(--mochi-spring);
+  /* 错峰：越靠右越晚亮，扫过去的感觉 */
+  transition-delay: calc(var(--_i) * 30ms);
+}
+
+.star[data-filled] path {
+  fill: var(--mochi-primary);
+  stroke: var(--mochi-primary-deep);
+}
+
+/* 悬停时星星轻微鼓起，光标停在哪颗哪颗最大 */
+.item:hover .star {
+  scale: 1.12;
+}
+
+.root[data-readonly] .item:hover .star {
+  scale: 1;
+}
+
+.control:focus-visible + .star {
+  border-radius: var(--mochi-radius-xs);
+  box-shadow: var(--mochi-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .star path {
+    transition: none;
+  }
+
+  .item:hover .star {
+    scale: 1;
+  }
+}

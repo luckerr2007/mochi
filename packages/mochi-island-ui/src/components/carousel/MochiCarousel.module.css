@@ -1,0 +1,161 @@
+/*
+ * 令牌：--mochi-surface / --mochi-line / --mochi-primary / --mochi-radius-md|full / --mochi-space-*
+ * 动效：轨道用 transform 平移（不重排）；指示点选中时把内条 scaleX 拉开，不用改 width
+ */
+.root {
+  position: relative;
+  overflow: hidden;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-bg-sunken);
+  font-family: var(--mochi-font-family);
+  touch-action: pan-y;
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+}
+
+.viewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  transition: transform var(--mochi-duration-slow) var(--mochi-spring-soft);
+  will-change: transform;
+}
+
+.slide {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 100%;
+  height: 100%;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.slide :deep(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px;
+  padding: 0;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--mochi-duration-fast) var(--mochi-ease-out),
+    transform var(--mochi-duration-fast) var(--mochi-spring);
+}
+
+/* 箭头平时藏着，悬停整块才出现——不抢画面 */
+.root:hover .arrow,
+.arrow:focus-visible {
+  opacity: 1;
+}
+
+.prev {
+  left: var(--mochi-space-3);
+  transform: translateX(-4px);
+}
+
+.next {
+  right: var(--mochi-space-3);
+  transform: translateX(4px);
+}
+
+.root:hover .prev,
+.root:hover .next {
+  transform: translateX(0);
+}
+
+.arrow:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.arrow svg {
+  width: 12px;
+  height: 12px;
+}
+
+.arrow path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dots {
+  position: absolute;
+  right: 0;
+  bottom: var(--mochi-space-3);
+  left: 0;
+  display: flex;
+  justify-content: center;
+  gap: var(--mochi-space-1);
+}
+
+.dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: color-mix(in srgb, var(--mochi-ink) 25%, transparent);
+  cursor: pointer;
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--mochi-primary);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.dot[aria-selected='true'] {
+  background: color-mix(in srgb, var(--mochi-primary) 25%, transparent);
+}
+
+.dot[aria-selected='true']::after {
+  transform: scaleX(1);
+}
+
+.dot:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .arrow,
+  .dot,
+  .dot::after {
+    transition: none;
+  }
+}

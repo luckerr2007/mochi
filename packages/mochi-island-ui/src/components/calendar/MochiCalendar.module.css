@@ -1,0 +1,166 @@
+/*
+ * 令牌：--mochi-surface / --mochi-line / --mochi-bg-sunken / --mochi-primary
+ *        --mochi-radius-md|sm|full / --mochi-space-* / --mochi-duration-base
+ * 动效：换月时整块网格按方向滑入 8px + 淡入；选中日从 0.9 弹到 1
+ */
+.root {
+  width: 272px;
+  padding: var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  font-family: var(--mochi-font-family);
+  user-select: none;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--mochi-space-2);
+}
+
+.title {
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.nav {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.nav:hover {
+  background: var(--mochi-bg-sunken);
+  color: var(--mochi-ink);
+}
+
+.nav:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.nav svg {
+  width: 12px;
+  height: 12px;
+}
+
+.nav path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: var(--mochi-space-1);
+  color: var(--mochi-ink-soft);
+  font-size: 11px;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+/* 方向决定滑入的一侧：往后翻从右边来，往前翻从左边来 */
+.grid[data-dir='1'] {
+  animation: fromRight var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.grid[data-dir='-1'] {
+  animation: fromLeft var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+@keyframes fromRight {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+
+@keyframes fromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+.day {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-sm);
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-size: var(--mochi-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.day:hover {
+  background: var(--mochi-bg-sunken);
+}
+
+.day[data-outside] {
+  color: var(--mochi-ink-soft);
+  opacity: 0.45;
+}
+
+/* 今天：只描一圈，不抢选中态的戏 */
+.day[data-today] {
+  box-shadow: inset 0 0 0 var(--mochi-border-hairline) var(--mochi-primary);
+}
+
+.day[data-selected] {
+  background: var(--mochi-primary);
+  color: var(--mochi-on-primary);
+  font-weight: var(--mochi-font-weight-bold);
+  animation: pick var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes pick {
+  from {
+    scale: 0.9;
+  }
+}
+
+.day:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid[data-dir='1'],
+  .grid[data-dir='-1'],
+  .day[data-selected] {
+    animation: none;
+  }
+
+  .day,
+  .nav {
+    transition: none;
+  }
+}

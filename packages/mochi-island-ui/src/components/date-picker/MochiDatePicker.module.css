@@ -1,0 +1,53 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-font-size-base / --mochi-space-2 */
+.trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus {
+  outline: none;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+  color: var(--mochi-ink-soft);
+}
+
+.text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.text[data-placeholder] {
+  color: var(--mochi-ink-soft);
+}
+
+.icon {
+  flex: none;
+  width: 15px;
+  height: 15px;
+  color: var(--mochi-ink-soft);
+}
+
+.icon rect,
+.icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}

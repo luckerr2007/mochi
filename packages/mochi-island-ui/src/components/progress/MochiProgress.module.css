@@ -1,0 +1,54 @@
+/*
+ * 令牌清单
+ *   几何：12px 轨道高 / --mochi-radius-full / --mochi-space-1
+ *   色彩：--mochi-bg-sunken（轨道）/ --mochi-primary · --mochi-accent · --mochi-accent-candy（条）
+ *         --mochi-ink / --mochi-ink-soft
+ *   立体：--mochi-shadow-inset（轨道内凹）
+ *   动效：--mochi-duration-slow + --mochi-ease-out（数值变化时条子平滑推进）
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-1);
+  width: 100%;
+  font-family: var(--mochi-font-family);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--mochi-space-2);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.track {
+  height: 12px;
+  overflow: hidden;
+  border: var(--mochi-border-hairline) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-bg-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+}
+
+.bar {
+  height: 100%;
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-primary);
+  transition: width var(--mochi-duration-slow) var(--mochi-ease-out);
+}
+
+.bar[data-tone='accent'] {
+  background: var(--mochi-accent);
+}
+
+.bar[data-tone='candy'] {
+  background: var(--mochi-accent-candy);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}

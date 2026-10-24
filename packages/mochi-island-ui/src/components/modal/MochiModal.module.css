@@ -1,0 +1,144 @@
+/*
+ * 令牌清单
+ *   色彩：--mochi-surface / --mochi-line / --mochi-ink / --mochi-ink-soft / --mochi-shadow-soft
+ *   几何：--mochi-radius-lg / --mochi-space-4 · 6 / --mochi-shadow-offset（入场位移）
+ *   动效：--mochi-spring-soft（大面板回弹）/ --mochi-duration-base / --mochi-ease-in（离场更快）
+ * 说明：遮罩用轻微背景模糊做景深，但弹层本身、文字与描边一律不做模糊。
+ */
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: var(--mochi-space-6);
+  background: color-mix(in srgb, var(--mochi-ink) 32%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.fadeIn {
+  animation: fadeIn var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.fadeOut {
+  animation: fadeOut var(--mochi-duration-fast) var(--mochi-ease-in);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.panel {
+  width: min(420px, 100%);
+  max-height: calc(100vh - var(--mochi-space-8) * 2);
+  overflow-y: auto;
+  padding: var(--mochi-space-4);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-lg);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  box-shadow: var(--mochi-shadow-soft);
+  /* 入场：从下方 8px 弹起，过冲很小，对话框不该像果冻 */
+  animation: popIn var(--mochi-duration-slow) var(--mochi-spring-soft);
+}
+
+.panel:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--mochi-shadow-soft),
+    var(--mochi-focus-ring);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--mochi-space-2)) scale(0.96);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mochi-space-3);
+  margin-bottom: var(--mochi-space-3);
+}
+
+.title.title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--mochi-font-size-lg);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.close:hover {
+  background: var(--mochi-bg-sunken);
+  rotate: 90deg;
+}
+
+.close:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.close svg {
+  width: 10px;
+  height: 10px;
+}
+
+.close path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.body {
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  line-height: var(--mochi-line-height);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--mochi-space-2);
+  margin-top: var(--mochi-space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fadeIn,
+  .fadeOut,
+  .panel {
+    animation: none;
+  }
+
+  .close {
+    transition: none;
+  }
+}

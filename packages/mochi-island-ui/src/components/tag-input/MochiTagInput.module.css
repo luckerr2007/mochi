@@ -1,0 +1,142 @@
+/*
+ * 标签输入：凹陷槽里放标签 + 输入框，Enter/分隔符添加，退格删除末尾。
+ * 令牌：--mochi-surface-sunken / --mochi-shadow-inset / --mochi-primary-soft
+ *        --mochi-radius-xs|sm / --mochi-space-1·2 / --mochi-control-sm
+ * 动效：新标签 spring 弹入、移除淡出、其余 move 补位；到上限后输入框让位给提示文案。
+ */
+.well {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mochi-space-1);
+  box-sizing: border-box;
+  min-height: var(--mochi-control-md);
+  padding: var(--mochi-space-1) var(--mochi-space-2);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-surface-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+  transition: opacity var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.well[data-disabled] {
+  opacity: 0.55;
+}
+
+.well:focus-within {
+  box-shadow: var(--mochi-shadow-inset), var(--mochi-focus-ring);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-1);
+  padding: 2px var(--mochi-space-2);
+  border-radius: var(--mochi-radius-xs);
+  background: var(--mochi-primary-soft);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.remove {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    rotate var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.remove:hover {
+  background: color-mix(in srgb, var(--mochi-ink) 10%, transparent);
+  rotate: 90deg;
+}
+
+.remove:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.remove svg {
+  width: 8px;
+  height: 8px;
+}
+
+.remove path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.input {
+  flex: 1;
+  min-width: 96px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--mochi-ink-soft);
+}
+
+.fullNote {
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+}
+
+/* ---------- 标签进出 ---------- */
+.tagEnter {
+  animation: tagIn var(--mochi-duration-base) var(--mochi-spring) backwards;
+}
+
+.tagLeave {
+  animation: tagOut var(--mochi-duration-fast) var(--mochi-ease-in) forwards;
+}
+
+.tagMove {
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes tagIn {
+  from {
+    opacity: 0;
+    scale: 0.7;
+  }
+}
+
+@keyframes tagOut {
+  to {
+    opacity: 0;
+    scale: 0.85;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tagEnter,
+  .tagLeave {
+    animation-duration: 1ms;
+  }
+
+  .tagMove,
+  .remove {
+    transition: none;
+  }
+}

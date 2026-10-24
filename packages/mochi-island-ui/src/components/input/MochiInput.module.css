@@ -1,0 +1,28 @@
+/*
+ * 只负责输入框本体；外层的 label / 凹陷槽 / hint 由内部组件 FieldShell 提供，
+ * 这样 Input 与 Textarea 的槽样式只有一份来源。
+ */
+.control {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+}
+
+.control:focus {
+  outline: none;
+}
+
+.control::placeholder {
+  color: var(--mochi-ink-soft);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  color: var(--mochi-ink-soft);
+}

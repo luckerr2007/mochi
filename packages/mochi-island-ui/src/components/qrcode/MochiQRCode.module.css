@@ -1,0 +1,49 @@
+/*
+ * 令牌：--mochi-ink（模块色）/ --mochi-surface（底色）/ --mochi-line / --mochi-ink-soft
+ *        --mochi-radius-sm / --mochi-space-3 / --mochi-border-hairline
+ * 动效：内容变化时整块 spring 缩放进场；模块是一整条 path，不做逐格动画（会拖慢扫码）。
+ * 纪律：模块色与底色是扫码对比度的功能色，取自墨色与面板色，保证深底浅纹。
+ */
+
+.root {
+  display: inline-block;
+  font-family: var(--mochi-font-family);
+}
+
+.code {
+  display: block;
+  box-sizing: border-box;
+  padding: var(--mochi-space-3);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-surface);
+  animation: codeIn var(--mochi-duration-base) var(--mochi-spring-soft) both;
+}
+
+.code path {
+  fill: var(--mochi-ink);
+}
+
+@keyframes codeIn {
+  from {
+    opacity: 0;
+    scale: 0.92;
+  }
+}
+
+.error {
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--mochi-space-3);
+  border: var(--mochi-border-hairline) dashed var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-sm);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code {
+    animation: none;
+  }
+}

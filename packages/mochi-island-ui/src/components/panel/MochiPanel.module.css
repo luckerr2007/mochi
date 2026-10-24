@@ -1,0 +1,97 @@
+/*
+ * 令牌清单
+ *   色彩：--mochi-surface / --mochi-line / --mochi-ink
+ *   几何：--mochi-radius-lg / --mochi-space-1 · 3 · 4 / --mochi-border-hairline
+ *   氛围：--mochi-shadow-soft（外）+ 两层 inset 描边（内）
+ *   文字：--mochi-font-family / --mochi-font-size-lg · base / --mochi-font-weight-bold
+ * 纪律：三层边框全部为 1px 整数；分隔线内缩 16px，不切断内框。
+ */
+
+.root {
+  position: relative;
+  box-sizing: border-box;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-lg);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  line-height: var(--mochi-line-height);
+  /* 边框层次：外描边 → 4px 空气层 → 内描边，靠 inset 阴影叠出，无需伪元素 */
+  box-shadow:
+    inset 0 0 0 var(--mochi-space-1) var(--mochi-surface),
+    inset 0 0 0 calc(var(--mochi-space-1) + var(--mochi-border-hairline)) var(--mochi-line),
+    var(--mochi-shadow-soft);
+}
+
+.header {
+  position: relative;
+  padding: var(--mochi-space-3) var(--mochi-space-4);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  right: var(--mochi-space-4);
+  bottom: 0;
+  left: var(--mochi-space-4);
+  height: var(--mochi-border-hairline);
+  background: var(--mochi-line);
+}
+
+.title.title {
+  margin: 0;
+  font-size: var(--mochi-font-size-lg);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.body {
+  padding: var(--mochi-space-4);
+}
+
+.body > :first-child {
+  margin-top: 0;
+}
+
+.body > :last-child {
+  margin-bottom: 0;
+}
+
+.footer {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--mochi-space-2);
+  padding: var(--mochi-space-3) var(--mochi-space-4);
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: var(--mochi-space-4);
+  left: var(--mochi-space-4);
+  height: var(--mochi-border-hairline);
+  background: var(--mochi-line);
+}
+
+/* ---------- 入场：淡入上浮一次，animate 打开才播 ---------- */
+.root[data-animate] {
+  animation: panelIn var(--mochi-duration-slow) var(--mochi-spring-soft) backwards;
+  animation-delay: calc(var(--_i, 0) * var(--mochi-stagger));
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--mochi-space-2));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-animate] {
+    animation: none;
+  }
+}

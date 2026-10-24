@@ -1,0 +1,80 @@
+/* 令牌：--mochi-danger / --mochi-primary / --mochi-accent / --mochi-accent-candy / --mochi-surface / --mochi-ink */
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+.content {
+  display: contents;
+}
+
+.pill,
+.dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(40%, -40%);
+  box-shadow: 0 0 0 2px var(--mochi-surface);
+  background: var(--mochi-danger);
+  /* 角标要能跟着子元素一起移动，这里单独补一条 translate 过渡 */
+  transition: translate var(--mochi-duration-fast) var(--mochi-spring);
+}
+
+/*
+ * 被包住的元素按下时会下沉（按钮位移 --mochi-shadow-offset），
+ * 角标是绝对定位的兄弟节点，不跟着走就会"浮"在原地。
+ * translate 与上面的 transform 是叠加关系，不会互相覆盖。
+ */
+.root:has(> .content > :active) :is(.pill, .dot) {
+  translate: 0 var(--mochi-shadow-offset);
+}
+
+.pill {
+  min-width: 18px;
+  height: 18px;
+  padding-inline: var(--mochi-space-1);
+  border-radius: var(--mochi-radius-full);
+  color: var(--mochi-surface);
+  font-family: var(--mochi-font-family);
+  font-size: 11px;
+  font-weight: var(--mochi-font-weight-bold);
+  line-height: 18px;
+  text-align: center;
+  /* 数值变化时 :key 换掉节点，于是每次都是"新数字弹一下" */
+  animation: pop var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--mochi-radius-full);
+}
+
+/* 限定在自家元素上：裸属性选择器是全局规则，会把页面上所有 data-tone 元素染色 */
+.pill[data-tone='primary'],
+.dot[data-tone='primary'] {
+  background: var(--mochi-primary);
+}
+
+.pill[data-tone='accent'],
+.dot[data-tone='accent'] {
+  background: var(--mochi-accent);
+}
+
+.pill[data-tone='candy'],
+.dot[data-tone='candy'] {
+  background: var(--mochi-accent-candy);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill {
+    animation: none;
+  }
+}

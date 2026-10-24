@@ -1,0 +1,66 @@
+/*
+ * 环形进度：SVG 圆环，数值变化时 stroke-dashoffset 平滑推进（transform/opacity 之外的
+ * 合法动画属性——它不触发重排）。圆心百分比用等宽数字防抖动。
+ * 令牌：--mochi-line（轨道）/ --mochi-ink / --mochi-ink-soft / --mochi-ink-soft
+ *        --mochi-primary · accent · accent-candy · danger（语气）
+ *        --mochi-duration-slow / --mochi-ease-out / --mochi-duration-fast
+ */
+.root {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  font-family: var(--mochi-font-family);
+}
+
+.ring {
+  display: block;
+  /* 从 12 点钟方向顺时针推进 */
+  rotate: -90deg;
+}
+
+.track {
+  stroke: var(--mochi-line);
+}
+
+.bar {
+  stroke: var(--_tone, var(--mochi-primary));
+  transition: stroke-dashoffset var(--mochi-duration-slow) var(--mochi-ease-out);
+}
+
+.root[data-tone='primary'] {
+  --_tone: var(--mochi-primary);
+}
+
+.root[data-tone='accent'] {
+  --_tone: var(--mochi-accent);
+}
+
+.root[data-tone='candy'] {
+  --_tone: var(--mochi-accent-candy);
+}
+
+.root[data-tone='danger'] {
+  --_tone: var(--mochi-danger);
+}
+
+.value {
+  position: absolute;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-lg);
+  font-weight: var(--mochi-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  margin-left: 1px;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  font-style: normal;
+  font-weight: var(--mochi-font-weight-normal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+}

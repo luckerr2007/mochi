@@ -1,0 +1,129 @@
+/*
+ * 令牌：--mochi-primary · danger · accent-candy · accent（四种语气）
+ *        --mochi-ink / --mochi-ink-soft / --mochi-space-*
+ * 动效：外圈从 0.7 弹到 1（spring），勾/叉用 stroke-dashoffset 画出来——不是整块淡入
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  padding: var(--mochi-space-8) var(--mochi-space-4);
+  font-family: var(--mochi-font-family);
+  text-align: center;
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: var(--mochi-space-1);
+  border-radius: var(--mochi-radius-full);
+  background: color-mix(in srgb, var(--mochi-accent) 18%, transparent);
+  animation: badgeIn var(--mochi-duration-slow) var(--mochi-spring) both;
+}
+
+@keyframes badgeIn {
+  from {
+    opacity: 0;
+    scale: 0.7;
+  }
+}
+
+.badge svg {
+  width: 32px;
+  height: 32px;
+  overflow: visible;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--mochi-accent);
+  stroke-width: 1.5;
+  opacity: 0.5;
+}
+
+.mark {
+  fill: none;
+  stroke: var(--mochi-accent);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* 路径长度约 26；延迟 120ms，等外圈弹到位再画 */
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: draw var(--mochi-duration-slow) var(--mochi-ease-out) var(--mochi-duration-fast) forwards;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.root[data-tone='success'] .badge {
+  background: color-mix(in srgb, var(--mochi-primary) 16%, transparent);
+}
+
+.root[data-tone='success'] .ring,
+.root[data-tone='success'] .mark {
+  stroke: var(--mochi-primary-deep);
+}
+
+.root[data-tone='warning'] .badge {
+  background: color-mix(in srgb, var(--mochi-accent-candy) 22%, transparent);
+}
+
+.root[data-tone='warning'] .ring,
+.root[data-tone='warning'] .mark {
+  stroke: #b2593f;
+}
+
+.root[data-tone='danger'] .badge {
+  background: color-mix(in srgb, var(--mochi-danger) 14%, transparent);
+}
+
+.root[data-tone='danger'] .ring,
+.root[data-tone='danger'] .mark {
+  stroke: var(--mochi-danger);
+}
+
+.title {
+  margin: 0;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-lg);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.desc {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  line-height: var(--mochi-line-height);
+}
+
+.extra {
+  margin-top: var(--mochi-space-2);
+  font-size: var(--mochi-font-size-sm);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--mochi-space-2);
+  margin-top: var(--mochi-space-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge {
+    animation: none;
+  }
+
+  .mark {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

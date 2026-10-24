@@ -1,0 +1,70 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-line / --mochi-spring */
+.trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus {
+  outline: none;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+  color: var(--mochi-ink-soft);
+}
+
+.text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text[data-placeholder] {
+  color: var(--mochi-ink-soft);
+}
+
+.icon {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: var(--mochi-ink-soft);
+  transition: rotate var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.icon[data-open='true'] {
+  rotate: 180deg;
+}
+
+.icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.panel {
+  padding: var(--mochi-space-1);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    transition: none;
+  }
+}

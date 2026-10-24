@@ -1,0 +1,167 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-surface / --mochi-line / --mochi-primary-soft / --mochi-radius-md / --mochi-shadow-soft */
+.root {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus {
+  outline: none;
+}
+
+.trigger:disabled {
+  cursor: not-allowed;
+}
+
+.value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.value[data-placeholder] {
+  color: var(--mochi-ink-soft);
+}
+
+.chevron {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+/* 注意用值匹配而不是 [data-open]：Vue 会把 false 渲染成 data-open="false"，
+   属性存在即匹配的写法会让箭头在关闭态也翻转 */
+.chevron[data-open='true'] {
+  transform: rotate(180deg);
+}
+
+.chevron path {
+  fill: none;
+  stroke: var(--mochi-ink-soft);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- 弹层 ---------- */
+/* .list.list 是刻意的双类叠加：特异性 (0,2,0) 压过文档站的 .vp-doc ul (0,1,1) */
+.list.list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + var(--mochi-space-1));
+  right: 0;
+  left: 0;
+  max-height: 240px;
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--mochi-space-1);
+  list-style: none;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  box-shadow: var(--mochi-shadow-soft);
+  transform-origin: top center;
+}
+
+/* disc 标记由 li 生成（list-style 可继承，直接在 li 上关掉最稳） */
+.list > li {
+  list-style: none;
+}
+
+.listUp {
+  top: auto;
+  bottom: calc(100% + var(--mochi-space-1));
+  transform-origin: bottom center;
+}
+
+/* 滑动高亮块：active 选项的底色由它承担，键盘/悬停切换时在选项间弹滑 */
+.indicator {
+  position: absolute;
+  top: 0;
+  right: var(--mochi-space-1);
+  left: var(--mochi-space-1);
+  z-index: 0;
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-primary-soft);
+  pointer-events: none;
+  transition:
+    transform var(--mochi-duration-base) var(--mochi-spring),
+    height var(--mochi-duration-base) var(--mochi-spring);
+}
+
+/* 首次定位（以及弹层刚打开）不播过渡，下一帧才开弹簧 */
+.indicator:not([data-ready]) {
+  transition: none;
+}
+
+.option {
+  position: relative;
+  z-index: 1;
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border-radius: var(--mochi-radius-sm);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  cursor: pointer;
+}
+
+.option[data-selected] {
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.option[aria-disabled='true'] {
+  color: var(--mochi-ink-soft);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.popEnter {
+  animation: popIn var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.popLeave {
+  animation: popOut var(--mochi-duration-fast) var(--mochi-ease-in);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+}
+
+@keyframes popOut {
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron,
+  .indicator {
+    transition: none;
+  }
+
+  .popEnter,
+  .popLeave {
+    animation: none;
+  }
+}

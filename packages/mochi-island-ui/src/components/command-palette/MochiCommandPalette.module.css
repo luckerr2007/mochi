@@ -1,0 +1,194 @@
+/*
+ * 令牌清单
+ *   色彩：--mochi-surface / --mochi-surface-sunken / --mochi-line / --mochi-ink / --mochi-ink-soft
+ *         --mochi-primary-soft（高亮）
+ *   几何：--mochi-radius-lg|sm|xs / --mochi-space-1·2·3·4·6 / --mochi-border-hairline
+ *   立体：--mochi-shadow-soft
+ *   动效：--mochi-spring-soft / --mochi-duration-base|slow / --mochi-ease-in|ease-out / --mochi-stagger
+ * 布局：面板钉在视口上方 20vh 处（命令面板习惯在眼睛的位置），不是正中央。
+ */
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  padding: 20vh var(--mochi-space-4) var(--mochi-space-6);
+  background: color-mix(in srgb, var(--mochi-ink) 32%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.fadeIn {
+  animation: fadeIn var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.fadeOut {
+  animation: fadeOut var(--mochi-duration-fast) var(--mochi-ease-in);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+.panel {
+  width: min(520px, 100%);
+  overflow: hidden;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-lg);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  box-shadow: var(--mochi-shadow-soft);
+  /* 从上方 8px 落下：命令面板的来向是"屏幕外的上面" */
+  animation: dropIn var(--mochi-duration-slow) var(--mochi-spring-soft);
+}
+
+.panel:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--mochi-shadow-soft),
+    var(--mochi-focus-ring);
+}
+
+@keyframes dropIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--mochi-space-2) * -1)) scale(0.98);
+  }
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  padding: var(--mochi-space-4);
+  border-bottom: var(--mochi-border-hairline) solid var(--mochi-line);
+}
+
+.icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.icon circle,
+.icon path {
+  fill: none;
+  stroke: var(--mochi-ink-soft);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-lg);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--mochi-ink-soft);
+}
+
+.list {
+  max-height: 320px;
+  margin: 0;
+  padding: var(--mochi-space-2);
+  overflow-y: auto;
+  list-style: none;
+}
+
+.group {
+  padding: var(--mochi-space-2) var(--mochi-space-3) var(--mochi-space-1);
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  font-weight: var(--mochi-font-weight-bold);
+  letter-spacing: 0.05em;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border-radius: var(--mochi-radius-sm);
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-base);
+  cursor: pointer;
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+  animation: optionIn var(--mochi-duration-fast) var(--mochi-ease-out) both;
+  animation-delay: calc(var(--_i) * 24ms);
+}
+
+@keyframes optionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.option:hover,
+.option[data-active] {
+  background: var(--mochi-primary-soft);
+}
+
+.option[aria-disabled='true'] {
+  color: var(--mochi-ink-soft);
+  cursor: not-allowed;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kbd {
+  flex: none;
+  padding: 2px var(--mochi-space-2);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-xs);
+  background: var(--mochi-surface-sunken);
+  color: var(--mochi-ink-soft);
+  font-family: var(--mochi-font-family);
+  font-size: 12px;
+}
+
+.empty {
+  padding: var(--mochi-space-6) var(--mochi-space-3);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fadeIn,
+  .fadeOut,
+  .panel,
+  .option {
+    animation: none;
+  }
+
+  .option {
+    transition: none;
+  }
+}

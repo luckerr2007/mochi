@@ -1,0 +1,140 @@
+/*
+ * 令牌：--mochi-line / --mochi-line-strong / --mochi-primary / --mochi-primary-soft / --mochi-ink-soft
+ * 动效：连接线用 scaleX 从 0 拉到 1（不是改 width，避免重排）；当前步骤圆点弹一下
+ */
+.root.root {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--mochi-font-family);
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--mochi-space-1);
+  padding-right: var(--mochi-space-6);
+}
+
+.step:last-child {
+  flex: none;
+  padding-right: 0;
+}
+
+.dot {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  box-sizing: border-box;
+  border: var(--mochi-border-width) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  font-weight: var(--mochi-font-weight-bold);
+  transition:
+    background-color var(--mochi-duration-base) var(--mochi-ease-out),
+    border-color var(--mochi-duration-base) var(--mochi-ease-out),
+    color var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.step[data-state='done'] .dot {
+  border-color: var(--mochi-primary);
+  background: var(--mochi-primary-soft);
+  color: var(--mochi-primary-deep);
+}
+
+.step[data-state='current'] .dot {
+  border-color: var(--mochi-primary-deep);
+  background: var(--mochi-primary);
+  color: var(--mochi-on-primary);
+  animation: pulse var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes pulse {
+  from {
+    scale: 0.8;
+  }
+}
+
+.dot svg {
+  width: 11px;
+  height: 9px;
+}
+
+.dot path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+  color: var(--mochi-ink);
+}
+
+.step[data-state='todo'] .title {
+  color: var(--mochi-ink-soft);
+}
+
+.desc {
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* 连接线只走圆点这一行，从本步圆点右侧拉到下一步圆点前 */
+.line {
+  position: absolute;
+  top: 12px;
+  left: calc(24px + var(--mochi-space-2));
+  right: var(--mochi-space-2);
+  height: var(--mochi-border-hairline);
+  background: var(--mochi-line);
+}
+
+.line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--mochi-primary);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--mochi-duration-slow) var(--mochi-ease-out);
+}
+
+.step[data-state='done'] .line::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    transition: none;
+    animation: none;
+  }
+
+  .line::after {
+    transition: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.root.root > * {
+  margin-top: 0;
+}

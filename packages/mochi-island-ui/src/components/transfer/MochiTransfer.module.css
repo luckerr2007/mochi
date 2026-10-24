@@ -1,0 +1,249 @@
+/*
+ * 令牌清单
+ *   色彩：--mochi-surface / --mochi-surface-sunken / --mochi-line / --mochi-ink / --mochi-ink-soft
+ *         --mochi-primary / --mochi-primary-soft / --mochi-on-primary / --mochi-danger（禁用态不用）
+ *   几何：--mochi-radius-md|sm|xs / --mochi-space-1·2·3·4 / --mochi-border-hairline
+ *   立体：--mochi-shadow-inset（列表凹陷）/ --mochi-shadow-press（按钮 3D 台阶）/ --mochi-shadow-offset
+ *   动效：--mochi-spring / --mochi-ease-out / --mochi-duration-fast|base / --mochi-stagger
+ * 纪律：面板宽 200px、行高 40px（= control-md），位移一律 4px 整数倍。
+ */
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+}
+
+.panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 240px;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border-bottom: var(--mochi-border-hairline) solid var(--mochi-line);
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 半选态：MochiCheckbox 的 data-indeterminate 落在 label 根上，色块给它一个浅填充 */
+.header label[data-indeterminate] > span:first-of-type {
+  background: color-mix(in srgb, var(--mochi-primary) 35%, var(--mochi-surface));
+}
+
+/* 头部全选框的读屏文案：视觉隐藏但进 accname */
+.srOnly {
+  position: absolute;
+  overflow: hidden;
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  white-space: nowrap;
+}
+
+.search {
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border-bottom: var(--mochi-border-hairline) solid var(--mochi-line);
+}
+
+.searchInput {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--mochi-control-sm);
+  padding: 0 var(--mochi-space-2);
+  border: 0;
+  border-radius: var(--mochi-radius-xs);
+  background: var(--mochi-surface-sunken);
+  box-shadow: var(--mochi-shadow-inset);
+  color: var(--mochi-ink);
+  font: inherit;
+  font-size: var(--mochi-font-size-sm);
+}
+
+.searchInput:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-shadow-inset), var(--mochi-focus-ring);
+}
+
+.searchInput::placeholder {
+  color: var(--mochi-ink-soft);
+}
+
+.listbox {
+  position: relative;
+  min-height: 120px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: var(--mochi-space-2);
+}
+
+/* .listbox .list 特异性 (0,2,0)，压过文档站的 .vp-doc ul (0,1,1) */
+.listbox .list {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* disc 标记由 li 生成（list-style 可继承，直接在 li 上关掉最稳） */
+.list > li {
+  list-style: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  border-radius: var(--mochi-radius-xs);
+  transition: background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.row:hover {
+  background: var(--mochi-primary-soft);
+}
+
+/* ---------- 行进出 ---------- */
+.rowEnter {
+  animation: rowIn var(--mochi-duration-base) var(--mochi-spring) backwards;
+}
+
+/* 离场绝对定位，留下的行靠 move 补位；方向跟随移动方向 */
+.rowLeaveRight {
+  position: absolute;
+  width: 100%;
+  animation: rowOutRight var(--mochi-duration-fast) var(--mochi-ease-in) forwards;
+}
+
+.rowLeaveLeft {
+  position: absolute;
+  width: 100%;
+  animation: rowOutLeft var(--mochi-duration-fast) var(--mochi-ease-in) forwards;
+}
+
+.rowMove {
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--mochi-space-2));
+  }
+}
+
+@keyframes rowOutRight {
+  to {
+    opacity: 0;
+    transform: translateX(var(--mochi-space-4));
+  }
+}
+
+@keyframes rowOutLeft {
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--mochi-space-4) * -1));
+  }
+}
+
+.empty {
+  margin: 0;
+  padding: var(--mochi-space-4) 0;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  text-align: center;
+}
+
+/* ---------- 中间的移动按钮 ---------- */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-2);
+}
+
+.move {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: var(--mochi-control-md);
+  padding: 0;
+  border: var(--mochi-border-hairline) solid var(--mochi-primary-deep);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-primary);
+  box-shadow: var(--mochi-shadow-press);
+  color: var(--mochi-on-primary);
+  cursor: pointer;
+  transition:
+    translate var(--mochi-duration-press) var(--mochi-ease-out),
+    box-shadow var(--mochi-duration-press) var(--mochi-ease-out);
+}
+
+.move:active:not(:disabled) {
+  translate: 0 var(--mochi-shadow-offset);
+  box-shadow: 0 0 0 0 var(--mochi-shadow-press-color);
+}
+
+.move:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.move:disabled {
+  border-color: var(--mochi-line);
+  background: var(--mochi-surface-sunken);
+  box-shadow: none;
+  color: var(--mochi-ink-soft);
+  cursor: not-allowed;
+}
+
+.move svg {
+  width: 14px;
+  height: 12px;
+}
+
+.move path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rowEnter,
+  .rowLeaveRight,
+  .rowLeaveLeft {
+    animation-duration: 1ms;
+  }
+
+  .rowMove,
+  .row,
+  .move {
+    transition: none;
+  }
+}

@@ -1,0 +1,80 @@
+/* 令牌：--mochi-ink / --mochi-ink-soft / --mochi-bg-sunken / --mochi-radius-full / --mochi-duration-press */
+.control {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--mochi-ink);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.control:focus {
+  outline: none;
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  color: var(--mochi-ink-soft);
+}
+
+.step {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-bg-sunken);
+  color: var(--mochi-ink);
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    scale var(--mochi-duration-press) var(--mochi-ease-out);
+}
+
+.step:hover:not(:disabled) {
+  background: var(--mochi-primary-soft);
+}
+
+.step:active:not(:disabled) {
+  scale: 0.9;
+}
+
+.step:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.step:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.step svg {
+  width: 10px;
+  height: 10px;
+}
+
+.step path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step {
+    transition: none;
+  }
+
+  .step:active:not(:disabled) {
+    scale: 1;
+  }
+}

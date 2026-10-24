@@ -1,0 +1,85 @@
+/* 令牌：--mochi-surface / --mochi-primary-deep / --mochi-shadow-press / --mochi-shadow-offset */
+.root {
+  position: fixed;
+  right: var(--mochi-space-6);
+  bottom: var(--mochi-space-6);
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: var(--mochi-border-width) solid var(--mochi-primary-deep);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  cursor: pointer;
+  box-shadow: var(--mochi-shadow-press);
+  transition:
+    transform var(--mochi-duration-fast) var(--mochi-spring),
+    box-shadow var(--mochi-duration-fast) var(--mochi-spring);
+}
+
+.root:hover {
+  transform: translateY(-1px);
+}
+
+.root:active {
+  transform: translateY(var(--mochi-shadow-offset));
+  box-shadow: 0 0 0 0 transparent;
+  transition-duration: var(--mochi-duration-press);
+}
+
+.root:focus-visible {
+  outline: none;
+  box-shadow:
+    var(--mochi-shadow-press),
+    var(--mochi-focus-ring);
+}
+
+.root svg {
+  width: 14px;
+  height: 14px;
+}
+
+.root path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.in {
+  animation: rise var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.out {
+  animation: fall var(--mochi-duration-fast) var(--mochi-ease-in);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--mochi-space-2);
+    scale: 0.9;
+  }
+}
+
+@keyframes fall {
+  to {
+    opacity: 0;
+    scale: 0.95;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+
+  .in,
+  .out {
+    animation: none;
+  }
+}

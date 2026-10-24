@@ -1,0 +1,14 @@
+/* 只是一个排版容器，不消费颜色令牌；gap 由组件按 4px 网格算出 */
+.root {
+  display: flex;
+  align-items: center;
+}
+
+.root[data-vertical] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.root[data-wrap] {
+  flex-wrap: wrap;
+}

@@ -1,0 +1,50 @@
+/* 令牌：--mochi-space-1 / --mochi-ink / --mochi-ink-soft / --mochi-danger / --mochi-font-size-sm */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mochi-space-1);
+}
+
+.label.label {
+  margin: 0;
+  color: var(--mochi-ink);
+  font-size: var(--mochi-font-size-sm);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.required {
+  margin-left: 2px;
+  color: var(--mochi-danger);
+}
+
+.error.error,
+.hint.hint {
+  margin: 0;
+  font-size: var(--mochi-font-size-sm);
+}
+
+.error {
+  color: var(--mochi-danger);
+}
+
+.hint {
+  color: var(--mochi-ink-soft);
+}
+
+/* 错误/提示文案出现：淡入 + 下落 4px；离场不播（校验纠错要即时） */
+.messageIn {
+  animation: messageIn var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--mochi-space-1) * -1));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .messageIn {
+    animation: none;
+  }
+}

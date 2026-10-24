@@ -1,0 +1,80 @@
+/*
+ * 头像组：负 margin 叠放，白色描边环把每张头像从重叠里切出来。
+ * 悬停：上浮 2px + 提层（scale 1.06），松手弹回——比"放大"更像把头像拎起来看。
+ * 令牌：--mochi-space-2 / --mochi-surface / --mochi-line / --mochi-ink-soft / --mochi-spring
+ */
+.root {
+  display: flex;
+  align-items: center;
+  font-family: var(--mochi-font-family);
+}
+
+.item {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  border-radius: var(--mochi-radius-full);
+  box-shadow: 0 0 0 2px var(--mochi-surface);
+  /* 入场错峰弹入：像成员一个个冒出来 */
+  animation: itemIn var(--mochi-duration-base) var(--mochi-spring) backwards;
+  animation-delay: calc(var(--_i, 0) * var(--mochi-stagger));
+  transition:
+    translate var(--mochi-duration-base) var(--mochi-spring),
+    scale var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes itemIn {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+/* 负 margin 叠放：每张压住前一张的 1/4 */
+.item + .item {
+  margin-left: calc(var(--mochi-space-2) * -1);
+}
+
+.item:hover {
+  translate: 0 -2px;
+  scale: 1.06;
+  z-index: 1;
+}
+
+/* 折叠位：与头像同尺寸的圆片 */
+.more {
+  place-items: center;
+  background: var(--mochi-surface-sunken);
+  color: var(--mochi-ink-soft);
+  font-size: 12px;
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+.moreText {
+  pointer-events: none;
+}
+
+.root[data-size='sm'] .more {
+  display: grid;
+  width: 28px;
+  height: 28px;
+}
+
+.root[data-size='md'] .more {
+  display: grid;
+  width: 40px;
+  height: 40px;
+}
+
+.root[data-size='lg'] .more {
+  display: grid;
+  width: 56px;
+  height: 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
+    animation: none;
+  }
+}

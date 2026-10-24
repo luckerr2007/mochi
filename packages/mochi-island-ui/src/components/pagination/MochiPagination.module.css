@@ -1,0 +1,115 @@
+/*
+ * 令牌：--mochi-surface / --mochi-line / --mochi-primary / --mochi-primary-deep
+ *        --mochi-control-sm（32px 方块）/ --mochi-shadow-press-color
+ * 动效：悬停抬 1px + 台阶长高，按下塌回——与按钮同一套物理
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  font-family: var(--mochi-font-family);
+}
+
+.page,
+.nav {
+  display: grid;
+  place-items: center;
+  min-width: var(--mochi-control-sm);
+  height: var(--mochi-control-sm);
+  padding-inline: var(--mochi-space-1);
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-sm);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink);
+  font: inherit;
+  font-size: var(--mochi-font-size-sm);
+  cursor: pointer;
+  box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color);
+  transform: translateY(0);
+  transition:
+    transform var(--mochi-duration-fast) var(--mochi-spring),
+    box-shadow var(--mochi-duration-fast) var(--mochi-spring),
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.page:hover,
+.nav:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 0 var(--mochi-shadow-press-color);
+}
+
+.page:active,
+.nav:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 0 transparent;
+  transition-duration: var(--mochi-duration-press);
+}
+
+.page[aria-current='page'] {
+  border-color: var(--mochi-primary-deep);
+  background: var(--mochi-primary);
+  color: var(--mochi-on-primary);
+  font-weight: var(--mochi-font-weight-bold);
+  /* 翻页时当前页弹一下：规则重新匹配即重播（scale 独立于 transform，不干扰按压位移） */
+  animation: pagePop var(--mochi-duration-base) var(--mochi-spring);
+}
+
+@keyframes pagePop {
+  from {
+    scale: 0.85;
+  }
+}
+
+.nav:disabled {
+  color: var(--mochi-ink-soft);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.page:focus-visible,
+.nav:focus-visible {
+  outline: none;
+  box-shadow:
+    0 2px 0 0 var(--mochi-shadow-press-color),
+    var(--mochi-focus-ring);
+}
+
+.nav svg {
+  width: 12px;
+  height: 12px;
+}
+
+.nav path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gap {
+  min-width: var(--mochi-control-sm);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page,
+  .nav {
+    transition: none;
+  }
+
+  .page[aria-current='page'] {
+    animation: none;
+  }
+
+  .page:hover,
+  .nav:hover:not(:disabled),
+  .page:active,
+  .nav:active:not(:disabled) {
+    transform: none;
+    box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color);
+  }
+}

@@ -1,0 +1,62 @@
+/*
+ * 令牌：--mochi-primary-deep / --mochi-border-hairline / --mochi-duration-base
+ * 动效：下划线用 background-size 从 0 拉满（不触发重排），外链箭头同时向右上轻移
+ */
+.root.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  color: var(--mochi-primary-deep);
+  font-family: var(--mochi-font-family);
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% var(--mochi-border-hairline);
+  transition: background-size var(--mochi-duration-base) var(--mochi-ease-out);
+}
+
+.root:hover {
+  background-size: 100% var(--mochi-border-hairline);
+}
+
+.root:focus-visible {
+  outline: none;
+  border-radius: var(--mochi-radius-xs);
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.root[aria-disabled='true'] {
+  color: var(--mochi-ink-soft);
+  cursor: not-allowed;
+  background-size: 0% var(--mochi-border-hairline);
+}
+
+.arrow {
+  width: 10px;
+  height: 10px;
+  transition: translate var(--mochi-duration-fast) var(--mochi-spring);
+}
+
+.root:hover .arrow {
+  translate: 1px -1px;
+}
+
+.arrow path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.root.root::after {
+  content: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .arrow {
+    transition: none;
+  }
+}

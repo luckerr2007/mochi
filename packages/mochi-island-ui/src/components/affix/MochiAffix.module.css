@@ -1,0 +1,22 @@
+/* 令牌：--mochi-shadow-soft / --mochi-line / --mochi-surface / --mochi-duration-base */
+.root {
+  position: relative;
+}
+
+.body {
+  transition: box-shadow var(--mochi-duration-base) var(--mochi-spring);
+}
+
+/* 钉住的一瞬加景深和描边，让"它现在是悬浮的"这件事可感知 */
+.body[data-pinned] {
+  z-index: 50;
+  border-radius: var(--mochi-radius-md);
+  background: var(--mochi-surface);
+  box-shadow: var(--mochi-shadow-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body {
+    transition: none;
+  }
+}

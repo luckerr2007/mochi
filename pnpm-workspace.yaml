@@ -1,0 +1,9 @@
+packages:
+  - 'packages/*'
+  - 'playground'
+  - 'docs'
+  - 'examples/*'
+
+# VitePress 依赖的 esbuild 需要执行安装脚本来落二进制；只放行这一个
+allowBuilds:
+  esbuild: true

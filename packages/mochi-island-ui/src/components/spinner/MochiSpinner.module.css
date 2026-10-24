@@ -1,0 +1,37 @@
+/* 令牌：--mochi-primary / --mochi-line / --mochi-duration-slow */
+.root {
+  display: inline-flex;
+  width: var(--_size, 20px);
+  height: var(--_size, 20px);
+}
+
+.ring {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--mochi-line);
+  border-top-color: var(--mochi-primary);
+  border-radius: var(--mochi-radius-full);
+  animation: spin calc(var(--mochi-duration-slow) * 2) linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring {
+    animation-duration: 3s;
+  }
+}

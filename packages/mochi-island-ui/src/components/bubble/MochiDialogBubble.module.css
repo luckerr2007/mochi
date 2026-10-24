@@ -1,0 +1,118 @@
+/*
+ * 令牌清单
+ *   色彩：--mochi-surface（气泡与尾巴同源，靠局部变量保持同步）/ --mochi-line / --mochi-ink
+ *   几何：--mochi-radius-lg / --mochi-space-3 · 4 / --mochi-border-hairline
+ *   氛围：--mochi-shadow-soft（大 blur、低透明度）
+ *   文字：--mochi-font-family / --mochi-font-size-base / --mochi-line-height
+ * 纪律：边框与文字不 blur；尾巴是 SVG 路径而非 CSS 三角形，便于做出不对称的手绘弧度。
+ */
+.root {
+  --_bubble-bg: var(--mochi-surface);
+  --_bubble-line: var(--mochi-line);
+
+  position: relative;
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 42ch;
+  padding: var(--mochi-space-3) var(--mochi-space-4);
+  border: var(--mochi-border-hairline) solid var(--_bubble-line);
+  border-radius: var(--mochi-radius-lg);
+  background: var(--_bubble-bg);
+  color: var(--mochi-ink);
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-base);
+  line-height: var(--mochi-line-height);
+  box-shadow: var(--mochi-shadow-soft);
+  /* 台词出现时轻轻"冒"出来，尾巴跟着一起 */
+  animation: bubbleIn var(--mochi-duration-slow) var(--mochi-spring-soft) both;
+}
+
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--mochi-space-2)) scale(0.96);
+  }
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  min-height: 1em;
+}
+
+.text {
+  white-space: pre-wrap;
+}
+
+/* 打字机光标：硬切换，不做渐变（边缘保持锐利） */
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  background: var(--mochi-primary);
+  vertical-align: -0.15em;
+  animation: blink calc(var(--mochi-duration-slow) * 2) steps(1, end) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 尾巴：26×28，底边压进气泡 2px ---------- */
+.tail {
+  position: absolute;
+  /* 垂直居中：单行与多行气泡都指向文字中部，不随高度漂移 */
+  top: 50%;
+  margin-top: -14px; /* = -高度 / 2 */
+  width: 26px;
+  height: 28px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.root[data-placement='left'] .tail {
+  left: -23px;
+}
+
+.root[data-placement='right'] .tail {
+  right: -23px;
+  transform: scaleX(-1);
+}
+
+.tailFill {
+  fill: var(--_bubble-bg);
+  stroke: none;
+}
+
+.tailStroke {
+  fill: none;
+  stroke: var(--_bubble-line);
+  stroke-width: var(--mochi-border-hairline);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+
+  .root {
+    animation: none;
+  }
+}

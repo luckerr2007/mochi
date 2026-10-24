@@ -1,0 +1,88 @@
+/*
+ * 令牌：--mochi-bg-sunken（轨道）/ --mochi-line-strong / --mochi-primary（已填充）
+ *        --mochi-surface / --mochi-shadow-press-color（滑块台阶）
+ * 动效：滑块位置 120ms 过渡；拖拽过程中关闭过渡（:active），否则手感会"追不上手指"
+ */
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  width: 100%;
+  font-family: var(--mochi-font-family);
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  height: 8px;
+  border: var(--mochi-border-hairline) solid var(--mochi-line-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-bg-sunken);
+}
+
+.fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-primary);
+  transition: width var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: var(--mochi-border-hairline) solid var(--mochi-primary-deep);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  box-shadow: 0 2px 0 0 var(--mochi-shadow-press-color);
+  transition: left var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.control {
+  position: absolute;
+  inset: -8px 0;
+  width: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.root:active .fill,
+.root:active .thumb {
+  transition: none;
+}
+
+.control:focus-visible ~ .thumb,
+.root:has(.control:focus-visible) .thumb {
+  box-shadow:
+    0 2px 0 0 var(--mochi-shadow-press-color),
+    var(--mochi-focus-ring);
+}
+
+.root[data-disabled] {
+  opacity: 0.55;
+}
+
+.root[data-disabled] .control {
+  cursor: not-allowed;
+}
+
+.value {
+  min-width: 32px;
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .thumb {
+    transition: none;
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["vite/client", "node"],
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "mochi-island-ui": ["../packages/mochi-island-ui/src/index.ts"],
+      "mochi-island-ui/*": ["../packages/mochi-island-ui/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "vite.config.ts"]
+}

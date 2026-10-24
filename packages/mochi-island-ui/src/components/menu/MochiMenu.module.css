@@ -1,0 +1,144 @@
+/*
+ * 令牌：--mochi-primary（指示条）/ --mochi-primary-soft（选中底）/ --mochi-ink · ink-soft
+ *        --mochi-radius-sm / --mochi-space-* / --mochi-spring
+ * 动效：选中的指示条在条目之间滑动（只动 transform）；分组展开用 grid-template-rows 补间
+ */
+.root {
+  position: relative;
+  display: block;
+  min-width: 180px;
+  padding: var(--mochi-space-1);
+  font-family: var(--mochi-font-family);
+}
+
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 2px;
+  z-index: 1;
+  width: var(--mochi-border-width-strong);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-primary);
+  transition:
+    transform var(--mochi-duration-base) var(--mochi-spring),
+    height var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.list.list,
+.sub.sub {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-2);
+  width: 100%;
+  padding: var(--mochi-space-2) var(--mochi-space-3);
+  border: 0;
+  border-radius: var(--mochi-radius-sm);
+  background: transparent;
+  color: var(--mochi-ink-soft);
+  font: inherit;
+  font-family: var(--mochi-font-family);
+  font-size: var(--mochi-font-size-sm);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--mochi-duration-fast) var(--mochi-ease-out),
+    color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.item:hover:not(:disabled) {
+  background: var(--mochi-bg-sunken);
+  color: var(--mochi-ink);
+}
+
+.item[aria-current='page'] {
+  background: var(--mochi-primary-soft);
+  color: var(--mochi-ink);
+  font-weight: var(--mochi-font-weight-bold);
+}
+
+/* 分组里有选中项时，父级只加重文字，不再铺底色——避免和子项的选中态打架 */
+.item[data-group-active] {
+  color: var(--mochi-ink);
+}
+
+.item:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+
+.chevron {
+  width: 12px;
+  height: 12px;
+  transition: rotate var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.chevron[data-open='true'] {
+  rotate: 180deg;
+}
+
+.chevron path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 展开/收起：0fr ↔ 1fr，浏览器自己补间，不用测高度 */
+.group {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.group[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.group > .sub {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.child {
+  padding-left: var(--mochi-space-6);
+  font-size: 12px;
+}
+
+.child[data-parent-active] {
+  color: var(--mochi-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicator,
+  .chevron,
+  .group,
+  .item {
+    transition: none;
+  }
+}
+
+/* 文档站的 li+li 会给行间塞 8px，行距由组件的 gap/padding 全权负责 */
+.list.list > *,
+.sub.sub > * {
+  margin-top: 0;
+}
