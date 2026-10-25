@@ -10,6 +10,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "lucide-vue-next": "^1.0.0",
     "mochi-island-ui": "workspace:*"
   },
   "devDependencies": {

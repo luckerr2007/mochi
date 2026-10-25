@@ -35,6 +35,7 @@ export const mochiComponentDirs = {
   MochiForm: 'form',
   MochiFormItem: 'form',
   MochiImage: 'image',
+  MochiIcon: 'icon',
   MochiInput: 'input',
   MochiInputNumber: 'input-number',
   MochiKbd: 'kbd',

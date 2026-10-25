@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { applyTheme, useToast, type MochiTheme } from 'mochi-island-ui';
+import { Sparkles, Rocket, Heart, MapPin, Calendar, Search } from 'lucide-vue-next';
 
 const sections = [
   { id: 'button', label: '按钮', title: 'Button', desc: '胶囊形状，按下时整体下沉，位移量等于台阶高度。' },
@@ -726,6 +727,15 @@ onMounted(() => {
           <MochiLoadMore :status="loadStatus" @more="startLoad" />
           <MochiDivider label="键位" />
           <p style="margin: 0">按 <MochiKbd>⌘K</MochiKbd> 唤起命令面板，<MochiKbd>Esc</MochiKbd> 关闭。</p>
+          <MochiDivider label="图标（第三方图标库适配，禁 emoji）" />
+          <div class="row" style="gap: var(--mochi-space-4); align-items: center; font-size: 15px">
+            <span><MochiIcon :icon="Sparkles" /> 闪光</span>
+            <span><MochiIcon :icon="Rocket" size="lg" /> 发射</span>
+            <span><MochiIcon :icon="Heart" size="sm" /> 喜欢</span>
+            <span><MochiIcon :icon="MapPin" label="地点" /></span>
+            <span><MochiIcon :icon="Calendar" :stroke-width="1.5" /> 日程</span>
+            <span><MochiIcon :icon="Search" size="sm" :stroke-width="1.5" /> 搜索</span>
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,10 @@
+/*
+ * 令牌：--mochi-ink（继承文字色，图标默认跟随）
+ * 图标基线对齐：inline-flex 收掉行内空隙，vertical-align 按文字基线对齐
+ */
+.root {
+  display: inline-flex;
+  flex: none;
+  color: currentColor;
+  vertical-align: -0.125em;
+}

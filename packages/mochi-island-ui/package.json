@@ -1,6 +1,6 @@
 {
   "name": "mochi-island-ui",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Cartoon-soft Vue 3 component library. Design tokens are the API.",
   "type": "module",
   "keywords": [
@@ -28,26 +28,33 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     },
     "./components/*": {
       "types": "./dist/components/*/index.d.ts",
-      "import": "./dist/components/*/index.js"
+      "import": "./dist/components/*/index.js",
+      "require": "./dist/components/*/index.cjs"
     },
     "./style.css": "./dist/style.css",
     "./styles/tokens.css": "./dist/styles/tokens.css",
     "./resolver": {
       "types": "./dist/resolver.d.ts",
-      "import": "./dist/resolver.js"
+      "import": "./dist/resolver.js",
+      "require": "./dist/resolver.cjs"
     },
     "./package.json": "./package.json",
     "./locale": {
       "types": "./dist/locale.d.ts",
-      "import": "./dist/locale.js"
+      "import": "./dist/locale.js",
+      "require": "./dist/locale.cjs"
+    },
+    "./global": {
+      "types": "./dist/global.d.ts"
     }
   },
   "scripts": {
-    "build": "vite build && node scripts/copy-tokens.mjs",
+    "build": "vite build && vite build --config vite.cjs.config.ts && cp src/global.d.ts dist/global.d.ts && node scripts/copy-tokens.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
@@ -74,6 +81,7 @@
     "vue-tsc": "^3.3.13"
   },
   "dependencies": {
+    "lucide-vue-next": "^1.0.0",
     "qrcode-generator": "^2.0.4"
   }
 }

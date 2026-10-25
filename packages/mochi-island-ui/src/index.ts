@@ -144,6 +144,8 @@ export { MochiDatePicker } from './components/date-picker';
 
 export { MochiImage } from './components/image';
 
+export { MochiIcon } from './components/icon';
+
 export { MochiAnchor } from './components/anchor';
 export type { MochiAnchorItem } from './components/anchor';
 

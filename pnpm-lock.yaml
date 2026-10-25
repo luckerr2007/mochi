@@ -14,6 +14,9 @@ importers:
 
   docs:
     dependencies:
+      lucide-vue-next:
+        specifier: ^1.0.0
+        version: 1.0.0(vue@3.5.44(typescript@5.9.3))
       mochi-island-ui:
         specifier: workspace:*
         version: link:../packages/mochi-island-ui
@@ -55,6 +58,9 @@ importers:
 
   packages/mochi-island-ui:
     dependencies:
+      lucide-vue-next:
+        specifier: ^1.0.0
+        version: 1.0.0(vue@3.5.44(typescript@5.9.3))
       qrcode-generator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -73,16 +79,16 @@ importers:
         version: 30.1.3
       unplugin-vue-components:
         specifier: '>=0.27.0'
-        version: 32.1.0(esbuild@0.21.5)(rolldown@1.2.15)(rollup@4.65.0)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5))(vue@3.5.44(typescript@5.9.3))
+        version: 32.1.0(rolldown@1.2.15)(rollup@4.65.0)(vite@8.3.5(@types/node@26.6.5))(vue@3.5.44(typescript@5.9.3))
       vite:
         specifier: ^8.3.5
-        version: 8.3.5(@types/node@26.6.5)(esbuild@0.21.5)
+        version: 8.3.5(@types/node@26.6.5)
       vite-plugin-dts:
         specifier: ^5.1.2
-        version: 5.1.2(@vue/language-core@3.3.13)(esbuild@0.21.5)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5))
+        version: 5.1.2(@vue/language-core@3.3.13)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5))
       vitest:
         specifier: ^5.0.5
-        version: 5.0.5(@types/node@26.6.5)(jsdom@30.1.3)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5))
+        version: 5.0.5(@types/node@26.6.5)(jsdom@30.1.3)(vite@8.3.5(@types/node@26.6.5))
       vue:
         specifier: ^3.5.0
         version: 3.5.44(typescript@5.9.3)
@@ -92,6 +98,9 @@ importers:
 
   playground:
     dependencies:
+      lucide-vue-next:
+        specifier: ^1.0.0
+        version: 1.0.0(vue@3.5.44(typescript@5.9.3))
       mochi-island-ui:
         specifier: workspace:*
         version: link:../packages/mochi-island-ui
@@ -1225,6 +1234,12 @@ packages:
     resolution: {integrity: sha512-U4N8FgzmWxc8k1VH8Kr6lQg18U7Fjvby6wXHVRX/ZZ7IwWbRMgrRbP0Wrb5q5NVinryp4SQampHKdvtecItxUg==}
     engines: {node: 20 || >=22}
 
+  lucide-vue-next@1.0.0:
+    resolution: {integrity: sha512-V6SPvx1IHTj/UY+FrIYWV5faISsPSb8BnWSFDxAtezWKvWc9ZZ40PDrdu1/Qb5vg4lHWr1hs1BAMGVGm6V1Xdg==}
+    deprecated: Package deprecated. Please use @lucide/vue instead.
+    peerDependencies:
+      vue: '>=3.0.1'
+
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
 
@@ -2298,14 +2313,14 @@ snapshots:
       vite: 8.3.5(@types/node@26.6.5)(esbuild@0.21.5)
       vue: 3.5.44(typescript@5.9.3)
 
-  '@vitest/mocker@5.0.5(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5))':
+  '@vitest/mocker@5.0.5(vite@8.3.5(@types/node@26.6.5))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       '@vitest/spy': 5.0.5
       estree-walker: 3.0.3
       magic-string: 1.4.3
     optionalDependencies:
-      vite: 8.3.5(@types/node@26.6.5)(esbuild@0.21.5)
+      vite: 8.3.5(@types/node@26.6.5)
 
   '@vitest/spy@5.0.5': {}
 
@@ -2755,6 +2770,10 @@ snapshots:
 
   lru-cache@11.5.3: {}
 
+  lucide-vue-next@1.0.0(vue@3.5.44(typescript@5.9.3)):
+    dependencies:
+      vue: 3.5.44(typescript@5.9.3)
+
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.6.0
@@ -3045,7 +3064,7 @@ snapshots:
       unist-util-is: 6.0.1
       unist-util-visit-parents: 6.0.2
 
-  unplugin-dts@1.1.2(@vue/language-core@3.3.13)(esbuild@0.21.5)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5)):
+  unplugin-dts@1.1.2(@vue/language-core@3.3.13)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5)):
     dependencies:
       '@rollup/pluginutils': 5.5.1(rollup@4.65.0)
       '@volar/typescript': 2.4.30(typescript@5.9.3)
@@ -3059,10 +3078,9 @@ snapshots:
       unplugin: 2.3.11
     optionalDependencies:
       '@vue/language-core': 3.3.13
-      esbuild: 0.21.5
       rolldown: 1.2.15
       rollup: 4.65.0
-      vite: 8.3.5(@types/node@26.6.5)(esbuild@0.21.5)
+      vite: 8.3.5(@types/node@26.6.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -3095,6 +3113,30 @@ snapshots:
       - vite
       - webpack
 
+  unplugin-vue-components@32.1.0(rolldown@1.2.15)(rollup@4.65.0)(vite@8.3.5(@types/node@26.6.5))(vue@3.5.44(typescript@5.9.3)):
+    dependencies:
+      chokidar: 5.0.0
+      local-pkg: 1.2.1
+      magic-string: 0.30.21
+      mlly: 1.8.2
+      obug: 2.2.1
+      picomatch: 4.0.7
+      tinyglobby: 0.2.17
+      unplugin: 3.4.0(rolldown@1.2.15)(rollup@4.65.0)(vite@8.3.5(@types/node@26.6.5))
+      unplugin-utils: 0.3.2
+      vue: 3.5.44(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - esbuild
+      - rolldown
+      - rollup
+      - unloader
+      - vite
+      - webpack
+
   unplugin@2.3.11:
     dependencies:
       '@jridgewell/remapping': 2.3.5
@@ -3113,6 +3155,16 @@ snapshots:
       rollup: 4.65.0
       vite: 8.3.5(@types/node@26.6.5)(esbuild@0.21.5)
 
+  unplugin@3.4.0(rolldown@1.2.15)(rollup@4.65.0)(vite@8.3.5(@types/node@26.6.5)):
+    dependencies:
+      '@jridgewell/remapping': 2.3.5
+      picomatch: 4.0.7
+      webpack-virtual-modules: 0.6.2
+    optionalDependencies:
+      rolldown: 1.2.15
+      rollup: 4.65.0
+      vite: 8.3.5(@types/node@26.6.5)
+
   vfile-message@4.0.3:
     dependencies:
       '@types/unist': 3.0.3
@@ -3123,12 +3175,12 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite-plugin-dts@5.1.2(@vue/language-core@3.3.13)(esbuild@0.21.5)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5)):
+  vite-plugin-dts@5.1.2(@vue/language-core@3.3.13)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5)):
     dependencies:
-      unplugin-dts: 1.1.2(@vue/language-core@3.3.13)(esbuild@0.21.5)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5))
+      unplugin-dts: 1.1.2(@vue/language-core@3.3.13)(rolldown@1.2.15)(rollup@4.65.0)(typescript@5.9.3)(vite@8.3.5(@types/node@26.6.5))
     optionalDependencies:
       rollup: 4.65.0
-      vite: 8.3.5(@types/node@26.6.5)(esbuild@0.21.5)
+      vite: 8.3.5(@types/node@26.6.5)
     transitivePeerDependencies:
       - '@rspack/core'
       - '@vue/language-core'
@@ -3147,6 +3199,17 @@ snapshots:
       '@types/node': 26.6.5
       fsevents: 2.3.3
       lightningcss: 1.33.0
+
+  vite@8.3.5(@types/node@26.6.5):
+    dependencies:
+      lightningcss: 1.33.0
+      picomatch: 4.0.7
+      postcss: 8.5.31
+      rolldown: 1.2.15
+      tinyglobby: 0.2.17
+    optionalDependencies:
+      '@types/node': 26.6.5
+      fsevents: 2.3.3
 
   vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5):
     dependencies:
@@ -3210,10 +3273,10 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@5.0.5(@types/node@26.6.5)(jsdom@30.1.3)(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5)):
+  vitest@5.0.5(@types/node@26.6.5)(jsdom@30.1.3)(vite@8.3.5(@types/node@26.6.5)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.5(vite@8.3.5(@types/node@26.6.5)(esbuild@0.21.5))
+      '@vitest/mocker': 5.0.5(vite@8.3.5(@types/node@26.6.5))
       chai: 6.3.0
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -3224,7 +3287,7 @@ snapshots:
       tinybench: 6.2.2
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
-      vite: 8.3.5(@types/node@26.6.5)(esbuild@0.21.5)
+      vite: 8.3.5(@types/node@26.6.5)
       why-is-node-running: 3.2.1
     optionalDependencies:
       '@types/node': 26.6.5

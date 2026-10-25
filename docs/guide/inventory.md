@@ -15,7 +15,7 @@
 | 组件 | AntD | EP | MUI | Chakra | shadcn | Naive | Mochi |
 | --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
 | Button 按钮 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Icon 图标 | ✅ | ✅ | ✅ | — | ✅ | ✅ | ❌ 需要图标包 |
+| Icon 图标 | ✅ | ✅ | ✅ | — | ✅ | ✅ | ✅ MochiIcon 适配 lucide |
 | Typography 排版 | ✅ | — | ✅ | — | — | — | ✅ MochiText |
 | Divider 分割线 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Link 链接 | ✅ | ✅ | ✅ | — | — | ✅ | ✅ |

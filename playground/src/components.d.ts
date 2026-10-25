@@ -40,6 +40,7 @@ declare module 'vue' {
     MochiEmpty: typeof import('mochi-island-ui/components/empty')['MochiEmpty']
     MochiForm: typeof import('mochi-island-ui/components/form')['MochiForm']
     MochiFormItem: typeof import('mochi-island-ui/components/form')['MochiFormItem']
+    MochiIcon: typeof import('mochi-island-ui/components/icon')['MochiIcon']
     MochiImage: typeof import('mochi-island-ui/components/image')['MochiImage']
     MochiInput: typeof import('mochi-island-ui/components/input')['MochiInput']
     MochiInputNumber: typeof import('mochi-island-ui/components/input-number')['MochiInputNumber']

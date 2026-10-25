@@ -86,8 +86,11 @@ const scheduleGrow: (cb: () => void) => number =
   typeof requestIdleCallback === 'function'
     ? (cb) => requestIdleCallback(cb, { timeout: 200 })
     : (cb) => window.setTimeout(cb, 16) as unknown as number;
+// 兜底分支的 window 访问必须延迟到调用时：SSR（Node）没有 window，模块作用域直接取会炸
 const cancelGrow: (id: number) => void =
-  typeof cancelIdleCallback === 'function' ? cancelIdleCallback : window.clearTimeout;
+  typeof cancelIdleCallback === 'function'
+    ? (id) => cancelIdleCallback(id)
+    : (id) => window.clearTimeout(id);
 
 const progressiveOn = computed(() => shouldVirtualize(sortedRows.value.length, props.progressive !== false));
 const renderedCount = ref<number>(Number.POSITIVE_INFINITY);

@@ -17,8 +17,9 @@ export const VIRTUAL_ROW_THRESHOLD = 30;
 
 export type MochiVirtualSetting = boolean | 'auto';
 
-/** 低端设备保守探测：内存 ≤4GB 或核数 ≤4 视为低端；字段缺失时不当低端（避免误开） */
+/** 低端设备保守探测：内存 ≤4GB 或核数 ≤4 视为低端；字段缺失或无 navigator（SSR）时不当作低端 */
 export function isLowEndDevice(): boolean {
+  if (typeof navigator === 'undefined') return false;
   const nav = navigator as Navigator & { deviceMemory?: number };
   if (nav.deviceMemory !== undefined && nav.deviceMemory <= 4) return true;
   return nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency <= 4;

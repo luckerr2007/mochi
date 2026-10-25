@@ -1,5 +1,6 @@
 import DefaultTheme from 'vitepress/theme';
 import type { Theme } from 'vitepress';
+import IconDemo from './IconDemo.vue';
 import {
   MochiAffix,
   MochiAlert,
@@ -32,6 +33,7 @@ import {
   MochiForm,
   MochiFormItem,
   MochiImage,
+  MochiIcon,
   MochiInput,
   MochiInputNumber,
   MochiKbd,
@@ -115,6 +117,7 @@ const components = {
   MochiForm,
   MochiFormItem,
   MochiImage,
+  MochiIcon,
   MochiInput,
   MochiInputNumber,
   MochiKbd,
@@ -167,5 +170,7 @@ export default {
     for (const [name, component] of Object.entries(components)) {
       app.component(name, component);
     }
+    // 图标演示包装：lucide 图标组件只能在 SFC 里 import，markdown 里传不了组件对象
+    app.component('IconDemo', IconDemo);
   },
 } satisfies Theme;
