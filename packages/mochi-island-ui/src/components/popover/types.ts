@@ -1,1 +1,1 @@
-export type MochiPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
+export type MochiPopoverPlacement = 'top' | 'bottom' | 'left' | 'right'

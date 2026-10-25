@@ -85,9 +85,7 @@
 }
 
 .control:focus-visible + .track {
-  box-shadow:
-    var(--mochi-shadow-inset),
-    var(--mochi-focus-ring);
+  box-shadow: var(--mochi-shadow-inset), var(--mochi-focus-ring);
 }
 
 .root[data-disabled] {

@@ -1,2 +1,2 @@
-export { default as MochiDrawer } from './MochiDrawer.vue';
-export type { MochiDrawerPlacement } from './types';
+export { default as MochiDrawer } from './MochiDrawer.vue'
+export type { MochiDrawerPlacement } from './types'

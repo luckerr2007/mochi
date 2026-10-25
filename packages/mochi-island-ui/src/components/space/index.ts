@@ -1,1 +1,1 @@
-export { default as MochiSpace } from './MochiSpace.vue';
+export { default as MochiSpace } from './MochiSpace.vue'

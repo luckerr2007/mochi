@@ -1,1 +1,1 @@
-export { default as MochiAutoComplete } from './MochiAutoComplete.vue';
+export { default as MochiAutoComplete } from './MochiAutoComplete.vue'

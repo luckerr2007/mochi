@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue';
-import MochiPopover from '../popover/MochiPopover.vue';
-import { clamp, hexToHsv, hsvToHex, normalizeHex } from './color';
-import css from './MochiColorPicker.module.css';
-import { useMessages } from '../../locale';
+import { reactive, ref, watch } from 'vue'
+import MochiPopover from '../popover/MochiPopover.vue'
+import { clamp, hexToHsv, hsvToHex, normalizeHex } from './color'
+import css from './MochiColorPicker.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiColorPicker' });
+defineOptions({ name: 'MochiColorPicker' })
 
-const m = useMessages();
+const m = useMessages()
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
-    label?: string;
-    disabled?: boolean;
+    label?: string
+    disabled?: boolean
     /** 预设色板；不传时用 Mochi 令牌的八个色 */
-    swatches?: string[];
+    swatches?: string[]
   }>(),
   {
     swatches: () => [
@@ -28,95 +28,100 @@ const props = withDefaults(
       '#3d2f28',
     ],
   },
-);
+)
 
 /** `#rrggbb`，小写 */
-const model = defineModel<string>({ default: '#f0875c' });
+const model = defineModel<string>({ default: '#f0875c' })
 
-const open = ref(false);
-const hsv = reactive({ h: 24, s: 84, v: 94 });
-const hexInput = ref(model.value);
-const svEl = ref<HTMLDivElement>();
-const dragging = ref(false);
+const open = ref(false)
+const hsv = reactive({ h: 24, s: 84, v: 94 })
+const hexInput = ref(model.value)
+const svEl = ref<HTMLDivElement>()
+const dragging = ref(false)
 
 watch(
   model,
   (hex) => {
-    const parsed = hexToHsv(hex);
+    const parsed = hexToHsv(hex)
     // 拖拽中不回读，否则指针还没松手状态就被外部值拽走
-    if (parsed && !dragging.value) Object.assign(hsv, parsed);
-    hexInput.value = hex;
+    if (parsed && !dragging.value) Object.assign(hsv, parsed)
+    hexInput.value = hex
   },
   { immediate: true },
-);
+)
 
 function commit() {
-  model.value = hsvToHex(hsv);
+  model.value = hsvToHex(hsv)
 }
 
 /* ---------- 取色面板：按住拖动，指针捕获保证移出面板也不丢 ---------- */
 function applyPoint(event: PointerEvent) {
-  const rect = svEl.value?.getBoundingClientRect();
-  if (!rect) return;
-  hsv.s = clamp(Math.round(((event.clientX - rect.left) / rect.width) * 100), 0, 100);
-  hsv.v = clamp(Math.round((1 - (event.clientY - rect.top) / rect.height) * 100), 0, 100);
-  commit();
+  const rect = svEl.value?.getBoundingClientRect()
+  if (!rect) return
+  hsv.s = clamp(Math.round(((event.clientX - rect.left) / rect.width) * 100), 0, 100)
+  hsv.v = clamp(Math.round((1 - (event.clientY - rect.top) / rect.height) * 100), 0, 100)
+  commit()
 }
 
 function onSvDown(event: PointerEvent) {
-  dragging.value = true;
-  svEl.value?.setPointerCapture(event.pointerId);
-  applyPoint(event);
+  dragging.value = true
+  svEl.value?.setPointerCapture(event.pointerId)
+  applyPoint(event)
 }
 
 function onSvMove(event: PointerEvent) {
-  if (dragging.value) applyPoint(event);
+  if (dragging.value) applyPoint(event)
 }
 
 function onSvUp(event: PointerEvent) {
-  dragging.value = false;
-  svEl.value?.releasePointerCapture(event.pointerId);
+  dragging.value = false
+  svEl.value?.releasePointerCapture(event.pointerId)
 }
 
 /** 面板可聚焦，方向键微调饱和度/明度，键盘用户不必依赖指针 */
 function onSvKeydown(event: KeyboardEvent) {
   const step =
-    event.key === 'ArrowLeft' ? [-4, 0] :
-    event.key === 'ArrowRight' ? [4, 0] :
-    event.key === 'ArrowUp' ? [0, 4] :
-    event.key === 'ArrowDown' ? [0, -4] : null;
-  if (!step) return;
-  event.preventDefault();
-  hsv.s = clamp(hsv.s + step[0]!, 0, 100);
-  hsv.v = clamp(hsv.v + step[1]!, 0, 100);
-  commit();
+    event.key === 'ArrowLeft'
+      ? [-4, 0]
+      : event.key === 'ArrowRight'
+        ? [4, 0]
+        : event.key === 'ArrowUp'
+          ? [0, 4]
+          : event.key === 'ArrowDown'
+            ? [0, -4]
+            : null
+  if (!step) return
+  event.preventDefault()
+  hsv.s = clamp(hsv.s + step[0]!, 0, 100)
+  hsv.v = clamp(hsv.v + step[1]!, 0, 100)
+  commit()
 }
 
 function setHue(event: Event) {
-  hsv.h = Number((event.target as HTMLInputElement).value);
-  commit();
+  hsv.h = Number((event.target as HTMLInputElement).value)
+  commit()
 }
 
 /** HEX 输入：合法即时生效并原样回传（不从四舍五入的 HSV 反推，避免 7fc8c0 → 7dc7be 这类漂移），非法等失焦再回读当前值 */
 function onHexInput(event: Event) {
-  const value = (event.target as HTMLInputElement).value;
-  hexInput.value = value;
-  const normalized = normalizeHex(value);
+  const value = (event.target as HTMLInputElement).value
+  hexInput.value = value
+  const normalized = normalizeHex(value)
   if (normalized) {
-    const parsed = hexToHsv(normalized);
-    if (parsed) Object.assign(hsv, parsed);
-    model.value = normalized;
+    const parsed = hexToHsv(normalized)
+    if (parsed) Object.assign(hsv, parsed)
+    model.value = normalized
   }
 }
 
 function onHexBlur() {
-  hexInput.value = model.value;
+  hexInput.value = model.value
 }
 
 function pickSwatch(hex: string) {
-  const parsed = hexToHsv(hex);
-  if (parsed) Object.assign(hsv, parsed);
-  model.value = hex.toLowerCase();
+  const parsed = hexToHsv(hex)
+  if (parsed) Object.assign(hsv, parsed)
+  model.value = hex.toLowerCase()
 }
 </script>
 

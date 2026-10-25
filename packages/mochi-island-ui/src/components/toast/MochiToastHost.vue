@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { toastItems } from '../../composables/toast';
-import ToastCard from './ToastCard.vue';
-import css from './MochiToastHost.module.css';
-import { useMessages } from '../../locale';
+import { toastItems } from '../../composables/toast'
+import ToastCard from './ToastCard.vue'
+import css from './MochiToastHost.module.css'
+import { useMessages } from '../../locale'
 
-const m = useMessages();
+const m = useMessages()
 </script>
 
 <template>
@@ -16,12 +16,7 @@ const m = useMessages();
         :leave-active-class="css.cardLeave"
         :move-class="css.cardMove"
       >
-        <ToastCard
-          v-for="(item, index) in toastItems"
-          :key="item.id"
-          :item="item"
-          :index="index"
-        />
+        <ToastCard v-for="(item, index) in toastItems" :key="item.id" :item="item" :index="index" />
       </TransitionGroup>
     </div>
   </Teleport>

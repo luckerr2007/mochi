@@ -1,1 +1,1 @@
-export type MochiBadgeTone = 'primary' | 'accent' | 'candy' | 'danger';
+export type MochiBadgeTone = 'primary' | 'accent' | 'candy' | 'danger'

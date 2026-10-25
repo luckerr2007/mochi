@@ -1,1 +1,1 @@
-export { default as MochiImage } from './MochiImage.vue';
+export { default as MochiImage } from './MochiImage.vue'

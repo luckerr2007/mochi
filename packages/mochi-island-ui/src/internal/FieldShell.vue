@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, inject, watchEffect } from 'vue';
-import css from './FieldShell.module.css';
-import { MOCHI_FORM_ITEM } from './formItemContext';
+import { computed, inject, watchEffect } from 'vue'
+import css from './FieldShell.module.css'
+import { MOCHI_FORM_ITEM } from './formItemContext'
 
-defineOptions({ name: 'MochiFieldShell' });
+defineOptions({ name: 'MochiFieldShell' })
 
 /**
  * 表单件的公共外壳（label / 凹陷槽 / hint）。
@@ -14,21 +14,21 @@ defineOptions({ name: 'MochiFieldShell' });
  * <label for> 关联到真正的控件。
  */
 const props = defineProps<{
-  label?: string;
-  hint?: string;
+  label?: string
+  hint?: string
   /** 关联 label 的 for，由使用方传入 */
-  fieldId?: string;
-  hintId?: string;
-  invalid?: boolean;
-}>();
+  fieldId?: string
+  hintId?: string
+  invalid?: boolean
+}>()
 
-const item = inject(MOCHI_FORM_ITEM, null);
+const item = inject(MOCHI_FORM_ITEM, null)
 
-const effectiveInvalid = computed(() => props.invalid || item?.invalid.value || false);
+const effectiveInvalid = computed(() => props.invalid || item?.invalid.value || false)
 
 watchEffect(() => {
-  if (props.fieldId) item?.setFieldId(props.fieldId);
-});
+  if (props.fieldId) item?.setFieldId(props.fieldId)
+})
 </script>
 
 <template>

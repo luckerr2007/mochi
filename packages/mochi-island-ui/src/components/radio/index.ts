@@ -1,2 +1,2 @@
-export { default as MochiRadioGroup } from './MochiRadioGroup.vue';
-export type { MochiRadioOption } from './types';
+export { default as MochiRadioGroup } from './MochiRadioGroup.vue'
+export type { MochiRadioOption } from './types'

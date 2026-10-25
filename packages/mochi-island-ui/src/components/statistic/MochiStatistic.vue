@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { formatNumber, useCountUp } from '../../composables/useCountUp';
-import css from './MochiStatistic.module.css';
+import { computed } from 'vue'
+import { formatNumber, useCountUp } from '../../composables/useCountUp'
+import css from './MochiStatistic.module.css'
 
-defineOptions({ name: 'MochiStatistic' });
+defineOptions({ name: 'MochiStatistic' })
 
 const props = withDefaults(
   defineProps<{
-    title?: string;
-    value: number;
-    precision?: number;
-    prefix?: string;
-    suffix?: string;
-    duration?: number;
+    title?: string
+    value: number
+    precision?: number
+    prefix?: string
+    suffix?: string
+    duration?: number
   }>(),
   { precision: 0, duration: 700 },
-);
+)
 
-const display = useCountUp(() => props.value, props.duration);
-const formatted = computed(() => formatNumber(display.value, props.precision));
+const display = useCountUp(() => props.value, props.duration)
+const formatted = computed(() => formatNumber(display.value, props.precision))
 </script>
 
 <template>

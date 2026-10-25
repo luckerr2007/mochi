@@ -1,1 +1,1 @@
-export { default as MochiWatermark } from './MochiWatermark.vue';
+export { default as MochiWatermark } from './MochiWatermark.vue'

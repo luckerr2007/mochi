@@ -13,22 +13,22 @@
  *   containment 记账），而低端 CPU/GPU 上跳过屏外行的布局绘制是净收益；
  *   高端硬件的判定用 deviceMemory + hardwareConcurrency 保守估计。
  */
-export const VIRTUAL_ROW_THRESHOLD = 30;
+export const VIRTUAL_ROW_THRESHOLD = 30
 
-export type MochiVirtualSetting = boolean | 'auto';
+export type MochiVirtualSetting = boolean | 'auto'
 
 /** 低端设备保守探测：内存 ≤4GB 或核数 ≤4 视为低端；字段缺失或无 navigator（SSR）时不当作低端 */
 export function isLowEndDevice(): boolean {
-  if (typeof navigator === 'undefined') return false;
-  const nav = navigator as Navigator & { deviceMemory?: number };
-  if (nav.deviceMemory !== undefined && nav.deviceMemory <= 4) return true;
-  return nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency <= 4;
+  if (typeof navigator === 'undefined') return false
+  const nav = navigator as Navigator & { deviceMemory?: number }
+  if (nav.deviceMemory !== undefined && nav.deviceMemory <= 4) return true
+  return nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency <= 4
 }
 
 /** 行数超过阈值且策略允许时启用 */
 export function shouldVirtualize(count: number, setting: MochiVirtualSetting): boolean {
-  if (count <= VIRTUAL_ROW_THRESHOLD) return false;
-  if (setting === true) return true;
-  if (setting === 'auto') return isLowEndDevice();
-  return false;
+  if (count <= VIRTUAL_ROW_THRESHOLD) return false
+  if (setting === true) return true
+  if (setting === 'auto') return isLowEndDevice()
+  return false
 }

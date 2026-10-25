@@ -1,1 +1,1 @@
-export { default as MochiRate } from './MochiRate.vue';
+export { default as MochiRate } from './MochiRate.vue'

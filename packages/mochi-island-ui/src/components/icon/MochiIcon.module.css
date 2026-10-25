@@ -5,6 +5,6 @@
 .root {
   display: inline-flex;
   flex: none;
-  color: currentColor;
+  color: currentcolor;
   vertical-align: -0.125em;
 }

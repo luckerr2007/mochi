@@ -1,1 +1,1 @@
-export { default as MochiCollapse } from './MochiCollapse.vue';
+export { default as MochiCollapse } from './MochiCollapse.vue'

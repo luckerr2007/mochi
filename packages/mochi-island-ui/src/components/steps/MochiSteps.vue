@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { MochiStepItem } from './types';
-import css from './MochiSteps.module.css';
+import type { MochiStepItem } from './types'
+import css from './MochiSteps.module.css'
 
-defineOptions({ name: 'MochiSteps' });
+defineOptions({ name: 'MochiSteps' })
 
 withDefaults(
   defineProps<{
-    items: MochiStepItem[];
+    items: MochiStepItem[]
     /** 当前进行到第几步（0 起） */
-    current?: number;
+    current?: number
   }>(),
   { current: 0 },
-);
+)
 </script>
 
 <template>

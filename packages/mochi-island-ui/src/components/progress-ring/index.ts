@@ -1,1 +1,1 @@
-export { default as MochiProgressRing } from './MochiProgressRing.vue';
+export { default as MochiProgressRing } from './MochiProgressRing.vue'

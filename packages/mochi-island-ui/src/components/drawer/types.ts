@@ -1,1 +1,1 @@
-export type MochiDrawerPlacement = 'left' | 'right';
+export type MochiDrawerPlacement = 'left' | 'right'

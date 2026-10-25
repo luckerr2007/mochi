@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue';
-import FieldShell from '../../internal/FieldShell.vue';
-import css from './MochiTextarea.module.css';
+import { computed, useId } from 'vue'
+import FieldShell from '../../internal/FieldShell.vue'
+import css from './MochiTextarea.module.css'
 
-defineOptions({ name: 'MochiTextarea' });
+defineOptions({ name: 'MochiTextarea' })
 
 withDefaults(
   defineProps<{
-    label?: string;
-    hint?: string;
-    placeholder?: string;
-    rows?: number;
-    disabled?: boolean;
-    readonly?: boolean;
-    invalid?: boolean;
+    label?: string
+    hint?: string
+    placeholder?: string
+    rows?: number
+    disabled?: boolean
+    readonly?: boolean
+    invalid?: boolean
   }>(),
   { rows: 3 },
-);
+)
 
-const model = defineModel<string>({ default: '' });
+const model = defineModel<string>({ default: '' })
 
-const fieldId = useId();
-const hintId = computed(() => `${fieldId}-hint`);
+const fieldId = useId()
+const hintId = computed(() => `${fieldId}-hint`)
 </script>
 
 <template>

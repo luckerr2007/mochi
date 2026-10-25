@@ -1,1 +1,1 @@
-export { default as MochiSkeleton } from './MochiSkeleton.vue';
+export { default as MochiSkeleton } from './MochiSkeleton.vue'

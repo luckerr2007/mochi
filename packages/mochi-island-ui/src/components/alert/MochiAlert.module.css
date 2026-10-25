@@ -56,6 +56,7 @@
 
 .root[data-tone] {
   background: color-mix(in srgb, var(--_tone) 10%, var(--mochi-surface));
+
   --_tone-line: color-mix(in srgb, var(--_tone) 45%, transparent);
 }
 
@@ -78,7 +79,7 @@
 
 .badge path {
   fill: none;
-  stroke: currentColor;
+  stroke: currentcolor;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -138,7 +139,7 @@
 
 .close path {
   fill: none;
-  stroke: currentColor;
+  stroke: currentcolor;
   stroke-width: 2;
   stroke-linecap: round;
 }

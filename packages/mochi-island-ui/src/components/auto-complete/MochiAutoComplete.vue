@@ -1,68 +1,68 @@
 <script setup lang="ts">
-import { computed, ref, useId, watch } from 'vue';
-import FieldShell from '../../internal/FieldShell.vue';
-import MochiPopover from '../popover/MochiPopover.vue';
-import css from './MochiAutoComplete.module.css';
-import { useMessages } from '../../locale';
+import { computed, ref, useId, watch } from 'vue'
+import FieldShell from '../../internal/FieldShell.vue'
+import MochiPopover from '../popover/MochiPopover.vue'
+import css from './MochiAutoComplete.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiAutoComplete' });
+defineOptions({ name: 'MochiAutoComplete' })
 
-const m = useMessages();
+const m = useMessages()
 
 const props = withDefaults(
   defineProps<{
-    options: string[];
-    label?: string;
-    hint?: string;
-    placeholder?: string;
-    disabled?: boolean;
-    invalid?: boolean;
+    options: string[]
+    label?: string
+    hint?: string
+    placeholder?: string
+    disabled?: boolean
+    invalid?: boolean
     /** 最多展示几条建议 */
-    limit?: number;
+    limit?: number
   }>(),
   { limit: 8 },
-);
+)
 
-const emit = defineEmits<{ select: [string] }>();
+const emit = defineEmits<{ select: [string] }>()
 
-const model = defineModel<string>({ default: '' });
+const model = defineModel<string>({ default: '' })
 
-const open = ref(false);
-const highlight = ref(-1);
-const fieldId = useId();
-const listId = computed(() => `${fieldId}-list`);
-const hintId = computed(() => `${fieldId}-hint`);
+const open = ref(false)
+const highlight = ref(-1)
+const fieldId = useId()
+const listId = computed(() => `${fieldId}-list`)
+const hintId = computed(() => `${fieldId}-hint`)
 
 const suggestions = computed(() => {
-  const query = model.value.trim().toLowerCase();
+  const query = model.value.trim().toLowerCase()
   const matched = query
     ? props.options.filter((option) => option.toLowerCase().includes(query))
-    : props.options;
-  return matched.slice(0, props.limit);
-});
+    : props.options
+  return matched.slice(0, props.limit)
+})
 
 function move(step: 1 | -1) {
-  if (!suggestions.value.length) return;
-  const total = suggestions.value.length;
-  highlight.value = (highlight.value + step + total) % total;
+  if (!suggestions.value.length) return
+  const total = suggestions.value.length
+  highlight.value = (highlight.value + step + total) % total
 }
 
 function choose(option: string) {
-  model.value = option;
-  highlight.value = -1;
-  open.value = false;
-  emit('select', option);
+  model.value = option
+  highlight.value = -1
+  open.value = false
+  emit('select', option)
 }
 
 function onEnter() {
-  const option = suggestions.value[highlight.value];
-  if (option) choose(option);
+  const option = suggestions.value[highlight.value]
+  if (option) choose(option)
 }
 
 /** 打开时高亮归零；输入变化也归零，避免高亮停在已经被过滤掉的项上 */
 watch([open, model], () => {
-  highlight.value = -1;
-});
+  highlight.value = -1
+})
 </script>
 
 <template>

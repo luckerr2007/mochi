@@ -1,1 +1,1 @@
-export { default as MochiCascader } from './MochiCascader.vue';
+export { default as MochiCascader } from './MochiCascader.vue'

@@ -1,2 +1,2 @@
-export { default as MochiButton } from './MochiButton.vue';
-export type { MochiButtonSize, MochiButtonVariant } from './types';
+export { default as MochiButton } from './MochiButton.vue'
+export type { MochiButtonSize, MochiButtonVariant } from './types'

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import css from './MochiLayout.module.css';
+import css from './MochiLayout.module.css'
 
 /** 底栏：弱化文字色，常放版权与次要链接 */
-defineOptions({ name: 'MochiLayoutFooter' });
+defineOptions({ name: 'MochiLayoutFooter' })
 </script>
 
 <template>

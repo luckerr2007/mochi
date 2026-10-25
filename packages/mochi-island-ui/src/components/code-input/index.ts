@@ -1,1 +1,1 @@
-export { default as MochiCodeInput } from './MochiCodeInput.vue';
+export { default as MochiCodeInput } from './MochiCodeInput.vue'

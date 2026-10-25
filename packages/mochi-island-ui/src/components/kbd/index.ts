@@ -1,1 +1,1 @@
-export { default as MochiKbd } from './MochiKbd.vue';
+export { default as MochiKbd } from './MochiKbd.vue'

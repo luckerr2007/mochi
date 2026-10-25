@@ -1,8 +1,8 @@
-import type { MochiAvatarSize } from '../avatar/types';
+import type { MochiAvatarSize } from '../avatar/types'
 
 export interface MochiAvatarGroupItem {
-  name: string;
-  src?: string;
+  name: string
+  src?: string
 }
 
-export type MochiAvatarGroupSize = MochiAvatarSize;
+export type MochiAvatarGroupSize = MochiAvatarSize

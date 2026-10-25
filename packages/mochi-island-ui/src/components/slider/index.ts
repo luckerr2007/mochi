@@ -1,1 +1,1 @@
-export { default as MochiSlider } from './MochiSlider.vue';
+export { default as MochiSlider } from './MochiSlider.vue'

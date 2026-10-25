@@ -1,1 +1,1 @@
-export type MochiProgressTone = 'primary' | 'accent' | 'candy';
+export type MochiProgressTone = 'primary' | 'accent' | 'candy'

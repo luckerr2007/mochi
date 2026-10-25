@@ -1,1 +1,1 @@
-export { default as MochiBanner } from './MochiBanner.vue';
+export { default as MochiBanner } from './MochiBanner.vue'

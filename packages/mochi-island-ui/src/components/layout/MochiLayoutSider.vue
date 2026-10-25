@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import css from './MochiLayout.module.css';
+import css from './MochiLayout.module.css'
 
 /**
  * 侧栏：宽度可配，collapsible 时右缘出折叠钮，收起动画走弹簧令牌。
  * 折叠态宽度 = 折叠钮自身宽度（--sider-collapsed-w）。
  */
-defineOptions({ name: 'MochiLayoutSider' });
+defineOptions({ name: 'MochiLayoutSider' })
 
-const props = withDefaults(
+withDefaults(
   defineProps<{
-    width?: number;
-    collapsible?: boolean;
+    width?: number
+    collapsible?: boolean
   }>(),
   { width: 208, collapsible: false },
-);
+)
 
-const collapsed = defineModel<boolean>('collapsed', { default: false });
+const collapsed = defineModel<boolean>('collapsed', { default: false })
 </script>
 
 <template>

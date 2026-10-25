@@ -1,4 +1,4 @@
-import type { ComponentResolverObject } from 'unplugin-vue-components/types';
+import type { ComponentResolverObject } from 'unplugin-vue-components/types'
 
 /**
  * 组件名 → 子路径目录。
@@ -87,16 +87,16 @@ export const mochiComponentDirs = {
   MochiWatermark: 'watermark',
   MochiDescriptions: 'descriptions',
   MochiMentions: 'mentions',
-} as const;
+} as const
 
-export type MochiComponentName = keyof typeof mochiComponentDirs;
+export type MochiComponentName = keyof typeof mochiComponentDirs
 
 export interface MochiResolverOptions {
   /**
    * 是否自动引入组件样式。
    * 默认 true，会注入 `mochi-island-ui/style.css`；若项目自行全局引入样式可设为 false。
    */
-  importStyle?: boolean;
+  importStyle?: boolean
 }
 
 /**
@@ -107,19 +107,19 @@ export interface MochiResolverOptions {
  * ```
  */
 export function MochiResolver(options: MochiResolverOptions = {}): ComponentResolverObject {
-  const { importStyle = true } = options;
+  const { importStyle = true } = options
 
   return {
     type: 'component',
     resolve: (name: string) => {
-      const dir = mochiComponentDirs[name as MochiComponentName];
-      if (!dir) return;
+      const dir = mochiComponentDirs[name as MochiComponentName]
+      if (!dir) return
 
       return {
         name,
         from: `mochi-island-ui/components/${dir}`,
         sideEffects: importStyle ? ['mochi-island-ui/style.css'] : undefined,
-      };
+      }
     },
-  };
+  }
 }

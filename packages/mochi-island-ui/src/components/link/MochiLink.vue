@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import css from './MochiLink.module.css';
+import css from './MochiLink.module.css'
 
-defineOptions({ name: 'MochiLink' });
+defineOptions({ name: 'MochiLink' })
 
 const props = withDefaults(
   defineProps<{ href?: string; external?: boolean; disabled?: boolean }>(),
   { external: false, disabled: false },
-);
+)
 
 function onClick(event: MouseEvent) {
-  if (props.disabled) event.preventDefault();
+  if (props.disabled) event.preventDefault()
 }
 </script>
 

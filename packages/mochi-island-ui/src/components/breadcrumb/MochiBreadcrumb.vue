@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { MochiBreadcrumbItem } from './types';
-import css from './MochiBreadcrumb.module.css';
-import { useMessages } from '../../locale';
+import type { MochiBreadcrumbItem } from './types'
+import css from './MochiBreadcrumb.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiBreadcrumb' });
+defineOptions({ name: 'MochiBreadcrumb' })
 
-const m = useMessages();
+const m = useMessages()
 
-withDefaults(defineProps<{ items: MochiBreadcrumbItem[]; label?: string }>(), {});
+withDefaults(defineProps<{ items: MochiBreadcrumbItem[]; label?: string }>(), {})
 </script>
 
 <template>

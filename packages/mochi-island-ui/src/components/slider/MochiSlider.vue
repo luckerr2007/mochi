@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import css from './MochiSlider.module.css';
-import { useMessages } from '../../locale';
+import { computed } from 'vue'
+import css from './MochiSlider.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiSlider' });
+defineOptions({ name: 'MochiSlider' })
 
-const m = useMessages();
+const m = useMessages()
 
 const props = withDefaults(
   defineProps<{
-    min?: number;
-    max?: number;
-    step?: number;
-    disabled?: boolean;
-    showValue?: boolean;
-    label?: string;
+    min?: number
+    max?: number
+    step?: number
+    disabled?: boolean
+    showValue?: boolean
+    label?: string
   }>(),
   { min: 0, max: 100, step: 1, showValue: false },
-);
+)
 
-const model = defineModel<number>({ default: 0 });
+const model = defineModel<number>({ default: 0 })
 
 const percent = computed(() => {
-  const span = props.max - props.min || 1;
-  return Math.min(100, Math.max(0, ((model.value - props.min) / span) * 100));
-});
+  const span = props.max - props.min || 1
+  return Math.min(100, Math.max(0, ((model.value - props.min) / span) * 100))
+})
 </script>
 
 <template>

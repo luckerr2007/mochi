@@ -1,1 +1,1 @@
-export type MochiTooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
+export type MochiTooltipPlacement = 'top' | 'bottom' | 'left' | 'right'

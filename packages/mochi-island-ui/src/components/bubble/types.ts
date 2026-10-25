@@ -1,1 +1,1 @@
-export type MochiDialogBubblePlacement = 'left' | 'right';
+export type MochiDialogBubblePlacement = 'left' | 'right'

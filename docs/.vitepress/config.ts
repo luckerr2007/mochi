@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress';
+import { defineConfig } from 'vitepress'
 
 const zhSidebar = {
   '/guide/': [
@@ -23,7 +23,10 @@ const zhSidebar = {
         { text: 'Layout 骨架 · Grid 栅格', link: '/components/layout-grid' },
         { text: 'MochiDivider · Badge · Avatar', link: '/components/basics' },
         { text: 'Dropdown · Result · Space · Link · Text · CountUp', link: '/components/misc' },
-        { text: 'AvatarGroup · TagInput · Ring · CodeInput · Countdown', link: '/components/extras' },
+        {
+          text: 'AvatarGroup · TagInput · Ring · CodeInput · Countdown',
+          link: '/components/extras',
+        },
         { text: 'Banner · LoadMore · Kbd', link: '/components/extras-2' },
       ],
     },
@@ -80,12 +83,15 @@ const zhSidebar = {
         { text: 'MochiTree', link: '/components/tree-search' },
         { text: 'Cascader · TreeSelect', link: '/components/tree-search#mochicascader' },
         { text: 'MochiTable', link: '/components/table-upload' },
-        { text: 'Statistic · Descriptions · Timeline · Breadcrumb', link: '/components/data-display' },
+        {
+          text: 'Statistic · Descriptions · Timeline · Breadcrumb',
+          link: '/components/data-display',
+        },
         { text: 'MochiQRCode', link: '/components/qrcode' },
       ],
     },
   ],
-};
+}
 
 const zhTheme = {
   nav: [
@@ -100,7 +106,7 @@ const zhTheme = {
   darkModeSwitchLabel: '主题',
   sidebarMenuLabel: '菜单',
   lastUpdated: { text: '最后更新' },
-};
+}
 
 const enTheme = {
   nav: [
@@ -144,7 +150,7 @@ const enTheme = {
   returnToTopLabel: 'Back to top',
   sidebarMenuLabel: 'Menu',
   lastUpdated: { text: 'Last updated' },
-};
+}
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -177,4 +183,4 @@ export default defineConfig({
   themeConfig: {
     outline: { label: '本页目录', level: [2, 3] as [number, number] },
   },
-});
+})

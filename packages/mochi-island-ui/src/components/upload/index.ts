@@ -1,1 +1,1 @@
-export { default as MochiUpload } from './MochiUpload.vue';
+export { default as MochiUpload } from './MochiUpload.vue'

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import css from './MochiSpinner.module.css';
-import { useMessages } from '../../locale';
+import css from './MochiSpinner.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiSpinner' });
+defineOptions({ name: 'MochiSpinner' })
 
-const m = useMessages();
+const m = useMessages()
 
-withDefaults(defineProps<{ size?: number; label?: string }>(), { size: 20 });
+withDefaults(defineProps<{ size?: number; label?: string }>(), { size: 20 })
 </script>
 
 <template>

@@ -28,7 +28,7 @@
   overflow-wrap: anywhere;
 }
 
-@media (max-width: 520px) {
+@media (width <= 520px) {
   .root {
     grid-template-columns: minmax(0, 1fr);
   }

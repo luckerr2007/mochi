@@ -1,2 +1,2 @@
-export { default as MochiAvatar } from './MochiAvatar.vue';
-export type { MochiAvatarSize } from './types';
+export { default as MochiAvatar } from './MochiAvatar.vue'
+export type { MochiAvatarSize } from './types'

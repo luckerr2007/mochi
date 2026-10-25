@@ -1,1 +1,1 @@
-export { default as MochiCalendar } from './MochiCalendar.vue';
+export { default as MochiCalendar } from './MochiCalendar.vue'

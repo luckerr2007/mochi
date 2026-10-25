@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import ToneGlyph from '../../internal/ToneGlyph.vue';
-import type { MochiAlertTone } from './types';
-import css from './MochiAlert.module.css';
-import { useMessages } from '../../locale';
+import ToneGlyph from '../../internal/ToneGlyph.vue'
+import type { MochiAlertTone } from './types'
+import css from './MochiAlert.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiAlert' });
+defineOptions({ name: 'MochiAlert' })
 
-const m = useMessages();
+const m = useMessages()
 
 withDefaults(
   defineProps<{
-    tone?: MochiAlertTone;
-    title?: string;
-    closable?: boolean;
-    closeLabel?: string;
+    tone?: MochiAlertTone
+    title?: string
+    closable?: boolean
+    closeLabel?: string
   }>(),
   { tone: 'info', closable: false },
-);
+)
 
-defineEmits<{ close: [] }>();
+defineEmits<{ close: [] }>()
 </script>
 
 <template>
@@ -33,7 +33,13 @@ defineEmits<{ close: [] }>();
       <div :class="css.text"><slot /></div>
     </div>
 
-    <button v-if="closable" :class="css.close" type="button" :aria-label="closeLabel ?? m.close" @click="$emit('close')">
+    <button
+      v-if="closable"
+      :class="css.close"
+      type="button"
+      :aria-label="closeLabel ?? m.close"
+      @click="$emit('close')"
+    >
       <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">
         <path d="M2 2 L8 8 M8 2 L2 8" />
       </svg>

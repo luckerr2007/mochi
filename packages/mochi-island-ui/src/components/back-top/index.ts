@@ -1,1 +1,1 @@
-export { default as MochiBackTop } from './MochiBackTop.vue';
+export { default as MochiBackTop } from './MochiBackTop.vue'

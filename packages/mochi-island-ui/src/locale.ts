@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue';
+import { computed, ref } from 'vue'
 
 /**
  * 组件库内置文案的中英词典。
@@ -12,7 +12,7 @@ import { computed, ref } from 'vue';
  * 默认 zh-CN，与 1.0 行为完全兼容。
  */
 
-export type MochiLocaleName = 'zh-CN' | 'en-US';
+export type MochiLocaleName = 'zh-CN' | 'en-US'
 
 const zhCN = {
   // 通用动作
@@ -112,9 +112,9 @@ const zhCN = {
 
   // Upload
   uploadHint: '点击或拖入文件上传',
-};
+}
 
-export type MochiMessages = typeof zhCN;
+export type MochiMessages = typeof zhCN
 
 const enUS: MochiMessages = {
   close: 'Close',
@@ -186,7 +186,8 @@ const enUS: MochiMessages = {
   prevMonth: 'Previous month',
   nextMonth: 'Next month',
   weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'] as string[],
-  dateLabel: (y: number, m: number, d: number) => `${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][m - 1]} ${d}, ${y}`,
+  dateLabel: (y: number, m: number, d: number) =>
+    `${['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][m - 1]} ${d}, ${y}`,
 
   countdownLabel: 'Countdown',
   countdownRemain: (remain: string) => `${remain} remaining`,
@@ -203,26 +204,26 @@ const enUS: MochiMessages = {
   svPanel: (color: string) => `Color panel, current ${color}`,
 
   uploadHint: 'Click or drop files to upload',
-};
+}
 
-const locale = ref<MochiLocaleName>('zh-CN');
+const locale = ref<MochiLocaleName>('zh-CN')
 
 const dictionaries: Record<MochiLocaleName, MochiMessages> = {
   'zh-CN': zhCN,
   'en-US': enUS,
-};
+}
 
 /** 切换组件库内置文案的语言（默认 zh-CN）。 */
 export function setLocale(next: MochiLocaleName) {
-  locale.value = next;
+  locale.value = next
 }
 
 /** 当前语言名。 */
 export function getLocale(): MochiLocaleName {
-  return locale.value;
+  return locale.value
 }
 
 /** 响应式词典：切语言后所有组件的内置文案随之更新。 */
 export function useMessages() {
-  return computed<MochiMessages>(() => dictionaries[locale.value]);
+  return computed<MochiMessages>(() => dictionaries[locale.value])
 }

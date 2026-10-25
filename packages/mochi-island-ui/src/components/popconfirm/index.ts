@@ -1,1 +1,1 @@
-export { default as MochiPopconfirm } from './MochiPopconfirm.vue';
+export { default as MochiPopconfirm } from './MochiPopconfirm.vue'

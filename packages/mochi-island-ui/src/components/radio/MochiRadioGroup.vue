@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { useId } from 'vue';
-import type { MochiRadioOption } from './types';
-import css from './MochiRadioGroup.module.css';
+import { useId } from 'vue'
+import type { MochiRadioOption } from './types'
+import css from './MochiRadioGroup.module.css'
 
-defineOptions({ name: 'MochiRadioGroup' });
+defineOptions({ name: 'MochiRadioGroup' })
 
 withDefaults(
   defineProps<{
-    options: MochiRadioOption[];
-    legend?: string;
-    disabled?: boolean;
+    options: MochiRadioOption[]
+    legend?: string
+    disabled?: boolean
   }>(),
   { disabled: false },
-);
+)
 
-const model = defineModel<string>({ default: '' });
+const model = defineModel<string>({ default: '' })
 
 // 同名的原生 radio 才能用方向键在一组内切换，名字由组件自己保证一致
-const groupName = useId();
+const groupName = useId()
 </script>
 
 <template>

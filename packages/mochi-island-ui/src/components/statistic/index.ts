@@ -1,1 +1,1 @@
-export { default as MochiStatistic } from './MochiStatistic.vue';
+export { default as MochiStatistic } from './MochiStatistic.vue'

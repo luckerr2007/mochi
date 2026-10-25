@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useOverlay } from '../../internal/useOverlay';
-import type { MochiDrawerPlacement } from './types';
-import css from './MochiDrawer.module.css';
-import { useMessages } from '../../locale';
+import { computed, ref } from 'vue'
+import { useOverlay } from '../../internal/useOverlay'
+import type { MochiDrawerPlacement } from './types'
+import css from './MochiDrawer.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiDrawer' });
+defineOptions({ name: 'MochiDrawer' })
 
-const m = useMessages();
+const m = useMessages()
 
 const props = withDefaults(
   defineProps<{
-    title?: string;
-    placement?: MochiDrawerPlacement;
-    width?: string;
-    maskClosable?: boolean;
-    closeLabel?: string;
+    title?: string
+    placement?: MochiDrawerPlacement
+    width?: string
+    maskClosable?: boolean
+    closeLabel?: string
   }>(),
   { placement: 'right', width: '320px', maskClosable: true },
-);
+)
 
-const open = defineModel<boolean>('open', { default: false });
+const open = defineModel<boolean>('open', { default: false })
 
-const panel = ref<HTMLElement>();
-const { close, onKeydown } = useOverlay(open, panel);
+const panel = ref<HTMLElement>()
+const { close, onKeydown } = useOverlay(open, panel)
 
-const placementClass = computed(() => (props.placement === 'left' ? css.left : css.right));
+const placementClass = computed(() => (props.placement === 'left' ? css.left : css.right))
 </script>
 
 <template>
@@ -46,7 +46,12 @@ const placementClass = computed(() => (props.placement === 'left' ? css.left : c
             <slot name="header">
               <h2 :class="css.title">{{ title }}</h2>
             </slot>
-            <button :class="css.close" type="button" :aria-label="closeLabel ?? m.close" @click="close">
+            <button
+              :class="css.close"
+              type="button"
+              :aria-label="closeLabel ?? m.close"
+              @click="close"
+            >
               <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">
                 <path d="M2 2 L8 8 M8 2 L2 8" />
               </svg>

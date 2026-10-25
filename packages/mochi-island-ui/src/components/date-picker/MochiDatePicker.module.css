@@ -47,7 +47,7 @@
 .icon rect,
 .icon path {
   fill: none;
-  stroke: currentColor;
+  stroke: currentcolor;
   stroke-width: 1.4;
   stroke-linecap: round;
 }

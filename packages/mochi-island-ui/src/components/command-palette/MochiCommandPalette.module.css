@@ -54,9 +54,7 @@
 
 .panel:focus-visible {
   outline: none;
-  box-shadow:
-    var(--mochi-shadow-soft),
-    var(--mochi-focus-ring);
+  box-shadow: var(--mochi-shadow-soft), var(--mochi-focus-ring);
 }
 
 @keyframes dropIn {

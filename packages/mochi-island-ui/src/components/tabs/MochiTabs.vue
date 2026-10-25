@@ -1,62 +1,62 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
-import type { MochiTabItem } from './types';
-import css from './MochiTabs.module.css';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import type { MochiTabItem } from './types'
+import css from './MochiTabs.module.css'
 
-defineOptions({ name: 'MochiTabs' });
+defineOptions({ name: 'MochiTabs' })
 
-const props = defineProps<{ items: MochiTabItem[]; label?: string }>();
+const props = defineProps<{ items: MochiTabItem[]; label?: string }>()
 
-const model = defineModel<string>({ required: true });
-const uid = useId();
+const model = defineModel<string>({ required: true })
+const uid = useId()
 
-const listEl = ref<HTMLElement>();
+const listEl = ref<HTMLElement>()
 /** 选中指示块的位置与宽度，靠 JS 量一次再交给 CSS 过渡 */
-const indicator = ref({ left: 0, width: 0 });
-let ro: ResizeObserver | undefined;
+const indicator = ref({ left: 0, width: 0 })
+let ro: ResizeObserver | undefined
 
 function syncIndicator() {
-  const list = listEl.value;
-  const active = list?.querySelector<HTMLElement>('[aria-selected="true"]');
-  if (!list || !active) return;
-  indicator.value = { left: active.offsetLeft, width: active.offsetWidth };
+  const list = listEl.value
+  const active = list?.querySelector<HTMLElement>('[aria-selected="true"]')
+  if (!list || !active) return
+  indicator.value = { left: active.offsetLeft, width: active.offsetWidth }
 }
 
 onMounted(() => {
-  syncIndicator();
+  syncIndicator()
   // 在 display:none 的容器里挂载时（如 v-show 分节）量到 0 宽，指示块会塌成竖线；
   // 变可见/字体加载引起的尺寸变化都由 ResizeObserver 兜底重测
   if (typeof ResizeObserver === 'function' && listEl.value) {
-    ro = new ResizeObserver(() => syncIndicator());
-    ro.observe(listEl.value);
+    ro = new ResizeObserver(() => syncIndicator())
+    ro.observe(listEl.value)
   }
-  window.addEventListener('resize', syncIndicator);
-});
+  window.addEventListener('resize', syncIndicator)
+})
 onBeforeUnmount(() => {
-  ro?.disconnect();
-  window.removeEventListener('resize', syncIndicator);
-});
-watch(model, () => nextTick(syncIndicator));
+  ro?.disconnect()
+  window.removeEventListener('resize', syncIndicator)
+})
+watch(model, () => nextTick(syncIndicator))
 
-const enabled = computed(() => props.items.filter((item) => !item.disabled));
+const enabled = computed(() => props.items.filter((item) => !item.disabled))
 
 /** 方向键在可用项之间循环，与原生 tablist 的行为一致 */
 function move(step: 1 | -1) {
-  const list = enabled.value;
-  if (!list.length) return;
-  const index = list.findIndex((item) => item.key === model.value);
-  const next = list[(index + step + list.length) % list.length];
-  if (next) model.value = next.key;
+  const list = enabled.value
+  if (!list.length) return
+  const index = list.findIndex((item) => item.key === model.value)
+  const next = list[(index + step + list.length) % list.length]
+  if (next) model.value = next.key
 }
 
 function onKeydown(event: KeyboardEvent) {
-  if (event.key === 'ArrowRight') move(1);
-  else if (event.key === 'ArrowLeft') move(-1);
+  if (event.key === 'ArrowRight') move(1)
+  else if (event.key === 'ArrowLeft') move(-1)
   else if (event.key === 'Home') {
-    const first = enabled.value[0];
-    if (first) model.value = first.key;
-  } else return;
-  event.preventDefault();
+    const first = enabled.value[0]
+    if (first) model.value = first.key
+  } else return
+  event.preventDefault()
 }
 </script>
 

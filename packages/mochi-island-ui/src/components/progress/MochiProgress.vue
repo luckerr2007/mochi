@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import type { MochiProgressTone } from './types';
-import css from './MochiProgress.module.css';
-import { useMessages } from '../../locale';
+import { computed } from 'vue'
+import type { MochiProgressTone } from './types'
+import css from './MochiProgress.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiProgress' });
+defineOptions({ name: 'MochiProgress' })
 
-const m = useMessages();
+const m = useMessages()
 
 const props = withDefaults(
   defineProps<{
-    value?: number;
-    max?: number;
+    value?: number
+    max?: number
     /** 无障碍名称，进度条必须有 */
-    label?: string;
-    tone?: MochiProgressTone;
-    showValue?: boolean;
+    label?: string
+    tone?: MochiProgressTone
+    showValue?: boolean
   }>(),
   { value: 0, max: 100, tone: 'primary', showValue: false },
-);
+)
 
 // 越界值夹在 0-100%，避免脏数据把条子撑出轨道
 const percent = computed(() => {
-  const max = props.max > 0 ? props.max : 100;
-  return Math.min(100, Math.max(0, (props.value / max) * 100));
-});
+  const max = props.max > 0 ? props.max : 100
+  return Math.min(100, Math.max(0, (props.value / max) * 100))
+})
 </script>
 
 <template>

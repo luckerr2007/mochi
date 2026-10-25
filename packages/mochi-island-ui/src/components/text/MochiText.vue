@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import type { MochiTextSize, MochiTextTone } from './types';
-import css from './MochiText.module.css';
+import type { MochiTextSize, MochiTextTone } from './types'
+import css from './MochiText.module.css'
 
-defineOptions({ name: 'MochiText' });
+defineOptions({ name: 'MochiText' })
 
 withDefaults(
   defineProps<{
     /** 渲染成什么标签：p / span / strong / small… */
-    as?: string;
-    size?: MochiTextSize;
-    tone?: MochiTextTone;
-    bold?: boolean;
+    as?: string
+    size?: MochiTextSize
+    tone?: MochiTextTone
+    bold?: boolean
   }>(),
   { as: 'span', size: 'base', tone: 'default' },
-);
+)
 </script>
 
 <template>

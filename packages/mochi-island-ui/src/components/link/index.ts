@@ -1,1 +1,1 @@
-export { default as MochiLink } from './MochiLink.vue';
+export { default as MochiLink } from './MochiLink.vue'

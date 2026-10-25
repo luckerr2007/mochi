@@ -53,7 +53,8 @@
   /* 路径长度约 26；延迟 120ms，等外圈弹到位再画 */
   stroke-dasharray: 30;
   stroke-dashoffset: 30;
-  animation: draw var(--mochi-duration-slow) var(--mochi-ease-out) var(--mochi-duration-fast) forwards;
+  animation: draw var(--mochi-duration-slow) var(--mochi-ease-out) var(--mochi-duration-fast)
+    forwards;
 }
 
 @keyframes draw {

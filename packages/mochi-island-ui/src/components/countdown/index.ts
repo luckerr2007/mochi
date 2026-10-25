@@ -1,1 +1,1 @@
-export { default as MochiCountdown } from './MochiCountdown.vue';
+export { default as MochiCountdown } from './MochiCountdown.vue'

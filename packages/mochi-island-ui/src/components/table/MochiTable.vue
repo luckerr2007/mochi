@@ -1,74 +1,74 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, TransitionGroup, watch } from 'vue';
-import type { MochiTableColumn, MochiTableSort } from './types';
-import css from './MochiTable.module.css';
-import vcss from '../../styles/virtual.module.css';
-import { shouldVirtualize } from '../../styles/virtual';
-import type { MochiVirtualSetting } from '../../styles/virtual';
-import { useMessages } from '../../locale';
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import type { MochiTableColumn, MochiTableSort } from './types'
+import css from './MochiTable.module.css'
+import vcss from '../../styles/virtual.module.css'
+import { shouldVirtualize } from '../../styles/virtual'
+import type { MochiVirtualSetting } from '../../styles/virtual'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiTable' });
+defineOptions({ name: 'MochiTable' })
 
-const m = useMessages();
+const m = useMessages()
 
 const props = withDefaults(
   defineProps<{
-    columns: MochiTableColumn[];
-    rows: Record<string, unknown>[];
+    columns: MochiTableColumn[]
+    rows: Record<string, unknown>[]
     /** 行主键字段，用来给 v-for 一个稳定 key */
-    rowKey?: string;
-    striped?: boolean;
-    emptyText?: string;
+    rowKey?: string
+    striped?: boolean
+    emptyText?: string
     /**
      * CSS 虚拟化三态：true 强制开（屏外行跳过布局/绘制，DOM 保留）；
      * false 强制关；'auto'（默认）按硬件自适应——低端设备自动开。
      */
-    virtual?: MochiVirtualSetting;
+    virtual?: MochiVirtualSetting
     /**
      * 渐进分片渲染：行数超阈值时先渲染首块（200 行）尽快出屏，其余行在
      * idle 期补齐，DOM 最终全量保留（可 Ctrl+F）。补块大小按上一块的实际
      * patch 耗时 AIMD 调节（预算内翻倍、超时减半），慢硬件自动缩小、快硬件
      * 自动放大。排序/换数据会重置分片。
      */
-    progressive?: boolean;
+    progressive?: boolean
   }>(),
   { rowKey: 'id', virtual: 'auto', progressive: true },
-);
+)
 
-const emit = defineEmits<{ 'sort-change': [MochiTableSort | null] }>();
+const emit = defineEmits<{ 'sort-change': [MochiTableSort | null] }>()
 
-const sort = ref<MochiTableSort | null>(null);
+const sort = ref<MochiTableSort | null>(null)
 
 const sortedRows = computed(() => {
-  const current = sort.value;
-  if (!current) return props.rows;
+  const current = sort.value
+  if (!current) return props.rows
 
-  const factor = current.order === 'asc' ? 1 : -1;
+  const factor = current.order === 'asc' ? 1 : -1
   return [...props.rows].sort((a, b) => {
-    const left = a[current.key];
-    const right = b[current.key];
-    if (left === right) return 0;
+    const left = a[current.key]
+    const right = b[current.key]
+    if (left === right) return 0
     // 数字按大小、其余按字符串比较
-    if (typeof left === 'number' && typeof right === 'number') return (left - right) * factor;
-    return String(left).localeCompare(String(right), 'zh-CN') * factor;
-  });
-});
+    if (typeof left === 'number' && typeof right === 'number') return (left - right) * factor
+    return String(left).localeCompare(String(right), 'zh-CN') * factor
+  })
+})
 
 /** 升序 → 降序 → 取消，三态循环 */
 function toggleSort(column: MochiTableColumn) {
-  if (!column.sortable) return;
-  if (sort.value?.key !== column.key) sort.value = { key: column.key, order: 'asc' };
-  else if (sort.value.order === 'asc') sort.value = { key: column.key, order: 'desc' };
-  else sort.value = null;
-  emit('sort-change', sort.value);
+  if (!column.sortable) return
+  if (sort.value?.key !== column.key) sort.value = { key: column.key, order: 'asc' }
+  else if (sort.value.order === 'asc') sort.value = { key: column.key, order: 'desc' }
+  else sort.value = null
+  emit('sort-change', sort.value)
 }
 
 function ariaSort(column: MochiTableColumn) {
-  if (sort.value?.key !== column.key) return 'none';
-  return sort.value.order === 'asc' ? 'ascending' : 'descending';
+  if (sort.value?.key !== column.key) return 'none'
+  return sort.value.order === 'asc' ? 'ascending' : 'descending'
 }
 
-const virtualOn = computed(() => shouldVirtualize(sortedRows.value.length, props.virtual));
+const virtualOn = computed(() => shouldVirtualize(sortedRows.value.length, props.virtual))
 
 /**
  * 渐进分片调度内核：先出首块，其余行 idle 期补齐（jsdom 里 requestIdleCallback
@@ -77,65 +77,67 @@ const virtualOn = computed(() => shouldVirtualize(sortedRows.value.length, props
  * 既有列表做 keyed diff（成本随行数增长），固定块大小要么浪费 idle 预算（快机器）
  * 要么卡顿（慢机器），AIMD 让同一份代码在所有硬件上自己找到合适的块大小。
  */
-const CHUNK = 200;
-const MAX_CHUNK = 3200;
+const CHUNK = 200
+const MAX_CHUNK = 3200
 /** 预算约四个空闲帧：tick 固定成本含对既有行的 keyed diff（随 N 增长），且补齐跑在
  *  idle 期不占交互路径——预算太紧会把块压死在地板，反而拉长总时长（tick 数变多） */
-const FRAME_BUDGET_MS = 96;
+const FRAME_BUDGET_MS = 96
 const scheduleGrow: (cb: () => void) => number =
   typeof requestIdleCallback === 'function'
     ? (cb) => requestIdleCallback(cb, { timeout: 200 })
-    : (cb) => window.setTimeout(cb, 16) as unknown as number;
+    : (cb) => window.setTimeout(cb, 16) as unknown as number
 // 兜底分支的 window 访问必须延迟到调用时：SSR（Node）没有 window，模块作用域直接取会炸
 const cancelGrow: (id: number) => void =
   typeof cancelIdleCallback === 'function'
     ? (id) => cancelIdleCallback(id)
-    : (id) => window.clearTimeout(id);
+    : (id) => window.clearTimeout(id)
 
-const progressiveOn = computed(() => shouldVirtualize(sortedRows.value.length, props.progressive !== false));
-const renderedCount = ref<number>(Number.POSITIVE_INFINITY);
-const visibleRows = computed(() => sortedRows.value.slice(0, renderedCount.value));
-let growId: number | null = null;
-let nextChunk = CHUNK;
-let disposed = false;
+const progressiveOn = computed(() =>
+  shouldVirtualize(sortedRows.value.length, props.progressive !== false),
+)
+const renderedCount = ref<number>(Number.POSITIVE_INFINITY)
+const visibleRows = computed(() => sortedRows.value.slice(0, renderedCount.value))
+let growId: number | null = null
+let nextChunk = CHUNK
+let disposed = false
 
 function grow() {
-  growId = null;
-  const total = sortedRows.value.length;
-  const chunk = nextChunk;
-  renderedCount.value = Math.min(renderedCount.value + chunk, total);
-  const startedAt = performance.now();
+  growId = null
+  const total = sortedRows.value.length
+  const chunk = nextChunk
+  renderedCount.value = Math.min(renderedCount.value + chunk, total)
+  const startedAt = performance.now()
   nextTick(() => {
-    if (disposed) return;
-    const patchMs = performance.now() - startedAt;
+    if (disposed) return
+    const patchMs = performance.now() - startedAt
     nextChunk =
       patchMs <= FRAME_BUDGET_MS
         ? Math.min(chunk * 2, MAX_CHUNK)
-        : Math.max(Math.round(chunk / 2), CHUNK);
-    if (renderedCount.value < total) growId = scheduleGrow(grow);
-  });
+        : Math.max(Math.round(chunk / 2), CHUNK)
+    if (renderedCount.value < total) growId = scheduleGrow(grow)
+  })
 }
 
 watch(
   sortedRows,
   (rows) => {
-    if (growId !== null) cancelGrow(growId);
-    growId = null;
-    nextChunk = CHUNK;
+    if (growId !== null) cancelGrow(growId)
+    growId = null
+    nextChunk = CHUNK
     if (!progressiveOn.value) {
-      renderedCount.value = Number.POSITIVE_INFINITY;
-      return;
+      renderedCount.value = Number.POSITIVE_INFINITY
+      return
     }
-    renderedCount.value = Math.min(CHUNK, rows.length);
-    if (renderedCount.value < rows.length) growId = scheduleGrow(grow);
+    renderedCount.value = Math.min(CHUNK, rows.length)
+    if (renderedCount.value < rows.length) growId = scheduleGrow(grow)
   },
   { immediate: true },
-);
+)
 
 onBeforeUnmount(() => {
-  disposed = true;
-  if (growId !== null) cancelGrow(growId);
-});
+  disposed = true
+  if (growId !== null) cancelGrow(growId)
+})
 </script>
 
 <template>

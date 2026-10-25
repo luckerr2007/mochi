@@ -1,8 +1,8 @@
 <script setup lang="ts">
-defineOptions({ name: 'MochiToneGlyph' });
+defineOptions({ name: 'MochiToneGlyph' })
 
 /** 语气符号：info=i / success=✓ / warning·danger=!，线条交给父级样式 */
-defineProps<{ tone: 'info' | 'success' | 'warning' | 'danger' }>();
+defineProps<{ tone: 'info' | 'success' | 'warning' | 'danger' }>()
 </script>
 
 <template>

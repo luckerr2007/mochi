@@ -1,57 +1,57 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import css from './MochiUpload.module.css';
-import { useMessages } from '../../locale';
+import { ref } from 'vue'
+import css from './MochiUpload.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiUpload' });
+defineOptions({ name: 'MochiUpload' })
 
-const m = useMessages();
+const m = useMessages()
 
 const props = withDefaults(
   defineProps<{
-    accept?: string;
-    multiple?: boolean;
-    disabled?: boolean;
+    accept?: string
+    multiple?: boolean
+    disabled?: boolean
     /** 单文件大小上限（字节） */
-    maxSize?: number;
-    hint?: string;
+    maxSize?: number
+    hint?: string
   }>(),
   { multiple: true },
-);
+)
 
-const emit = defineEmits<{ change: [File[]] }>();
+const emit = defineEmits<{ change: [File[]] }>()
 
-const files = ref<File[]>([]);
-const dragging = ref(false);
-const input = ref<HTMLInputElement>();
+const files = ref<File[]>([])
+const dragging = ref(false)
+const input = ref<HTMLInputElement>()
 
 function human(size: number) {
-  if (size < 1024) return `${size} B`;
-  if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
-  return `${(size / 1024 / 1024).toFixed(1)} MB`;
+  if (size < 1024) return `${size} B`
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`
+  return `${(size / 1024 / 1024).toFixed(1)} MB`
 }
 
 function add(list: File[]) {
-  if (props.disabled || !list.length) return;
-  const accepted = list.filter((file) => !props.maxSize || file.size <= props.maxSize);
-  files.value = props.multiple ? [...files.value, ...accepted] : accepted.slice(0, 1);
-  emit('change', files.value);
+  if (props.disabled || !list.length) return
+  const accepted = list.filter((file) => !props.maxSize || file.size <= props.maxSize)
+  files.value = props.multiple ? [...files.value, ...accepted] : accepted.slice(0, 1)
+  emit('change', files.value)
 }
 
 function onPick(event: Event) {
-  const target = event.target as HTMLInputElement;
-  add([...(target.files ?? [])]);
-  target.value = '';
+  const target = event.target as HTMLInputElement
+  add([...(target.files ?? [])])
+  target.value = ''
 }
 
 function onDrop(event: DragEvent) {
-  dragging.value = false;
-  add([...(event.dataTransfer?.files ?? [])]);
+  dragging.value = false
+  add([...(event.dataTransfer?.files ?? [])])
 }
 
 function remove(index: number) {
-  files.value = files.value.filter((_, i) => i !== index);
-  emit('change', files.value);
+  files.value = files.value.filter((_, i) => i !== index)
+  emit('change', files.value)
 }
 </script>
 
@@ -87,7 +87,12 @@ function remove(index: number) {
       <li v-for="(file, index) in files" :key="`${file.name}-${index}`" :class="css.item">
         <span :class="css.name">{{ file.name }}</span>
         <span :class="css.size">{{ human(file.size) }}</span>
-        <button :class="css.remove" type="button" :aria-label="`移除 ${file.name}`" @click="remove(index)">
+        <button
+          :class="css.remove"
+          type="button"
+          :aria-label="`移除 ${file.name}`"
+          @click="remove(index)"
+        >
           <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 2 L8 8 M8 2 L2 8" /></svg>
         </button>
       </li>

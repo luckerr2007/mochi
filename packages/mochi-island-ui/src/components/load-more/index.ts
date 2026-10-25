@@ -1,1 +1,1 @@
-export { default as MochiLoadMore } from './MochiLoadMore.vue';
+export { default as MochiLoadMore } from './MochiLoadMore.vue'

@@ -1,1 +1,1 @@
-export { default as MochiSpinner } from './MochiSpinner.vue';
+export { default as MochiSpinner } from './MochiSpinner.vue'

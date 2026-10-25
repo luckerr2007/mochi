@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import css from './MochiDivider.module.css';
+import css from './MochiDivider.module.css'
 
-defineOptions({ name: 'MochiDivider' });
+defineOptions({ name: 'MochiDivider' })
 
-withDefaults(defineProps<{ vertical?: boolean; label?: string }>(), { vertical: false });
+withDefaults(defineProps<{ vertical?: boolean; label?: string }>(), { vertical: false })
 </script>
 
 <template>

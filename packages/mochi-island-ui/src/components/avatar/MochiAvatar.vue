@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import type { MochiAvatarSize } from './types';
-import css from './MochiAvatar.module.css';
+import { computed, ref, watch } from 'vue'
+import type { MochiAvatarSize } from './types'
+import css from './MochiAvatar.module.css'
 
-defineOptions({ name: 'MochiAvatar' });
+defineOptions({ name: 'MochiAvatar' })
 
-const props = withDefaults(
-  defineProps<{ src?: string; name?: string; size?: MochiAvatarSize }>(),
-  { size: 'md' },
-);
+const props = withDefaults(defineProps<{ src?: string; name?: string; size?: MochiAvatarSize }>(), {
+  size: 'md',
+})
 
 // 图片加载失败时退回首字，避免出现破图
-const failed = ref(false);
+const failed = ref(false)
 watch(
   () => props.src,
   () => {
-    failed.value = false;
+    failed.value = false
   },
-);
+)
 
-const initial = computed(() => props.name?.trim().slice(0, 1).toUpperCase() || '?');
+const initial = computed(() => props.name?.trim().slice(0, 1).toUpperCase() || '?')
 </script>
 
 <template>
@@ -31,6 +30,8 @@ const initial = computed(() => props.name?.trim().slice(0, 1).toUpperCase() || '
       :alt="name || ''"
       @error="failed = true"
     />
-    <span v-else :class="css.fallback" role="img" :aria-label="name || undefined">{{ initial }}</span>
+    <span v-else :class="css.fallback" role="img" :aria-label="name || undefined">{{
+      initial
+    }}</span>
   </span>
 </template>

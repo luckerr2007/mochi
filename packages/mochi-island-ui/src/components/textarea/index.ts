@@ -1,1 +1,1 @@
-export { default as MochiTextarea } from './MochiTextarea.vue';
+export { default as MochiTextarea } from './MochiTextarea.vue'

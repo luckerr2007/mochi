@@ -96,18 +96,19 @@
 
 .close path {
   fill: none;
-  stroke: currentColor;
+  stroke: currentcolor;
   stroke-width: 2;
   stroke-linecap: round;
 }
 
 .enter {
-  animation: maskIn var(--mochi-duration-fast) var(--mochi-ease-out),
+  animation:
+    maskIn var(--mochi-duration-fast) var(--mochi-ease-out),
     zoomIn var(--mochi-duration-base) var(--mochi-spring);
 }
 
 /* 缩放的动画要落在图上，遮罩只负责淡入 */
-.enter :deep(.frame),
+.enter .frame,
 .frame {
   animation: zoomIn var(--mochi-duration-base) var(--mochi-spring);
 }

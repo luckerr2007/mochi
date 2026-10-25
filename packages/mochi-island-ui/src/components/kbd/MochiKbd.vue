@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import css from './MochiKbd.module.css';
+import css from './MochiKbd.module.css'
 
-defineOptions({ name: 'MochiKbd' });
+defineOptions({ name: 'MochiKbd' })
 </script>
 
 <template>

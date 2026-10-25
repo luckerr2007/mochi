@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { computed, provide, ref, useId } from 'vue';
-import css from './MochiFormItem.module.css';
-import { MOCHI_FORM_ITEM } from '../../internal/formItemContext';
+import { computed, provide, ref, useId } from 'vue'
+import css from './MochiFormItem.module.css'
+import { MOCHI_FORM_ITEM } from '../../internal/formItemContext'
 
-defineOptions({ name: 'MochiFormItem' });
+defineOptions({ name: 'MochiFormItem' })
 
 const props = defineProps<{
-  label?: string;
-  error?: string;
-  hint?: string;
-  required?: boolean;
+  label?: string
+  error?: string
+  hint?: string
+  required?: boolean
   /** 提示与错误文案的 id，交给内部控件做 aria-describedby */
-  describedById?: string;
-}>();
+  describedById?: string
+}>()
 
-const uid = useId();
-const messageId = computed(() => props.describedById ?? `${uid}-msg`);
+const uid = useId()
+const messageId = computed(() => props.describedById ?? `${uid}-msg`)
 /** 由内部 FieldShell 注册：让上面的 <label for> 关联到真正的控件 */
-const fieldId = ref('');
+const fieldId = ref('')
 
 provide(MOCHI_FORM_ITEM, {
   messageId,
   invalid: computed(() => Boolean(props.error)),
   setFieldId: (id: string) => {
-    fieldId.value = id;
+    fieldId.value = id
   },
-});
+})
 </script>
 
 <template>

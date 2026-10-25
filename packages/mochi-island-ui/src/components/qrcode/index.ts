@@ -1,1 +1,1 @@
-export { default as MochiQRCode } from './MochiQRCode.vue';
+export { default as MochiQRCode } from './MochiQRCode.vue'

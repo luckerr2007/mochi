@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useOverlay } from '../../internal/useOverlay';
-import css from './MochiModal.module.css';
-import { useMessages } from '../../locale';
+import { ref } from 'vue'
+import { useOverlay } from '../../internal/useOverlay'
+import css from './MochiModal.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiModal' });
+defineOptions({ name: 'MochiModal' })
 
-const m = useMessages();
+const m = useMessages()
 
 withDefaults(
   defineProps<{
-    title?: string;
+    title?: string
     /** 点遮罩是否关闭 */
-    maskClosable?: boolean;
-    closeLabel?: string;
+    maskClosable?: boolean
+    closeLabel?: string
   }>(),
   { maskClosable: true },
-);
+)
 
 // v-model:open —— 开关状态用显式命名，避免和表单类组件的 v-model 混淆
-const open = defineModel<boolean>('open', { default: false });
+const open = defineModel<boolean>('open', { default: false })
 
-const panel = ref<HTMLElement>();
-const { close, onKeydown } = useOverlay(open, panel);
+const panel = ref<HTMLElement>()
+const { close, onKeydown } = useOverlay(open, panel)
 </script>
 
 <template>
@@ -42,7 +42,12 @@ const { close, onKeydown } = useOverlay(open, panel);
             <slot name="header">
               <h2 :class="css.title">{{ title }}</h2>
             </slot>
-            <button :class="css.close" type="button" :aria-label="closeLabel ?? m.close" @click="close">
+            <button
+              :class="css.close"
+              type="button"
+              :aria-label="closeLabel ?? m.close"
+              @click="close"
+            >
               <svg viewBox="0 0 10 10" aria-hidden="true" focusable="false">
                 <path d="M2 2 L8 8 M8 2 L2 8" />
               </svg>

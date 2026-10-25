@@ -1,1 +1,1 @@
-export { default as MochiSwitch } from './MochiSwitch.vue';
+export { default as MochiSwitch } from './MochiSwitch.vue'

@@ -39,9 +39,7 @@
 .well:focus-within {
   border-color: var(--mochi-primary-deep);
   background: var(--mochi-surface);
-  box-shadow:
-    var(--mochi-shadow-inset),
-    var(--mochi-focus-ring);
+  box-shadow: var(--mochi-shadow-inset), var(--mochi-focus-ring);
 }
 
 .root[data-invalid] .well {

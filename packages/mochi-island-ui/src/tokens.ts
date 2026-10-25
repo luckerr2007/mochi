@@ -6,10 +6,10 @@
  */
 
 /** 任何 `--mochi-*` 自定义属性名。 */
-export type MochiTokenName = `--mochi-${string}`;
+export type MochiTokenName = `--mochi-${string}`
 
 /** 一组令牌覆盖值，可只覆盖其中一部分。 */
-export type MochiTheme = Partial<Record<MochiTokenName, string>>;
+export type MochiTheme = Partial<Record<MochiTokenName, string>>
 
 /**
  * 应用主题覆盖。
@@ -22,18 +22,18 @@ export function applyTheme(
   theme: MochiTheme,
   target: HTMLElement = document.documentElement,
 ): () => void {
-  const previous = new Map<string, string>();
+  const previous = new Map<string, string>()
 
   for (const [name, value] of Object.entries(theme)) {
-    if (value == null) continue;
-    previous.set(name, target.style.getPropertyValue(name));
-    target.style.setProperty(name, value);
+    if (value == null) continue
+    previous.set(name, target.style.getPropertyValue(name))
+    target.style.setProperty(name, value)
   }
 
   return () => {
     for (const [name, value] of previous) {
-      if (value) target.style.setProperty(name, value);
-      else target.style.removeProperty(name);
+      if (value) target.style.setProperty(name, value)
+      else target.style.removeProperty(name)
     }
-  };
+  }
 }

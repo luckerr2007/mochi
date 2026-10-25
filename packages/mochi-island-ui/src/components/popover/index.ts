@@ -1,2 +1,2 @@
-export { default as MochiPopover } from './MochiPopover.vue';
-export type { MochiPopoverPlacement } from './types';
+export { default as MochiPopover } from './MochiPopover.vue'
+export type { MochiPopoverPlacement } from './types'

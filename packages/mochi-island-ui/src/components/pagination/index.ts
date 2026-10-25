@@ -1,1 +1,1 @@
-export { default as MochiPagination } from './MochiPagination.vue';
+export { default as MochiPagination } from './MochiPagination.vue'

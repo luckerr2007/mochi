@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { MochiDescriptionItem } from './types';
-import css from './MochiDescriptions.module.css';
+import type { MochiDescriptionItem } from './types'
+import css from './MochiDescriptions.module.css'
 
-defineOptions({ name: 'MochiDescriptions' });
+defineOptions({ name: 'MochiDescriptions' })
 
-withDefaults(defineProps<{ items: MochiDescriptionItem[]; columns?: number }>(), { columns: 2 });
+withDefaults(defineProps<{ items: MochiDescriptionItem[]; columns?: number }>(), { columns: 2 })
 </script>
 
 <template>

@@ -1,1 +1,1 @@
-export { default as MochiAffix } from './MochiAffix.vue';
+export { default as MochiAffix } from './MochiAffix.vue'

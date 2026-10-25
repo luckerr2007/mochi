@@ -1,1 +1,1 @@
-export { default as MochiDivider } from './MochiDivider.vue';
+export { default as MochiDivider } from './MochiDivider.vue'

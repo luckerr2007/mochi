@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import { computed, useSlots } from 'vue';
-import type { MochiPanelHeadingLevel } from './types';
-import css from './MochiPanel.module.css';
+import { computed, useSlots } from 'vue'
+import type { MochiPanelHeadingLevel } from './types'
+import css from './MochiPanel.module.css'
 
-defineOptions({ name: 'MochiPanel' });
+defineOptions({ name: 'MochiPanel' })
 
 const props = withDefaults(
   defineProps<{
     /** 不传时若提供 header 插槽则仍渲染头部 */
-    title?: string;
+    title?: string
     /** 标题层级，避免在文档里跳级 */
-    headingLevel?: MochiPanelHeadingLevel;
+    headingLevel?: MochiPanelHeadingLevel
     /** 入场时淡入上浮一次；页面首屏的面板开这个，常态面板别开 */
-    animate?: boolean;
+    animate?: boolean
   }>(),
   { headingLevel: 3, animate: false },
-);
+)
 
-const slots = useSlots();
-const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header));
-const headingTag = computed(() => `h${props.headingLevel}`);
+const slots = useSlots()
+const hasHeader = computed(() => Boolean(props.title) || Boolean(slots.header))
+const headingTag = computed(() => `h${props.headingLevel}`)
 </script>
 
 <template>

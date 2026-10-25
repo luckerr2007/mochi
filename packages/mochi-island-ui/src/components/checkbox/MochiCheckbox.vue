@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import css from './MochiCheckbox.module.css';
+import css from './MochiCheckbox.module.css'
 
-defineOptions({ name: 'MochiCheckbox' });
+defineOptions({ name: 'MochiCheckbox' })
 
-withDefaults(defineProps<{ label?: string; disabled?: boolean }>(), { disabled: false });
+withDefaults(defineProps<{ label?: string; disabled?: boolean }>(), { disabled: false })
 
-const model = defineModel<boolean>({ default: false });
+const model = defineModel<boolean>({ default: false })
 </script>
 
 <template>
@@ -17,6 +17,8 @@ const model = defineModel<boolean>({ default: false });
         <path d="M1 5 L4.5 8.5 L11 1.5" />
       </svg>
     </span>
-    <span v-if="label || $slots.default" :class="css.text"><slot>{{ label }}</slot></span>
+    <span v-if="label || $slots.default" :class="css.text"
+      ><slot>{{ label }}</slot></span
+    >
   </label>
 </template>

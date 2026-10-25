@@ -9,7 +9,7 @@
   color: var(--mochi-primary-deep);
   font-family: var(--mochi-font-family);
   text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
+  background-image: linear-gradient(currentcolor, currentcolor);
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 0% var(--mochi-border-hairline);
@@ -44,7 +44,7 @@
 
 .arrow path {
   fill: none;
-  stroke: currentColor;
+  stroke: currentcolor;
   stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;

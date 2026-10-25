@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { MochiTreeNode } from './types';
-import css from './MochiTree.module.css';
-import vcss from '../../styles/virtual.module.css';
+import type { MochiTreeNode } from './types'
+import css from './MochiTree.module.css'
+import vcss from '../../styles/virtual.module.css'
 
 /**
  * 递归行：自己引用自己（名字与文件名一致）。
  * 展开/收起的补间在 .group 上，和 Menu 的分组同一套手法。
  */
-defineOptions({ name: 'MochiTreeRow' });
+defineOptions({ name: 'MochiTreeRow' })
 
 const props = defineProps<{
-  node: MochiTreeNode;
-  depth: number;
-  selectedKey: string;
-  expandedKeys: string[];
+  node: MochiTreeNode
+  depth: number
+  selectedKey: string
+  expandedKeys: string[]
   /** 由根组件按总节点数算好传下来：行加 content-visibility（CSS 虚拟化） */
-  virtual?: boolean;
-}>();
+  virtual?: boolean
+}>()
 
-const emit = defineEmits<{ select: [MochiTreeNode]; toggle: [MochiTreeNode] }>();
+const emit = defineEmits<{ select: [MochiTreeNode]; toggle: [MochiTreeNode] }>()
 
-const hasChildren = !!props.node.children?.length;
-const isOpen = () => props.expandedKeys.includes(props.node.key);
+const hasChildren = !!props.node.children?.length
+const isOpen = () => props.expandedKeys.includes(props.node.key)
 </script>
 
 <template>

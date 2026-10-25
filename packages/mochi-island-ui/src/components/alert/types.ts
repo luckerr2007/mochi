@@ -1,1 +1,1 @@
-export type MochiAlertTone = 'info' | 'success' | 'warning' | 'danger';
+export type MochiAlertTone = 'info' | 'success' | 'warning' | 'danger'

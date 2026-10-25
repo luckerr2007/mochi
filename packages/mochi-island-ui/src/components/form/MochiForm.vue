@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import css from './MochiForm.module.css';
+import css from './MochiForm.module.css'
 
-defineOptions({ name: 'MochiForm' });
+defineOptions({ name: 'MochiForm' })
 
-withDefaults(defineProps<{ layout?: 'vertical' | 'horizontal' }>(), { layout: 'vertical' });
+withDefaults(defineProps<{ layout?: 'vertical' | 'horizontal' }>(), { layout: 'vertical' })
 
-const emit = defineEmits<{ submit: [] }>();
+const emit = defineEmits<{ submit: [] }>()
 </script>
 
 <template>

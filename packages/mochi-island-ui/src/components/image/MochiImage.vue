@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, watch } from 'vue';
-import css from './MochiImage.module.css';
-import { useMessages } from '../../locale';
+import { onBeforeUnmount, ref, watch } from 'vue'
+import css from './MochiImage.module.css'
+import { useMessages } from '../../locale'
 
-defineOptions({ name: 'MochiImage' });
+defineOptions({ name: 'MochiImage' })
 
-const m = useMessages();
+const m = useMessages()
 
-const props = withDefaults(
+withDefaults(
   defineProps<{ src: string; alt: string; caption?: string; width?: string; height?: string }>(),
   {},
-);
+)
 
-const open = ref(false);
+const open = ref(false)
 
 function onKeydown(event: KeyboardEvent) {
-  if (event.key === 'Escape') open.value = false;
+  if (event.key === 'Escape') open.value = false
 }
 
 watch(open, (isOpen) => {
-  if (isOpen) document.addEventListener('keydown', onKeydown);
-  else document.removeEventListener('keydown', onKeydown);
-});
+  if (isOpen) document.addEventListener('keydown', onKeydown)
+  else document.removeEventListener('keydown', onKeydown)
+})
 
-onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
+onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown))
 </script>
 
 <template>

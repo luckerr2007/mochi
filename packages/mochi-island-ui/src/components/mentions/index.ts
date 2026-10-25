@@ -1,1 +1,1 @@
-export { default as MochiMentions } from './MochiMentions.vue';
+export { default as MochiMentions } from './MochiMentions.vue'

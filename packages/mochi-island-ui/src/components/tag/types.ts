@@ -1,1 +1,1 @@
-export type MochiTagTone = 'neutral' | 'accent' | 'candy' | 'danger';
+export type MochiTagTone = 'neutral' | 'accent' | 'candy' | 'danger'

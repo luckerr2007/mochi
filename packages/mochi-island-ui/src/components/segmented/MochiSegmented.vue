@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
-import type { MochiSegmentedOption } from './types';
-import css from './MochiSegmented.module.css';
+import { nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue'
+import type { MochiSegmentedOption } from './types'
+import css from './MochiSegmented.module.css'
 
-defineOptions({ name: 'MochiSegmented' });
+defineOptions({ name: 'MochiSegmented' })
 
-defineProps<{ options: MochiSegmentedOption[]; label?: string }>();
+defineProps<{ options: MochiSegmentedOption[]; label?: string }>()
 
-const model = defineModel<string>({ required: true });
-const uid = useId();
+const model = defineModel<string>({ required: true })
+const uid = useId()
 
-const rootEl = ref<HTMLElement>();
-const indicator = ref({ left: 0, width: 0 });
-let ro: ResizeObserver | undefined;
+const rootEl = ref<HTMLElement>()
+const indicator = ref({ left: 0, width: 0 })
+let ro: ResizeObserver | undefined
 
 function sync() {
-  const active = rootEl.value?.querySelector<HTMLElement>('[aria-checked="true"]');
-  if (!active) return;
-  indicator.value = { left: active.offsetLeft, width: active.offsetWidth };
+  const active = rootEl.value?.querySelector<HTMLElement>('[aria-checked="true"]')
+  if (!active) return
+  indicator.value = { left: active.offsetLeft, width: active.offsetWidth }
 }
 
 onMounted(() => {
-  sync();
+  sync()
   // 隐藏容器里挂载（v-show 分节）会量到 0 宽，指示块塌成竖线；RO 兜底重测
   if (typeof ResizeObserver === 'function' && rootEl.value) {
-    ro = new ResizeObserver(() => sync());
-    ro.observe(rootEl.value);
+    ro = new ResizeObserver(() => sync())
+    ro.observe(rootEl.value)
   }
-  window.addEventListener('resize', sync);
-});
+  window.addEventListener('resize', sync)
+})
 onBeforeUnmount(() => {
-  ro?.disconnect();
-  window.removeEventListener('resize', sync);
-});
-watch(model, () => nextTick(sync));
+  ro?.disconnect()
+  window.removeEventListener('resize', sync)
+})
+watch(model, () => nextTick(sync))
 
 /** ← → 在选项间移动，与原生 radiogroup 行为一致 */
 function move(step: 1 | -1, options: MochiSegmentedOption[]) {
-  const usable = options.filter((option) => !option.disabled);
-  if (!usable.length) return;
-  const index = usable.findIndex((option) => option.value === model.value);
-  const next = usable[(index + step + usable.length) % usable.length];
-  if (next) model.value = next.value;
+  const usable = options.filter((option) => !option.disabled)
+  if (!usable.length) return
+  const index = usable.findIndex((option) => option.value === model.value)
+  const next = usable[(index + step + usable.length) % usable.length]
+  if (next) model.value = next.value
 }
 </script>
 

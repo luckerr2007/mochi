@@ -32,9 +32,7 @@
 
 .root:focus-visible {
   outline: none;
-  box-shadow:
-    var(--mochi-shadow-press),
-    var(--mochi-focus-ring);
+  box-shadow: var(--mochi-shadow-press), var(--mochi-focus-ring);
 }
 
 .root svg {
@@ -44,7 +42,7 @@
 
 .root path {
   fill: none;
-  stroke: currentColor;
+  stroke: currentcolor;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;

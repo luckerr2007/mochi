@@ -1,1 +1,1 @@
-export { default as MochiTimePicker } from './MochiTimePicker.vue';
+export { default as MochiTimePicker } from './MochiTimePicker.vue'

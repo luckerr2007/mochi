@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { MochiTimelineItem } from './types';
-import css from './MochiTimeline.module.css';
+import type { MochiTimelineItem } from './types'
+import css from './MochiTimeline.module.css'
 
-defineOptions({ name: 'MochiTimeline' });
+defineOptions({ name: 'MochiTimeline' })
 
-withDefaults(defineProps<{ items: MochiTimelineItem[] }>(), {});
+withDefaults(defineProps<{ items: MochiTimelineItem[] }>(), {})
 </script>
 
 <template>

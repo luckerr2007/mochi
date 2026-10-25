@@ -88,8 +88,7 @@
   border-radius: var(--mochi-radius-xs);
   /* 底色 = 当前色相的全饱和色；黑白两轴用渐变叠出，拖动即取色 */
   background:
-    linear-gradient(to top, #000, transparent),
-    linear-gradient(to right, #fff, transparent),
+    linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent),
     hsl(var(--_hue) 100% 50%);
   cursor: crosshair;
   touch-action: none;
@@ -106,7 +105,9 @@
   height: 16px;
   border: 2px solid #fff;
   border-radius: var(--mochi-radius-full);
-  box-shadow: 0 0 0 var(--mochi-border-hairline) var(--mochi-line), var(--mochi-shadow-soft);
+  box-shadow:
+    0 0 0 var(--mochi-border-hairline) var(--mochi-line),
+    var(--mochi-shadow-soft);
   translate: -50% -50%;
   pointer-events: none;
 }
@@ -119,16 +120,7 @@
   border: var(--mochi-border-hairline) solid var(--mochi-line);
   border-radius: var(--mochi-radius-full);
   /* 色相轴是功能渐变：红 → 黄 → 绿 → 青 → 蓝 → 品红 → 红 */
-  background: linear-gradient(
-    to right,
-    #f00,
-    #ff0,
-    #0f0,
-    #0ff,
-    #00f,
-    #f0f,
-    #f00
-  );
+  background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
   cursor: pointer;
 }
 
@@ -225,7 +217,9 @@
 
 /* 选中的预设：深色描边 + 外圈留缝，和焦点环同构 */
 .dot[aria-selected='true'] {
-  box-shadow: 0 0 0 2px var(--mochi-surface), 0 0 0 4px var(--mochi-ink);
+  box-shadow:
+    0 0 0 2px var(--mochi-surface),
+    0 0 0 4px var(--mochi-ink);
 }
 
 @media (prefers-reduced-motion: reduce) {

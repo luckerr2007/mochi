@@ -1,1 +1,1 @@
-export { default as MochiModal } from './MochiModal.vue';
+export { default as MochiModal } from './MochiModal.vue'
