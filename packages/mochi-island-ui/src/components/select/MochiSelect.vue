@@ -5,6 +5,7 @@ import type { MochiSelectOption } from './types';
 import css from './MochiSelect.module.css';
 import vcss from '../../styles/virtual.module.css';
 import { shouldVirtualize } from '../../styles/virtual';
+import type { MochiVirtualSetting } from '../../styles/virtual';
 import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiSelect' });
@@ -21,12 +22,12 @@ const props = withDefaults(
     disabled?: boolean;
     invalid?: boolean;
     /**
-     * CSS 虚拟化（opt-in）：选项超阈值时给选项加 content-visibility，
-     * 弹层里屏外选项跳过布局/绘制、DOM 保留。超长选项列表再开。
+     * CSS 虚拟化三态：true 强制开（弹层里屏外选项跳过布局/绘制，DOM 保留）；
+     * false 强制关；'auto'（默认）按硬件自适应——低端设备自动开。
      */
-    virtual?: boolean;
+    virtual?: MochiVirtualSetting;
   }>(),
-  { virtual: false },
+  { virtual: 'auto' },
 );
 
 const model = defineModel<string>({ default: '' });
@@ -50,7 +51,7 @@ const selected = computed(() => props.options.find((option) => option.value === 
 const enabledIndexes = computed(() =>
   props.options.map((option, index) => (option.disabled ? -1 : index)).filter((index) => index >= 0),
 );
-const virtualOn = computed(() => shouldVirtualize(props.options.length, props.virtual !== false));
+const virtualOn = computed(() => shouldVirtualize(props.options.length, props.virtual));
 
 function show() {
   if (props.disabled) return;

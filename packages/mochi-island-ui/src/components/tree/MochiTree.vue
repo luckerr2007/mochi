@@ -4,6 +4,7 @@ import MochiTreeRow from './MochiTreeRow.vue';
 import type { MochiTreeNode } from './types';
 import css from './MochiTree.module.css';
 import { shouldVirtualize } from '../../styles/virtual';
+import type { MochiVirtualSetting } from '../../styles/virtual';
 import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTree' });
@@ -16,12 +17,12 @@ const props = withDefaults(
     defaultExpandAll?: boolean;
     label?: string;
     /**
-     * CSS 虚拟化（opt-in）：总节点数超阈值时给行加 content-visibility，
-     * 屏外行跳过布局/绘制、DOM 保留。低端设备或超大树再开。
+     * CSS 虚拟化三态：true 强制开（屏外行跳过布局/绘制，DOM 保留）；
+     * false 强制关；'auto'（默认）按硬件自适应——低端设备自动开。
      */
-    virtual?: boolean;
+    virtual?: MochiVirtualSetting;
   }>(),
-  { defaultExpandAll: false, virtual: false },
+  { defaultExpandAll: false, virtual: 'auto' },
 );
 
 const selected = defineModel<string>('selected', { default: '' });
@@ -41,7 +42,7 @@ const expandedKeys = ref<string[]>(
 );
 
 /** 按总节点数判断：全收起时多带几个类无副作用（cv 只跳过屏外行），展开后立即生效 */
-const virtualOn = computed(() => shouldVirtualize(countNodes(props.data), props.virtual !== false));
+const virtualOn = computed(() => shouldVirtualize(countNodes(props.data), props.virtual));
 
 function toggle(node: MochiTreeNode) {
   expandedKeys.value = expandedKeys.value.includes(node.key)

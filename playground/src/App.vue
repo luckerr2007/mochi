@@ -748,8 +748,9 @@ onMounted(() => {
           </div>
           <p class="desc" style="margin: var(--mochi-space-2) 0 0; color: var(--mochi-ink-soft)">
             一万行表格 / 一千项选择器 / 两千多节点树。渐进分片：先渲染首块 200 行尽快出屏，
-            其余行 idle 期补齐，DOM 最终全量保留（可 Ctrl+F、可复制）。CSS 虚拟化（opt-in）：
-            屏外行跳过布局与绘制，适合低端设备与复杂单元格。
+            其余行 idle 期补齐，块大小按上一块实测耗时反馈调节（目标 8ms），慢硬件自动缩小、
+            快硬件自动放大；DOM 最终全量保留（可 Ctrl+F、可复制）。CSS 虚拟化三态：
+            开关在这里是强制开/关，组件默认 auto——低端设备（≤4 核或 ≤4GB）自动开启。
           </p>
 
           <MochiDivider label="一万行表格" />

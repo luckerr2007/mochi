@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, TransitionGroup, watch } from 'vue';
+import { computed, nextTick, onBeforeUnmount, ref, TransitionGroup, watch } from 'vue';
 import type { MochiTableColumn, MochiTableSort } from './types';
 import css from './MochiTable.module.css';
 import vcss from '../../styles/virtual.module.css';
 import { shouldVirtualize } from '../../styles/virtual';
+import type { MochiVirtualSetting } from '../../styles/virtual';
 import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTable' });
@@ -19,18 +20,19 @@ const props = withDefaults(
     striped?: boolean;
     emptyText?: string;
     /**
-     * CSS 虚拟化：给行加 content-visibility（屏外行跳过布局/绘制，DOM 保留）。
-     * opt-in：M 系列芯片 + 简单文本单元格的基准里首渲染有约三成记账开销，
-     * 低端设备目标、复杂单元格或超长列表再开。
+     * CSS 虚拟化三态：true 强制开（屏外行跳过布局/绘制，DOM 保留）；
+     * false 强制关；'auto'（默认）按硬件自适应——低端设备自动开。
      */
-    virtual?: boolean;
+    virtual?: MochiVirtualSetting;
     /**
      * 渐进分片渲染：行数超阈值时先渲染首块（200 行）尽快出屏，其余行在
-     * idle 期分片补齐，DOM 最终全量保留（可 Ctrl+F）。排序/换数据会重置分片。
+     * idle 期补齐，DOM 最终全量保留（可 Ctrl+F）。补块大小按上一块的实际
+     * patch 耗时 AIMD 调节（预算内翻倍、超时减半），慢硬件自动缩小、快硬件
+     * 自动放大。排序/换数据会重置分片。
      */
     progressive?: boolean;
   }>(),
-  { rowKey: 'id', virtual: false, progressive: true },
+  { rowKey: 'id', virtual: 'auto', progressive: true },
 );
 
 const emit = defineEmits<{ 'sort-change': [MochiTableSort | null] }>();
@@ -66,12 +68,20 @@ function ariaSort(column: MochiTableColumn) {
   return sort.value.order === 'asc' ? 'ascending' : 'descending';
 }
 
-const virtualOn = computed(() => shouldVirtualize(sortedRows.value.length, props.virtual !== false));
+const virtualOn = computed(() => shouldVirtualize(sortedRows.value.length, props.virtual));
 
-/** 渐进分片：先出首块，其余行 idle 期补齐（jsdom 里 requestIdleCallback 缺席，退化为 setTimeout） */
+/**
+ * 渐进分片调度内核：先出首块，其余行 idle 期补齐（jsdom 里 requestIdleCallback
+ * 缺席，退化为 setTimeout）。补块大小按上一块的真实 patch 耗时做 AIMD 调节
+ * （约一帧的预算内 ×2 增长、超预算 ÷2 收缩、地板 200 保护慢机）：块追加要对
+ * 既有列表做 keyed diff（成本随行数增长），固定块大小要么浪费 idle 预算（快机器）
+ * 要么卡顿（慢机器），AIMD 让同一份代码在所有硬件上自己找到合适的块大小。
+ */
 const CHUNK = 200;
-/** 块大小指数翻倍封顶：追加块要对既有列表做 keyed diff，小块多次会近似平方级，指数块摊薄成线性 */
-const MAX_CHUNK = 1600;
+const MAX_CHUNK = 3200;
+/** 预算约四个空闲帧：tick 固定成本含对既有行的 keyed diff（随 N 增长），且补齐跑在
+ *  idle 期不占交互路径——预算太紧会把块压死在地板，反而拉长总时长（tick 数变多） */
+const FRAME_BUDGET_MS = 96;
 const scheduleGrow: (cb: () => void) => number =
   typeof requestIdleCallback === 'function'
     ? (cb) => requestIdleCallback(cb, { timeout: 200 })
@@ -84,12 +94,23 @@ const renderedCount = ref<number>(Number.POSITIVE_INFINITY);
 const visibleRows = computed(() => sortedRows.value.slice(0, renderedCount.value));
 let growId: number | null = null;
 let nextChunk = CHUNK;
+let disposed = false;
 
 function grow() {
   growId = null;
-  renderedCount.value = Math.min(renderedCount.value + nextChunk, sortedRows.value.length);
-  nextChunk = Math.min(nextChunk * 2, MAX_CHUNK);
-  if (renderedCount.value < sortedRows.value.length) growId = scheduleGrow(grow);
+  const total = sortedRows.value.length;
+  const chunk = nextChunk;
+  renderedCount.value = Math.min(renderedCount.value + chunk, total);
+  const startedAt = performance.now();
+  nextTick(() => {
+    if (disposed) return;
+    const patchMs = performance.now() - startedAt;
+    nextChunk =
+      patchMs <= FRAME_BUDGET_MS
+        ? Math.min(chunk * 2, MAX_CHUNK)
+        : Math.max(Math.round(chunk / 2), CHUNK);
+    if (renderedCount.value < total) growId = scheduleGrow(grow);
+  });
 }
 
 watch(
@@ -109,6 +130,7 @@ watch(
 );
 
 onBeforeUnmount(() => {
+  disposed = true;
   if (growId !== null) cancelGrow(growId);
 });
 </script>
