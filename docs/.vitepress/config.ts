@@ -1,4 +1,11 @@
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vitepress'
+
+// 版本徽标自动读取组件库 package.json，发版即更新（index.md 的 hero 手动同步）
+const pkgVersion = JSON.parse(
+  readFileSync(new URL('../../packages/mochi-island-ui/package.json', import.meta.url), 'utf-8'),
+).version as string
+const npmLink = 'https://www.npmjs.com/package/mochi-island-ui'
 
 const zhSidebar = {
   '/guide/': [
@@ -98,6 +105,7 @@ const zhTheme = {
     { text: '指南', link: '/guide/installation' },
     { text: '组件', link: '/components/button' },
     { text: '令牌', link: '/guide/theming' },
+    { text: `v${pkgVersion}`, link: npmLink },
   ],
   sidebar: zhSidebar,
   outline: { label: '本页目录', level: [2, 3] as [number, number] },
@@ -114,6 +122,7 @@ const enTheme = {
     { text: 'Components', link: '/en/components' },
     { text: 'Theming', link: '/en/guide/theming' },
     { text: 'Blog demo', link: 'https://mochi.liveroom.dpdns.org/blog/' },
+    { text: `v${pkgVersion}`, link: npmLink },
   ],
   sidebar: {
     '/en/guide/': [

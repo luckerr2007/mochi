@@ -4,7 +4,8 @@ layout: home
 hero:
   name: Mochi
   text: A cartoon component library that breathes
-  tagline: Every design token is a CSS custom property — retheme at runtime without a rebuild
+  # Keep the version in sync with packages/mochi-island-ui/package.json (the navbar badge is auto-read at build time)
+  tagline: v2.1.0 · Every design token is a CSS custom property — retheme at runtime without a rebuild
   actions:
     - theme: brand
       text: Get started

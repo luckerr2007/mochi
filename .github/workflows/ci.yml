@@ -24,14 +24,16 @@ jobs:
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
+      # docs/playground 的类型解析依赖库的 dist（exports 指向 dist/*.d.ts），
+      # 干净机器必须先构建；typecheck 串行跑，避免并发 vue-tsc 撑爆 runner 内存
+      - name: 构建组件库
+        run: pnpm build
+
       - name: 单元测试（含令牌契约与对比度）
         run: pnpm test
 
       - name: 类型检查
         run: pnpm typecheck
-
-      - name: 构建组件库
-        run: pnpm build
 
       - name: 构建文档站
         run: pnpm docs:build

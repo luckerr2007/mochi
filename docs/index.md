@@ -4,7 +4,8 @@ layout: home
 hero:
   name: Mochi
   text: 会呼吸的卡通组件库
-  tagline: 设计令牌全部是 CSS 自定义属性——不改源码就能运行时换肤
+  # 版本号与 packages/mochi-island-ui/package.json 同步（导航栏右侧徽标是构建时自动读取的）
+  tagline: v2.1.0 · 设计令牌全部是 CSS 自定义属性——不改源码就能运行时换肤
   actions:
     - theme: brand
       text: 开始使用
