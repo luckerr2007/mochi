@@ -1,10 +1,8 @@
 # MochiIcon
 
-第三方图标适配器：接 [lucide-vue-next](https://lucide.dev) 等任意"一个图标一个组件"的图标库，统一尺寸令牌与卡通风描边。**本项目规范：不使用 emoji 做图标。**
+第三方图标适配器：接 [lucide-vue-next](https://lucide.dev) 等任意"一个图标一个组件"的图标库，统一尺寸令牌与卡通风描边。**本项目规范：不使用 emoji 做图标。** Mochi 自身不内置也不使用任何图标——这是一个留给业务开发者的适配层。
 
 按图标名从图标库具名导入再传入（tree-shaking 友好，用到的图标才会进产物）：
-
-<IconDemo />
 
 ```vue
 <script setup lang="ts">
@@ -27,4 +25,8 @@ import { Sparkles, Rocket, Heart } from 'lucide-vue-next';
 
 ## 无障碍
 
-默认视为装饰性图标（`aria-hidden`）。传达信息的图标传 `label`，自动切换为 `role="img"` + `aria-label`（见上方演示第 4 枚"地点"图标）。
+默认视为装饰性图标（`aria-hidden`）。传达信息的图标传 `label`，自动切换为 `role="img"` + `aria-label`：
+
+```vue
+<MochiIcon :icon="Sparkles" label="闪光" />
+```

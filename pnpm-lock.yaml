@@ -14,9 +14,6 @@ importers:
 
   docs:
     dependencies:
-      lucide-vue-next:
-        specifier: ^1.0.0
-        version: 1.0.0(vue@3.5.44(typescript@5.9.3))
       mochi-island-ui:
         specifier: workspace:*
         version: link:../packages/mochi-island-ui
@@ -98,9 +95,6 @@ importers:
 
   playground:
     dependencies:
-      lucide-vue-next:
-        specifier: ^1.0.0
-        version: 1.0.0(vue@3.5.44(typescript@5.9.3))
       mochi-island-ui:
         specifier: workspace:*
         version: link:../packages/mochi-island-ui

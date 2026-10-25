@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue';
+import { computed, provide, ref, useId } from 'vue';
 import css from './MochiFormItem.module.css';
+import { MOCHI_FORM_ITEM } from '../../internal/formItemContext';
 
 defineOptions({ name: 'MochiFormItem' });
 
@@ -15,13 +16,23 @@ const props = defineProps<{
 
 const uid = useId();
 const messageId = computed(() => props.describedById ?? `${uid}-msg`);
+/** 由内部 FieldShell 注册：让上面的 <label for> 关联到真正的控件 */
+const fieldId = ref('');
+
+provide(MOCHI_FORM_ITEM, {
+  messageId,
+  invalid: computed(() => Boolean(props.error)),
+  setFieldId: (id: string) => {
+    fieldId.value = id;
+  },
+});
 </script>
 
 <template>
   <div :class="css.root" :data-invalid="error ? true : undefined">
-    <p v-if="label" :class="css.label">
+    <label v-if="label" :class="css.label" :for="fieldId || undefined">
       {{ label }}<span v-if="required" :class="css.required" aria-hidden="true">*</span>
-    </p>
+    </label>
 
     <slot :message-id="messageId" :invalid="Boolean(error)" />
 
