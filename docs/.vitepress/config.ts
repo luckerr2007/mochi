@@ -22,8 +22,9 @@ const zhSidebar = {
   ],
   '/components/': [
     {
-      text: '基础',
+      text: '组件',
       items: [
+        { text: '演示厅（全组件速览）', link: '/components/gallery' },
         { text: 'MochiButton', link: '/components/button' },
         { text: 'MochiTag', link: '/components/tag' },
         { text: 'MochiIcon（第三方图标适配）', link: '/components/icon' },
@@ -103,6 +104,7 @@ const zhSidebar = {
 const zhTheme = {
   nav: [
     { text: '指南', link: '/guide/installation' },
+    { text: '演示厅', link: '/components/gallery' },
     { text: '组件', link: '/components/button' },
     { text: '令牌', link: '/guide/theming' },
     { text: `v${pkgVersion}`, link: npmLink },
