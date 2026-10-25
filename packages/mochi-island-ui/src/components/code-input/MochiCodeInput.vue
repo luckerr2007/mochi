@@ -35,7 +35,6 @@ const groupEl = ref<HTMLDivElement>()
 /** 焦点定位走组内查询：模板函数 ref 在该编译路径上不触发，不依赖它 */
 function focusAt(index: number) {
   const inputs = groupEl.value?.querySelectorAll<HTMLInputElement>('input')
-  console.log('[dbg] focusAt', index, 'group:', Boolean(groupEl.value), 'inputs:', inputs?.length)
   inputs?.[Math.min(Math.max(index, 0), props.length - 1)]?.focus()
 }
 

@@ -81,7 +81,7 @@ toast({ title: '需要手动关闭', duration: 0 });        // 0 = 不自动消�
 | `confirmText` / `cancelText` | `确定` / `取消` | 按钮文案 |
 | `tone` | `'default'` | `'danger'` 时确认按钮换成危险色 |
 
-事件：`confirm` / `cancel`。确认后自动收起。
+气泡确认框：删除等危险操作前的轻量二次确认，确认/取消后自动收起。事件：`confirm` / `cancel`。
 
 <script setup>
 import { ref } from 'vue';

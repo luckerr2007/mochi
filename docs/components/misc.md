@@ -18,7 +18,7 @@
 | `items` | `{ key, label, disabled?, divider? }[]` | — | 必填 |
 | `width` | `string` | `'180px'` | 菜单宽度 |
 
-事件 `select(key)`。菜单项 `role="menuitem"`，`↑` `↓` 在可用项间移动焦点，
+下拉菜单：点触发器展开动作列表，`↑` `↓` 移动焦点、回车执行，菜单项 `role="menuitem"`。事件 `select(key)`。
 点击外部或 `Esc` 关闭（复用 Popover 的行为）。
 
 **动效**：菜单项按索引错峰 24ms 上浮淡入，比整块一起出现更像"被拉出来"。

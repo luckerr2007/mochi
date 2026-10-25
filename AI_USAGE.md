@@ -11,7 +11,7 @@
 | MochiAffix | ```vue | [/components/page-extras](/components/page-extras) |
 | MochiAlert | `role="status"`（polite），不会像 `role="alert"` 那样打断读屏正在读的内容。 | [/components/feedback](/components/feedback) |
 | MochiAnchor | 滚动监听是**被动的**（`passive: true`），每帧只做一次 `getBoundingClientRect` 循环。 | [/components/page-extras](/components/page-extras) |
-| MochiAutoComplete | 事件 `select(value)`。**自由输入是合法的**——它不是 Select，输什么就保留什么， | [/components/tree-search](/components/tree-search) |
+| MochiAutoComplete | 自动补全输入框：键入即过滤候选，`↑` `↓` 选择、回车确认。**自由输入是合法的**——它不是 Select，输什么就保留什么， | [/components/tree-search](/components/tree-search) |
 | MochiAvatar | 上面第三个用了不存在的图片，`@error` 后自动退回首字——这一类兜底不写就会露出破图。 | [/components/basics](/components/basics) |
 | MochiAvatarGroup | 头像组。叠放展示成员，悬停时头像被"拎起来"看一眼；超出的折叠成 +N。 | [/components/extras](/components/extras) |
 | MochiBackTop | （暂无文档页）按需引入路径 mochi-island-ui/components/back-top | [/components/back-top](/components/back-top) |
@@ -21,7 +21,7 @@
 | MochiButton | 胶囊按钮。主按钮带 3D 台阶，按下时整体下沉——位移量正好等于台阶高度。 | [/components/button](/components/button) |
 | MochiCalendar | - 换月时整块网格按方向滑入 8px 并淡入——往后翻从右边来，往前翻从左边来 | [/components/menu-calendar](/components/menu-calendar) |
 | MochiCarousel | :style="{ | [/components/carousel-time](/components/carousel-time) |
-| MochiCascader | 触发框显示 `小镇 / 沙滩` 这样的路径串。点有下级的项追加一列，点叶子收起并回传完整路径。 | [/components/tree-search](/components/tree-search) |
+| MochiCascader | 级联选择器：适合「省 / 市 / 区」这类逐级下钻的数据——点有下级的项追加一列，点叶子收起并回传完整路径，触发框显示 `小镇 / 沙滩` 这样的路径串。 | [/components/tree-search](/components/tree-search) |
 | MochiCheckbox | 复选框。勾选标记是矢量路径，边缘保持锐利，不做任何模糊。 | [/components/checkbox](/components/checkbox) |
 | MochiCodeInput | 兑换码输入。N 个单格，输一位自动前进，粘贴从当前位置铺开，填满抛 `complete`。 | [/components/extras](/components/extras) |
 | MochiCollapse | 完成日常委托、捐建公共设施、保持环境整洁都会累积评价。 | [/components/navigation](/components/navigation) |
@@ -34,13 +34,13 @@
 | MochiDialogBubble | 对话气泡。尾巴是两段 SVG 路径而不是 CSS 三角形——这样才能做出不对称的手绘弧度。 | [/components/dialog-bubble](/components/dialog-bubble) |
 | MochiDivider | 带 `role="separator"` 与 `aria-orientation`。 | [/components/basics](/components/basics) |
 | MochiDrawer | import { ref } from 'vue'; | [/components/overlays](/components/overlays) |
-| MochiDropdown | 事件 `select(key)`。菜单项 `role="menuitem"`，`↑` `↓` 在可用项间移动焦点， | [/components/misc](/components/misc) |
+| MochiDropdown | 下拉菜单：点触发器展开动作列表，`↑` `↓` 移动焦点、回车执行，菜单项 `role="menuitem"`。事件 `select(key)`。 | [/components/misc](/components/misc) |
 | MochiEmpty | 还有一个 `#action` 插槽放按钮。空状态的插图只用了虚线圆盘，不引入图片资源。 | [/components/feedback](/components/feedback) |
 | MochiForm | import { ref } from 'vue'; | [/components/forms-advanced](/components/forms-advanced) |
 | MochiFormItem | （暂无文档页）按需引入路径 mochi-island-ui/components/form | [/components/form](/components/form) |
 | MochiGrid | 12 列（可调）等宽栅格，`gap` 单位 px，子项用 MochiGridItem 控制 `span`；`sm`/`md`/`lg` 是从 640/768/1024px 起生效的覆盖档位，不传沿用更小档。 | [/components/layout-grid](/components/layout-grid) |
 | MochiGridItem | （暂无文档页）按需引入路径 mochi-island-ui/components/grid | [/components/grid](/components/grid) |
-| MochiIcon | 第三方图标适配器：接 [lucide-vue-next](https://lucide.dev) 等任意"一个图标一个组件"的图标库，统一尺寸令牌与卡通风描边。**本项目规范：不使用 emoji 做图标。** | [/components/icon](/components/icon) |
+| MochiIcon | 第三方图标适配器：接 [lucide-vue-next](https://lucide.dev) 等任意"一个图标一个组件"的图标库，统一尺寸令牌与卡通风描边。**本项目规范：不使用 emoji 做图标。** Mochi 自身不内置也不使用任何图标——这是一个留给业务开发者的适配层。 | [/components/icon](/components/icon) |
 | MochiImage | src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='150'%3E%3Crect width='240' height='150' fill='%23f6e7d2'/%3E%3Ccircle cx='120' cy='70' r='36' fill='%23e8833a'/%3E%3Ctext x='120' y='132' text-anchor='middle' font-size='14' fill='%236b5d4f'%3E中心广场%3C/text%3E%3C/svg%3E" | [/components/page-extras](/components/page-extras) |
 | MochiInput | 单行输入框。视觉上是一块内凹的槽，聚焦时槽内仍保持凹陷，焦点环画在槽外。 | [/components/input](/components/input) |
 | MochiInputNumber | `↑` / `↓` 也能增减；输入框是 `inputmode="decimal"`，手机上直接起数字键盘。 | [/components/forms-advanced](/components/forms-advanced) |
@@ -58,7 +58,7 @@
 | MochiModal | 对话框。遮罩淡入、面板弹起，焦点锁在内部。 | [/components/modal](/components/modal) |
 | MochiPagination | `v-model` 绑定当前页。页码折叠规则：总数超过 `siblings × 2 + 5` 时才出现省略号， | [/components/navigation-extra](/components/navigation-extra) |
 | MochiPanel | 带 header / body / footer 三段 anatomy 的面板。三层边框：外描边 → 4px 空气层 → 内描边。 | [/components/panel](/components/panel) |
-| MochiPopconfirm | 事件：`confirm` / `cancel`。确认后自动收起。 | [/components/toast-popover](/components/toast-popover) |
+| MochiPopconfirm | 气泡确认框：删除等危险操作前的轻量二次确认，确认/取消后自动收起。事件：`confirm` / `cancel`。 | [/components/toast-popover](/components/toast-popover) |
 | MochiPopover | 点击外部或按 Esc 关闭。 | [/components/toast-popover](/components/toast-popover) |
 | MochiProgress | 进度条。数值变化时条子平滑推进，越界值会被夹在 0–100%。 | [/components/progress](/components/progress) |
 | MochiProgressRing | 环形进度。数值变化时沿圆弧平滑推进，圆心显示百分比。 | [/components/extras](/components/extras) |
@@ -86,7 +86,7 @@
 | MochiToastHost | ```ts | [/components/toast-popover](/components/toast-popover) |
 | MochiTooltip | 鼠标移入、键盘聚焦都会显示；离开或失焦立即消失。气泡带 `role="tooltip"`。 | [/components/overlays](/components/overlays) |
 | MochiTransfer | 穿梭框。双栏勾选 + 中间按钮搬运，用于「从一批候选里挑出一组」的场景。 | [/components/transfer](/components/transfer) |
-| MochiTree | 递归渲染靠 `MochiTreeRow` 引用自身完成，缩进 = 深度 × 16px。 | [/components/tree-search](/components/tree-search) |
-| MochiTreeSelect | 就是 Tree 套了壳：FieldShell 的凹陷槽 + Popover + Tree 本体，展开动画直接继承。 | [/components/tree-search](/components/tree-search) |
-| MochiUpload | 事件：`change(files: File[])`。**它只负责选择和列表，不上传**——上传请求的鉴权、并发、 | [/components/table-upload](/components/table-upload) |
+| MochiTree | 树形控件：可展开/收起的层级列表，支持选中与禁用节点，缩进 = 深度 × 16px（递归渲染由 `MochiTreeRow` 引用自身完成）。 | [/components/tree-search](/components/tree-search) |
+| MochiTreeSelect | 树形选择器：从层级数据里选一个节点。Tree 套了 FieldShell 凹陷槽 + Popover 的壳，展开动画与 Tree 一致。 | [/components/tree-search](/components/tree-search) |
+| MochiUpload | 文件选择与待传清单：点击或拖入选择文件、列表展示。**它只负责选择和列表，不上传**——鉴权、并发、进度由业务实现。事件：`change(files: File[])`。 | [/components/table-upload](/components/table-upload) |
 | MochiWatermark | 这块内容的水印是 canvas 生成的：文字先画到离屏 canvas，旋转后转成 dataURL， | [/components/page-extras](/components/page-extras) |

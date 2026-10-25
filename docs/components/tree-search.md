@@ -15,7 +15,7 @@
 | `v-model:selected` | `string` | `''` | 选中节点的 key |
 | `label` | `string` | `'树'` | 无障碍名称 |
 
-递归渲染靠 `MochiTreeRow` 引用自身完成，缩进 = 深度 × 16px。
+树形控件：可展开/收起的层级列表，支持选中与禁用节点，缩进 = 深度 × 16px（递归渲染由 `MochiTreeRow` 引用自身完成）。
 
 ### 动效
 
@@ -41,7 +41,7 @@
 | `v-model` | `string[]` | `[]` | **从根到叶的 key 路径** |
 | `label` / `hint` / `placeholder` / `disabled` / `invalid` | — | — | 与其他表单件一致 |
 
-触发框显示 `小镇 / 沙滩` 这样的路径串。点有下级的项追加一列，点叶子收起并回传完整路径。
+级联选择器：适合「省 / 市 / 区」这类逐级下钻的数据——点有下级的项追加一列，点叶子收起并回传完整路径，触发框显示 `小镇 / 沙滩` 这样的路径串。
 
 **动效**：新列从右侧 6px 滑入。列以 level 为 key，只有新增的那列会挂载，
 所以动画永远只播一次，不会整排重播。
@@ -58,7 +58,7 @@
 | `v-model` | `string` | `''` | 选中节点的 key |
 | `defaultExpandAll` | `boolean` | `true` | 面板打开时是否全展开 |
 
-就是 Tree 套了壳：FieldShell 的凹陷槽 + Popover + Tree 本体，展开动画直接继承。
+树形选择器：从层级数据里选一个节点。Tree 套了 FieldShell 凹陷槽 + Popover 的壳，展开动画与 Tree 一致。
 单选语义；要选多个请用 Transfer（待写）。
 
 ## MochiAutoComplete
@@ -74,8 +74,8 @@
 | `limit` | `number` | `8` | 最多展示几条 |
 | `label` / `hint` / `placeholder` / `disabled` / `invalid` | — | — | 与其他表单件一致 |
 
-事件 `select(value)`。**自由输入是合法的**——它不是 Select，输什么就保留什么，
-候选项只是辅助。需要"必须从列表选"的语义请用 Select。
+自动补全输入框：键入即过滤候选，`↑` `↓` 选择、回车确认。**自由输入是合法的**——它不是 Select，输什么就保留什么，
+候选项只是辅助；需要"必须从列表选"的语义请用 Select。事件 `select(value)`。
 
 ### 交互
 
