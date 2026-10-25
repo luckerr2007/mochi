@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { MochiTreeNode } from './types';
 import css from './MochiTree.module.css';
+import vcss from '../../styles/virtual.module.css';
 
 /**
  * 递归行：自己引用自己（名字与文件名一致）。
@@ -13,6 +14,8 @@ const props = defineProps<{
   depth: number;
   selectedKey: string;
   expandedKeys: string[];
+  /** 由根组件按总节点数算好传下来：行加 content-visibility（CSS 虚拟化） */
+  virtual?: boolean;
 }>();
 
 const emit = defineEmits<{ select: [MochiTreeNode]; toggle: [MochiTreeNode] }>();
@@ -24,9 +27,10 @@ const isOpen = () => props.expandedKeys.includes(props.node.key);
 <template>
   <li :class="css.item" role="none">
     <button
-      :class="css.row"
+      :class="[css.row, virtual && vcss.row]"
       type="button"
       role="treeitem"
+      :data-virtual="virtual || undefined"
       :style="{ paddingLeft: `${depth * 16 + 8}px` }"
       :aria-level="depth + 1"
       :aria-selected="selectedKey === node.key || undefined"
@@ -54,6 +58,7 @@ const isOpen = () => props.expandedKeys.includes(props.node.key);
           :depth="depth + 1"
           :selected-key="selectedKey"
           :expanded-keys="expandedKeys"
+          :virtual="virtual"
           @select="emit('select', $event)"
           @toggle="emit('toggle', $event)"
         />

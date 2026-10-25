@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, ref, TransitionGroup } from 'vue';
+import { computed, onBeforeUnmount, ref, TransitionGroup, watch } from 'vue';
 import type { MochiTableColumn, MochiTableSort } from './types';
 import css from './MochiTable.module.css';
+import vcss from '../../styles/virtual.module.css';
+import { shouldVirtualize } from '../../styles/virtual';
 import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiTable' });
@@ -16,8 +18,19 @@ const props = withDefaults(
     rowKey?: string;
     striped?: boolean;
     emptyText?: string;
+    /**
+     * CSS 虚拟化：给行加 content-visibility（屏外行跳过布局/绘制，DOM 保留）。
+     * opt-in：M 系列芯片 + 简单文本单元格的基准里首渲染有约三成记账开销，
+     * 低端设备目标、复杂单元格或超长列表再开。
+     */
+    virtual?: boolean;
+    /**
+     * 渐进分片渲染：行数超阈值时先渲染首块（200 行）尽快出屏，其余行在
+     * idle 期分片补齐，DOM 最终全量保留（可 Ctrl+F）。排序/换数据会重置分片。
+     */
+    progressive?: boolean;
   }>(),
-  { rowKey: 'id' },
+  { rowKey: 'id', virtual: false, progressive: true },
 );
 
 const emit = defineEmits<{ 'sort-change': [MochiTableSort | null] }>();
@@ -52,6 +65,52 @@ function ariaSort(column: MochiTableColumn) {
   if (sort.value?.key !== column.key) return 'none';
   return sort.value.order === 'asc' ? 'ascending' : 'descending';
 }
+
+const virtualOn = computed(() => shouldVirtualize(sortedRows.value.length, props.virtual !== false));
+
+/** 渐进分片：先出首块，其余行 idle 期补齐（jsdom 里 requestIdleCallback 缺席，退化为 setTimeout） */
+const CHUNK = 200;
+/** 块大小指数翻倍封顶：追加块要对既有列表做 keyed diff，小块多次会近似平方级，指数块摊薄成线性 */
+const MAX_CHUNK = 1600;
+const scheduleGrow: (cb: () => void) => number =
+  typeof requestIdleCallback === 'function'
+    ? (cb) => requestIdleCallback(cb, { timeout: 200 })
+    : (cb) => window.setTimeout(cb, 16) as unknown as number;
+const cancelGrow: (id: number) => void =
+  typeof cancelIdleCallback === 'function' ? cancelIdleCallback : window.clearTimeout;
+
+const progressiveOn = computed(() => shouldVirtualize(sortedRows.value.length, props.progressive !== false));
+const renderedCount = ref<number>(Number.POSITIVE_INFINITY);
+const visibleRows = computed(() => sortedRows.value.slice(0, renderedCount.value));
+let growId: number | null = null;
+let nextChunk = CHUNK;
+
+function grow() {
+  growId = null;
+  renderedCount.value = Math.min(renderedCount.value + nextChunk, sortedRows.value.length);
+  nextChunk = Math.min(nextChunk * 2, MAX_CHUNK);
+  if (renderedCount.value < sortedRows.value.length) growId = scheduleGrow(grow);
+}
+
+watch(
+  sortedRows,
+  (rows) => {
+    if (growId !== null) cancelGrow(growId);
+    growId = null;
+    nextChunk = CHUNK;
+    if (!progressiveOn.value) {
+      renderedCount.value = Number.POSITIVE_INFINITY;
+      return;
+    }
+    renderedCount.value = Math.min(CHUNK, rows.length);
+    if (renderedCount.value < rows.length) growId = scheduleGrow(grow);
+  },
+  { immediate: true },
+);
+
+onBeforeUnmount(() => {
+  if (growId !== null) cancelGrow(growId);
+});
 </script>
 
 <template>
@@ -92,9 +151,10 @@ function ariaSort(column: MochiTableColumn) {
       <!-- 排序/过滤导致行序变化时，行按 key 复用并靠 move 过渡滑到新位置，而不是瞬移 -->
       <TransitionGroup tag="tbody" :class="css.tbody" :move-class="css.rowMove">
         <tr
-          v-for="(row, index) in sortedRows"
+          v-for="(row, index) in visibleRows"
           :key="String(row[rowKey] ?? index)"
-          :class="css.tr"
+          :class="[css.tr, virtualOn && vcss.row]"
+          :data-virtual="virtualOn || undefined"
           :style="{ '--_i': index }"
         >
           <td

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { applyTheme, useToast, type MochiTheme } from 'mochi-island-ui';
 
 const sections = [
@@ -16,6 +16,7 @@ const sections = [
   { id: 'more-misc', label: '补充件', title: 'Tabs · Result · QRCode · Space · Link', desc: '标签页内容切换、结果页、二维码与排版。' },
   { id: 'extra2', label: '新到件', title: 'AvatarGroup · TagInput · Ring · Code · Countdown', desc: '头像组、标签输入、环形进度、兑换码与倒计时。' },
   { id: 'dialog', label: '对话', title: 'DialogBubble', desc: '手绘尾巴，可选打字机。' },
+  { id: 'virtual', label: '万行压测', title: 'CSS 虚拟化', desc: 'content-visibility：DOM 全保留，屏外行不渲染。' },
   { id: 'tokens', label: '令牌', title: 'Design tokens', desc: '全部 --mochi-* 变量，换肤只改这里。' },
 ] as const;
 
@@ -112,6 +113,42 @@ const furniture = [
   { id: 2, name: '贝壳灯', price: 860, status: '在售' },
   { id: 3, name: '化石模型', price: 3500, status: '已售出' },
 ];
+// 万行压测：渐进分片（默认开）与 CSS 虚拟化（opt-in）A/B，v-if 首次进入才渲染并计时
+const stressVirtual = ref(false);
+const stressProgressive = ref(true);
+const stressMs = ref<number | null>(null);
+const stressSelect = ref('');
+const stressColumns = [
+  { key: 'id', title: 'ID', sortable: true, align: 'right' as const },
+  { key: 'name', title: '藏品' },
+  { key: 'owner', title: '负责人' },
+  { key: 'stars', title: '收藏', sortable: true, align: 'right' as const },
+];
+const stressRows = Array.from({ length: 10_000 }, (_, i) => ({
+  id: i + 1,
+  name: `藏品 ${String(i + 1).padStart(5, '0')}`,
+  owner: ['阿饼', '绵绵', '荷叶', '豆豆'][i % 4],
+  stars: (i * 37) % 999,
+}));
+const stressOptions = Array.from({ length: 1_000 }, (_, i) => ({
+  value: String(i),
+  label: `选项 ${String(i).padStart(4, '0')}`,
+}));
+const stressTree = Array.from({ length: 60 }, (_, i) => ({
+  key: `series-${i}`,
+  label: `系列 ${i}`,
+  children: Array.from({ length: 40 }, (_, j) => ({ key: `series-${i}-${j}`, label: `条目 ${i}-${j}` })),
+}));
+
+watch(active, async (id) => {
+  if (id !== 'virtual' || stressMs.value !== null) return;
+  const start = performance.now();
+  await nextTick();
+  requestAnimationFrame(() => {
+    stressMs.value = Math.round(performance.now() - start);
+  });
+});
+
 const pickedMenu = ref('');
 const menuItems = [
   { key: 'edit', label: '编辑' },
@@ -693,6 +730,50 @@ onMounted(() => {
       </section>
 
       <!-- 令牌 -->
+      <section v-if="active === 'virtual'" class="spec">
+        <div class="surface">
+          <div class="row" style="justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--mochi-space-4)">
+            <strong>万行渲染：渐进分片 + CSS 虚拟化</strong>
+            <div style="display: inline-flex; gap: var(--mochi-space-6); align-items: center">
+              <label style="display: inline-flex; gap: var(--mochi-space-2); align-items: center">
+                <MochiSwitch v-model="stressProgressive" />
+                渐进分片
+              </label>
+              <label style="display: inline-flex; gap: var(--mochi-space-2); align-items: center">
+                <MochiSwitch v-model="stressVirtual" />
+                CSS 虚拟化
+              </label>
+              <span style="color: var(--mochi-ink-soft)">首屏 {{ stressMs === null ? '…' : `${stressMs} ms` }}</span>
+            </div>
+          </div>
+          <p class="desc" style="margin: var(--mochi-space-2) 0 0; color: var(--mochi-ink-soft)">
+            一万行表格 / 一千项选择器 / 两千多节点树。渐进分片：先渲染首块 200 行尽快出屏，
+            其余行 idle 期补齐，DOM 最终全量保留（可 Ctrl+F、可复制）。CSS 虚拟化（opt-in）：
+            屏外行跳过布局与绘制，适合低端设备与复杂单元格。
+          </p>
+
+          <MochiDivider label="一万行表格" />
+          <MochiTable
+            :columns="stressColumns"
+            :rows="stressRows"
+            striped
+            :virtual="stressVirtual"
+            :progressive="stressProgressive"
+          />
+
+          <MochiDivider label="一千项选择器" />
+          <MochiSelect v-model="stressSelect" :options="stressOptions" :virtual="stressVirtual" label="藏品检索" />
+
+          <MochiDivider label="两千节点树" />
+          <MochiTree
+            default-expand-all
+            :data="stressTree"
+            :virtual="stressVirtual"
+            style="max-height: 320px; overflow: auto; border: var(--mochi-border-hairline) solid var(--mochi-line); border-radius: var(--mochi-radius-md)"
+          />
+        </div>
+      </section>
+
       <section v-show="active === 'tokens'" class="spec">
         <div class="surface">
           <div class="swatches">

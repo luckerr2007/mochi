@@ -128,3 +128,8 @@
 .children.children > * {
   margin-top: 0;
 }
+
+/* CSS 虚拟化的行高估算：仅首绘前占位，之后浏览器记住每行真实尺寸 */
+.root {
+  --mochi-cv-h: 28px;
+}

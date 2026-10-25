@@ -3,6 +3,8 @@ import { computed, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue';
 import FieldShell from '../../internal/FieldShell.vue';
 import type { MochiSelectOption } from './types';
 import css from './MochiSelect.module.css';
+import vcss from '../../styles/virtual.module.css';
+import { shouldVirtualize } from '../../styles/virtual';
 import { useMessages } from '../../locale';
 
 defineOptions({ name: 'MochiSelect' });
@@ -18,8 +20,13 @@ const props = withDefaults(
     placeholder?: string;
     disabled?: boolean;
     invalid?: boolean;
+    /**
+     * CSS 虚拟化（opt-in）：选项超阈值时给选项加 content-visibility，
+     * 弹层里屏外选项跳过布局/绘制、DOM 保留。超长选项列表再开。
+     */
+    virtual?: boolean;
   }>(),
-  {},
+  { virtual: false },
 );
 
 const model = defineModel<string>({ default: '' });
@@ -43,6 +50,7 @@ const selected = computed(() => props.options.find((option) => option.value === 
 const enabledIndexes = computed(() =>
   props.options.map((option, index) => (option.disabled ? -1 : index)).filter((index) => index >= 0),
 );
+const virtualOn = computed(() => shouldVirtualize(props.options.length, props.virtual !== false));
 
 function show() {
   if (props.disabled) return;
@@ -192,8 +200,9 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onPointerDown)
           <li
             v-for="(option, index) in options"
             :key="option.value"
-            :class="css.option"
+            :class="[css.option, virtualOn && vcss.row]"
             role="option"
+            :data-virtual="virtualOn || undefined"
             :aria-selected="option.value === model"
             :aria-disabled="option.disabled || undefined"
             :data-active="index === activeIndex || undefined"

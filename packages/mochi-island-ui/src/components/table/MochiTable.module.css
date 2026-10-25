@@ -159,3 +159,8 @@
     transition: none;
   }
 }
+
+/* CSS 虚拟化的行高估算：仅首绘前占位，之后浏览器记住每行真实尺寸 */
+.wrap {
+  --mochi-cv-h: 44px;
+}

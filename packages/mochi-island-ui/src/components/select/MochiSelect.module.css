@@ -165,3 +165,8 @@
     animation: none;
   }
 }
+
+/* CSS 虚拟化的行高估算：与 show() 里弹层高度估算（每项 40px）保持一致 */
+.list {
+  --mochi-cv-h: 40px;
+}

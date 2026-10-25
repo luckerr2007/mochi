@@ -1,0 +1,16 @@
+/*
+ * CSS 虚拟化：让"行级"元素在滚出视口后跳过布局/绘制/合成。
+ *
+ * 取自 GitHub《Improving site performance by shipping more CSS》的思路
+ * （把渲染成本从运行时 JS 移回平台 CSS）：
+ *   content-visibility: auto  —— 屏外行不进渲染树，DOM 仍在（可 Ctrl+F、可复制）；
+ *   contain-intrinsic-size: auto … —— 屏外行用估算高度占位，auto 前缀让浏览器
+ *     记住每行首绘后的真实尺寸，之后滚动不再跳。
+ *
+ * 浏览器不支持时这两条声明被整体忽略，行为退回全量渲染，无需 @supports 分支。
+ * 行高估算由使用方在容器上覆盖 --mochi-cv-h（默认 40px，只影响首绘前的占位）。
+ */
+.row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--mochi-cv-h, 40px);
+}
