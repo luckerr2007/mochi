@@ -81,8 +81,10 @@ describe('硬件自适应（virtual: auto）', () => {
 })
 
 describe('渐进分片渲染（progressive，默认开启）', () => {
-  /** 行数断言用 tr[style]（行带 --_i 错峰变量）：jsdom 里 TransitionGroup 的行不一定挂在 tbody 下 */
-  const rowcount = (wrapper: ReturnType<typeof mount>) => wrapper.findAll('tr[style]').length
+  /** 行数断言用 data-mochi-row（v-memo 生效时行带此静态标记）：
+   *  jsdom 里 TransitionGroup 的行不一定挂在 tbody 下，行也不再挂 --_i style */
+  const rowcount = (wrapper: ReturnType<typeof mount>) =>
+    wrapper.findAll('tr[data-mochi-row]').length
 
   /** 等分片补齐（jsdom 无 requestIdleCallback，走 setTimeout(16) 退路） */
   async function untilRowcount(wrapper: ReturnType<typeof mount>, want: number, deadlineMs = 5000) {
@@ -119,4 +121,42 @@ describe('渐进分片渲染（progressive，默认开启）', () => {
     wrapper.unmount()
     await new Promise((resolve) => setTimeout(resolve, 120))
   })
+
+  it('排序纯重排走 v-memo 缓存：行内容与顺序仍正确', async () => {
+    const sortable = [
+      { key: 'id', title: 'ID', sortable: true },
+      { key: 'name', title: '名称' },
+    ]
+    const wrapper = mount(MochiTable, { props: { columns: sortable, rows: rows(50) } })
+    // 默认单元格（无 cell-* 插槽）且超阈值：v-memo 自动启用
+    expect(wrapper.find('tr[data-mochi-row]').exists()).toBe(true)
+
+    const textOf = (i: number) => wrapper.findAll('tr[data-mochi-row]')[i]?.find('td')?.text()
+    expect(textOf(0)).toBe('0')
+
+    await wrapper.find('th button').trigger('click') // 升序
+    expect(textOf(0)).toBe('0')
+    await wrapper.find('th button').trigger('click') // 降序
+    expect(textOf(0)).toBe('49')
+    await wrapper.find('th button').trigger('click') // 取消排序
+    expect(textOf(0)).toBe('0')
+  })
+
+  it('补齐过程中排序：全部补齐后顺序必须与排序态一致（渐进+v-memo+TransitionGroup 组合）', async () => {
+    const sortable = [{ key: 'id', title: 'ID', sortable: true }]
+    const wrapper = mount(MochiTable, { props: { columns: sortable, rows: rows(600) } })
+    expect(rowcount(wrapper)).toBe(200)
+    // 降序排序触发分片重置并重新补齐
+    await wrapper.find('th button').trigger('click')
+    await wrapper.find('th button').trigger('click')
+    await untilRowcount(wrapper, 600)
+    const ids = wrapper.findAll('tr[data-mochi-row]').map((tr) => tr.find('td')?.text())
+    // 降序：0 反转前是 0..599，降序应为 599 → 0
+    expect(ids[0]).toBe('599')
+    expect(ids[1]).toBe('598')
+    expect(ids[599]).toBe('0')
+    // 全表单调递减，不允许乱序
+    const sorted = [...ids].sort((a, b) => Number(b) - Number(a))
+    expect(ids).toEqual(sorted)
+  }, 12_000)
 })

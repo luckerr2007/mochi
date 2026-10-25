@@ -96,9 +96,41 @@
   background: transparent;
   border-top: 0;
   transition: background-color var(--mochi-duration-base) var(--mochi-ease-out);
-  /* 行入场错峰：只给前 8 行阶梯延迟，长表不等（--_i 由行内 style 提供） */
   animation: rowIn var(--mochi-duration-base) var(--mochi-spring-soft) backwards;
-  animation-delay: calc(min(var(--_i, 0), 8) * var(--mochi-stagger));
+}
+
+/* 行入场错峰：只给前 8 行阶梯延迟，长表不等。
+   延迟用 nth-child 而不是行内 --_i——行上不挂 index 类绑定，排序重渲染才能吃 v-memo 的缓存 */
+.tr.tr:nth-child(2) {
+  animation-delay: calc(1 * var(--mochi-stagger));
+}
+
+.tr.tr:nth-child(3) {
+  animation-delay: calc(2 * var(--mochi-stagger));
+}
+
+.tr.tr:nth-child(4) {
+  animation-delay: calc(3 * var(--mochi-stagger));
+}
+
+.tr.tr:nth-child(5) {
+  animation-delay: calc(4 * var(--mochi-stagger));
+}
+
+.tr.tr:nth-child(6) {
+  animation-delay: calc(5 * var(--mochi-stagger));
+}
+
+.tr.tr:nth-child(7) {
+  animation-delay: calc(6 * var(--mochi-stagger));
+}
+
+.tr.tr:nth-child(8) {
+  animation-delay: calc(7 * var(--mochi-stagger));
+}
+
+.tr.tr:nth-child(9) {
+  animation-delay: calc(8 * var(--mochi-stagger));
 }
 
 /* 排序时的 FLIP 位移：TransitionGroup 的 move-class，行滑到新位置。

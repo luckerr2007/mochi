@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, useSlots, watch } from 'vue'
 import type { MochiTableColumn, MochiTableSort } from './types'
 import css from './MochiTable.module.css'
 import vcss from '../../styles/virtual.module.css'
-import { shouldVirtualize } from '../../styles/virtual'
+import { shouldVirtualize, VIRTUAL_ROW_THRESHOLD } from '../../styles/virtual'
 import type { MochiVirtualSetting } from '../../styles/virtual'
 import { useMessages } from '../../locale'
 
@@ -69,6 +69,18 @@ function ariaSort(column: MochiTableColumn) {
 }
 
 const virtualOn = computed(() => shouldVirtualize(sortedRows.value.length, props.virtual))
+
+/**
+ * 行级 v-memo：行数超阈值且没有自定义 cell-* 插槽时自动启用。纯重排（排序）
+ * 时行对象身份不变，缓存直接命中，跳过整棵子树重渲染。自定义插槽可能读
+ * slot 的 index（重排后缓存里是旧序号），有插槽就不启用，正确性优先。
+ */
+const slots = useSlots()
+const memoOn = computed(
+  () =>
+    sortedRows.value.length > VIRTUAL_ROW_THRESHOLD &&
+    !Object.keys(slots).some((name) => name.startsWith('cell-')),
+)
 
 /**
  * 渐进分片调度内核：先出首块，其余行 idle 期补齐（jsdom 里 requestIdleCallback
@@ -175,14 +187,17 @@ onBeforeUnmount(() => {
         </tr>
       </thead>
 
-      <!-- 排序/过滤导致行序变化时，行按 key 复用并靠 move 过渡滑到新位置，而不是瞬移 -->
+      <!-- 排序/过滤导致行序变化时，行按 key 复用并靠 move 过渡滑到新位置，而不是瞬移。
+           v-memo 缓存行子树：纯重排（排序）时未变的行跳过整棵重渲染，只剩 DOM 移动。
+           行上不能挂 index 类绑定（style/data-index 会让缓存过期），错峰延迟走 nth-child -->
       <TransitionGroup tag="tbody" :class="css.tbody" :move-class="css.rowMove">
         <tr
           v-for="(row, index) in visibleRows"
           :key="String(row[rowKey] ?? index)"
+          v-memo="memoOn ? [row] : undefined"
           :class="[css.tr, virtualOn && vcss.row]"
           :data-virtual="virtualOn || undefined"
-          :style="{ '--_i': index }"
+          :data-mochi-row="memoOn || undefined"
         >
           <td
             v-for="column in columns"
