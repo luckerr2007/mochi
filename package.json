@@ -17,6 +17,7 @@
     "lint": "eslint . && stylelint \"packages/mochi-island-ui/src/**/*.css\" \"playground/src/**/*.css\"",
     "lint:fix": "eslint . --fix && stylelint \"packages/mochi-island-ui/src/**/*.css\" \"playground/src/**/*.css\" --fix",
     "format": "prettier --write \"packages/mochi-island-ui/src/**/*.{ts,vue,css}\" \"playground/src/**/*.{ts,vue,css}\"",
+    "test:visual": "playwright test",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -35,6 +36,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
+    "@playwright/test": "^1.64.1",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.9.0",
     "eslint": "^10.13.0",
