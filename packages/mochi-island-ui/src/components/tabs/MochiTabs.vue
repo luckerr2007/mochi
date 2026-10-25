@@ -13,6 +13,7 @@ const uid = useId();
 const listEl = ref<HTMLElement>();
 /** 选中指示块的位置与宽度，靠 JS 量一次再交给 CSS 过渡 */
 const indicator = ref({ left: 0, width: 0 });
+let ro: ResizeObserver | undefined;
 
 function syncIndicator() {
   const list = listEl.value;
@@ -23,9 +24,18 @@ function syncIndicator() {
 
 onMounted(() => {
   syncIndicator();
+  // 在 display:none 的容器里挂载时（如 v-show 分节）量到 0 宽，指示块会塌成竖线；
+  // 变可见/字体加载引起的尺寸变化都由 ResizeObserver 兜底重测
+  if (typeof ResizeObserver === 'function' && listEl.value) {
+    ro = new ResizeObserver(() => syncIndicator());
+    ro.observe(listEl.value);
+  }
   window.addEventListener('resize', syncIndicator);
 });
-onBeforeUnmount(() => window.removeEventListener('resize', syncIndicator));
+onBeforeUnmount(() => {
+  ro?.disconnect();
+  window.removeEventListener('resize', syncIndicator);
+});
 watch(model, () => nextTick(syncIndicator));
 
 const enabled = computed(() => props.items.filter((item) => !item.disabled));

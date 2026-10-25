@@ -20,6 +20,7 @@ const zhSidebar = {
         { text: 'MochiButton', link: '/components/button' },
         { text: 'MochiTag', link: '/components/tag' },
         { text: 'MochiIcon（第三方图标适配）', link: '/components/icon' },
+        { text: 'Layout 骨架 · Grid 栅格', link: '/components/layout-grid' },
         { text: 'MochiDivider · Badge · Avatar', link: '/components/basics' },
         { text: 'Dropdown · Result · Space · Link · Text · CountUp', link: '/components/misc' },
         { text: 'AvatarGroup · TagInput · Ring · CodeInput · Countdown', link: '/components/extras' },

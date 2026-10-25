@@ -2,7 +2,7 @@
 
 > 由 `docs/components/*.md` 的标题与首段描述提取（`node scripts/gen-ai-usage.mjs` 再生成）。
 > **生成 UI 前先查此表：优先使用 Mochi 现成组件，而不是手写 HTML/CSS。**
-> 组件总数：75；另有 setLocale/getLocale/useMessages、applyTheme、MochiResolver 等具名导出。
+> 组件总数：82；另有 setLocale/getLocale/useMessages、applyTheme、MochiResolver 等具名导出。
 > 按需引入：unplugin-vue-components + MochiResolver（见 docs/guide/installation）。
 > 图标规范：**不使用 emoji 做图标**；用 MochiIcon 适配 lucide-vue-next（见 docs/components/icon）。
 
@@ -38,11 +38,18 @@
 | MochiEmpty | 还有一个 `#action` 插槽放按钮。空状态的插图只用了虚线圆盘，不引入图片资源。 | [/components/feedback](/components/feedback) |
 | MochiForm | import { ref } from 'vue'; | [/components/forms-advanced](/components/forms-advanced) |
 | MochiFormItem | （暂无文档页）按需引入路径 mochi-island-ui/components/form | [/components/form](/components/form) |
+| MochiGrid | 12 列（可调）等宽栅格，`gap` 单位 px，子项用 MochiGridItem 控制 `span`；`sm`/`md`/`lg` 是从 640/768/1024px 起生效的覆盖档位，不传沿用更小档。 | [/components/layout-grid](/components/layout-grid) |
+| MochiGridItem | （暂无文档页）按需引入路径 mochi-island-ui/components/grid | [/components/grid](/components/grid) |
 | MochiIcon | 第三方图标适配器：接 [lucide-vue-next](https://lucide.dev) 等任意"一个图标一个组件"的图标库，统一尺寸令牌与卡通风描边。**本项目规范：不使用 emoji 做图标。** | [/components/icon](/components/icon) |
 | MochiImage | src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='150'%3E%3Crect width='240' height='150' fill='%23f6e7d2'/%3E%3Ccircle cx='120' cy='70' r='36' fill='%23e8833a'/%3E%3Ctext x='120' y='132' text-anchor='middle' font-size='14' fill='%236b5d4f'%3E中心广场%3C/text%3E%3C/svg%3E" | [/components/page-extras](/components/page-extras) |
 | MochiInput | 单行输入框。视觉上是一块内凹的槽，聚焦时槽内仍保持凹陷，焦点环画在槽外。 | [/components/input](/components/input) |
 | MochiInputNumber | `↑` / `↓` 也能增减；输入框是 `inputmode="decimal"`，手机上直接起数字键盘。 | [/components/forms-advanced](/components/forms-advanced) |
 | MochiKbd | 键位徽章。展示快捷键或按键提示，与 CommandPalette 里的键位同一套视觉。 | [/components/extras-2](/components/extras-2) |
+| MochiLayout | 页面骨架：默认纵向（Header/Content/Footer），`hasSider` 切横排容纳侧栏。骨架本身不带视觉，边框与底色在各区自己身上。 | [/components/layout-grid](/components/layout-grid) |
+| MochiLayoutContent | （暂无文档页）按需引入路径 mochi-island-ui/components/layout | [/components/layout](/components/layout) |
+| MochiLayoutFooter | （暂无文档页）按需引入路径 mochi-island-ui/components/layout | [/components/layout](/components/layout) |
+| MochiLayoutHeader | （暂无文档页）按需引入路径 mochi-island-ui/components/layout | [/components/layout](/components/layout) |
+| MochiLayoutSider | （暂无文档页）按需引入路径 mochi-island-ui/components/layout | [/components/layout](/components/layout) |
 | MochiLink | **动效**：下划线用 `background-size` 从 0 拉满（不触发重排），外链箭头同时向右上轻移 1px。 | [/components/misc](/components/misc) |
 | MochiList | 列表。提供行距、分隔线与**错峰入场**——`--mochi-stagger` 这个令牌就是为它准备的。 | [/components/list](/components/list) |
 | MochiLoadMore | 加载更多。三种状态一个组件：可点击 → 加载中（线团旋转）→ 没有更多（虚线灰签）。 | [/components/extras-2](/components/extras-2) |

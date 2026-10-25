@@ -1,0 +1,129 @@
+/*
+ * 令牌：--mochi-surface / --mochi-line / --mochi-ink-soft / --mochi-space-*
+ *        --mochi-duration-base / --mochi-spring / --mochi-shadow-soft
+ * 骨架是结构组件：视觉克制，边框一律 hairline，间距走令牌。
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  font-family: var(--mochi-font-family);
+}
+
+.root.row {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+/* ---------- Header ---------- */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--mochi-space-3);
+  padding: var(--mochi-space-3) var(--mochi-space-6);
+  border-bottom: var(--mochi-border-hairline) solid var(--mochi-line);
+  background: var(--mochi-surface);
+}
+
+.header.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ---------- Sider ---------- */
+.sider {
+  position: relative;
+  display: flex;
+  flex: none;
+  width: var(--sider-w);
+  border-right: var(--mochi-border-hairline) solid var(--mochi-line);
+  background: var(--mochi-surface);
+  transition: width var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.siderBody {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--mochi-space-4);
+}
+
+/* 折叠态宽度贴着折叠钮；data-collapsed 由 JS 翻转 */
+.sider.collapsible {
+  --sider-collapsed-w: 36px;
+}
+
+.sider[data-collapsed] {
+  width: var(--sider-collapsed-w);
+}
+
+.sider[data-collapsed] .siderBody {
+  visibility: hidden;
+  padding: var(--mochi-space-4) 0;
+}
+
+.siderToggle {
+  position: absolute;
+  top: var(--mochi-space-4);
+  right: -12px;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: var(--mochi-border-hairline) solid var(--mochi-line);
+  border-radius: var(--mochi-radius-full);
+  background: var(--mochi-surface);
+  color: var(--mochi-ink-soft);
+  box-shadow: var(--mochi-shadow-soft);
+  cursor: pointer;
+  transition: color var(--mochi-duration-fast) var(--mochi-ease-out);
+}
+
+.siderToggle:hover {
+  color: var(--mochi-ink);
+}
+
+.siderToggle:focus-visible {
+  outline: none;
+  box-shadow: var(--mochi-focus-ring);
+}
+
+.siderToggle svg {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--mochi-duration-base) var(--mochi-spring);
+}
+
+.sider[data-collapsed] .siderToggle svg {
+  transform: rotate(180deg);
+}
+
+/* ---------- Content / Footer ---------- */
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: var(--mochi-space-6);
+}
+
+.footer {
+  padding: var(--mochi-space-4) var(--mochi-space-6);
+  border-top: var(--mochi-border-hairline) solid var(--mochi-line);
+  color: var(--mochi-ink-soft);
+  font-size: var(--mochi-font-size-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sider,
+  .siderToggle svg {
+    transition: none;
+  }
+}

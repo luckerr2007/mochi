@@ -1,6 +1,6 @@
 {
   "name": "mochi-island-ui",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Cartoon-soft Vue 3 component library. Design tokens are the API.",
   "type": "module",
   "keywords": [

@@ -1,0 +1,34 @@
+/*
+ * 令牌：--mochi-font-family
+ * 栅格是纯布局组件：不给子项任何视觉，卡片感交给内容自己。
+ */
+.root {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 12), minmax(0, 1fr));
+  gap: var(--grid-gap, 12px);
+  font-family: var(--mochi-font-family);
+}
+
+.item {
+  grid-column: span var(--span, 12);
+  min-width: 0;
+}
+
+/* 断点覆盖：只在传了对应档位时生效（data 属性存在性门控） */
+@media (min-width: 640px) {
+  .item[data-sm] {
+    grid-column: span var(--sm);
+  }
+}
+
+@media (min-width: 768px) {
+  .item[data-md] {
+    grid-column: span var(--md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .item[data-lg] {
+    grid-column: span var(--lg);
+  }
+}

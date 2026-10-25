@@ -146,6 +146,16 @@ export { MochiImage } from './components/image';
 
 export { MochiIcon } from './components/icon';
 
+export { MochiGrid, MochiGridItem } from './components/grid';
+
+export {
+  MochiLayout,
+  MochiLayoutContent,
+  MochiLayoutFooter,
+  MochiLayoutHeader,
+  MochiLayoutSider,
+} from './components/layout';
+
 export { MochiAnchor } from './components/anchor';
 export type { MochiAnchorItem } from './components/anchor';
 

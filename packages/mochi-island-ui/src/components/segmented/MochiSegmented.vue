@@ -12,6 +12,7 @@ const uid = useId();
 
 const rootEl = ref<HTMLElement>();
 const indicator = ref({ left: 0, width: 0 });
+let ro: ResizeObserver | undefined;
 
 function sync() {
   const active = rootEl.value?.querySelector<HTMLElement>('[aria-checked="true"]');
@@ -21,9 +22,17 @@ function sync() {
 
 onMounted(() => {
   sync();
+  // 隐藏容器里挂载（v-show 分节）会量到 0 宽，指示块塌成竖线；RO 兜底重测
+  if (typeof ResizeObserver === 'function' && rootEl.value) {
+    ro = new ResizeObserver(() => sync());
+    ro.observe(rootEl.value);
+  }
   window.addEventListener('resize', sync);
 });
-onBeforeUnmount(() => window.removeEventListener('resize', sync));
+onBeforeUnmount(() => {
+  ro?.disconnect();
+  window.removeEventListener('resize', sync);
+});
 watch(model, () => nextTick(sync));
 
 /** ← → 在选项间移动，与原生 radiogroup 行为一致 */

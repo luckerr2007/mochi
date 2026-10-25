@@ -267,6 +267,7 @@ const interestTags = ref(['家具', '贝壳']);
 const ringValue = ref(64);
 const redeemCode = ref('');
 const bannerOpen = ref(true);
+const siderOff = ref(false);
 const loadStatus = ref<'idle' | 'loading' | 'done'>('idle');
 function startLoad() {
   loadStatus.value = 'loading';
@@ -736,6 +737,25 @@ onMounted(() => {
             <span><MochiIcon :icon="Calendar" :stroke-width="1.5" /> 日程</span>
             <span><MochiIcon :icon="Search" size="sm" :stroke-width="1.5" /> 搜索</span>
           </div>
+          <MochiDivider label="页面骨架（可折叠侧栏）" />
+          <MochiLayout has-sider style="min-height: 240px; border: var(--mochi-border-hairline) solid var(--mochi-line); border-radius: var(--mochi-radius-md); overflow: hidden">
+            <MochiLayoutSider collapsible v-model:collapsed="siderOff">
+              <p style="margin: 0; color: var(--mochi-ink-soft); font-size: 14px">档案馆菜单</p>
+            </MochiLayoutSider>
+            <MochiLayout style="min-height: 0">
+              <MochiLayoutHeader style="padding: var(--mochi-space-3)">岛屿档案馆</MochiLayoutHeader>
+              <MochiLayoutContent>
+                <p style="margin: 0">正文区：Content 吃满剩余宽度，宽表格也撑不破骨架。</p>
+              </MochiLayoutContent>
+              <MochiLayoutFooter>© 2026 Mochi</MochiLayoutFooter>
+            </MochiLayout>
+          </MochiLayout>
+          <MochiDivider label="栅格（缩放窗口看断点）" />
+          <MochiGrid :cols="12" :gap="12">
+            <MochiGridItem v-for="cell in 6" :key="cell" :span="12" :sm="6" :md="4">
+              <div style="padding: var(--mochi-space-3); border: var(--mochi-border-hairline) solid var(--mochi-line); border-radius: var(--mochi-radius-md); background: var(--mochi-bg-sunken); text-align: center; color: var(--mochi-ink-soft)">格 {{ cell }}</div>
+            </MochiGridItem>
+          </MochiGrid>
         </div>
       </section>
 

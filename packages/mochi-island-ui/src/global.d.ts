@@ -34,11 +34,18 @@ declare module 'vue' {
       MochiEmpty: typeof import('mochi-island-ui')['MochiEmpty'];
       MochiForm: typeof import('mochi-island-ui')['MochiForm'];
       MochiFormItem: typeof import('mochi-island-ui')['MochiFormItem'];
+      MochiGrid: typeof import('mochi-island-ui')['MochiGrid'];
+      MochiGridItem: typeof import('mochi-island-ui')['MochiGridItem'];
       MochiIcon: typeof import('mochi-island-ui')['MochiIcon'];
       MochiImage: typeof import('mochi-island-ui')['MochiImage'];
       MochiInput: typeof import('mochi-island-ui')['MochiInput'];
       MochiInputNumber: typeof import('mochi-island-ui')['MochiInputNumber'];
       MochiKbd: typeof import('mochi-island-ui')['MochiKbd'];
+      MochiLayout: typeof import('mochi-island-ui')['MochiLayout'];
+      MochiLayoutContent: typeof import('mochi-island-ui')['MochiLayoutContent'];
+      MochiLayoutFooter: typeof import('mochi-island-ui')['MochiLayoutFooter'];
+      MochiLayoutHeader: typeof import('mochi-island-ui')['MochiLayoutHeader'];
+      MochiLayoutSider: typeof import('mochi-island-ui')['MochiLayoutSider'];
       MochiLink: typeof import('mochi-island-ui')['MochiLink'];
       MochiList: typeof import('mochi-island-ui')['MochiList'];
       MochiLoadMore: typeof import('mochi-island-ui')['MochiLoadMore'];
